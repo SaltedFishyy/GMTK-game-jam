@@ -41,12 +41,28 @@ gizmo_extents = 0.0
 [node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
 
 [node name="LengthLabel" type="Label" parent="." unique_id=1623993704]
-offset_left = 1000.0
-offset_top = 154.99998
-offset_right = 1116.0
-offset_bottom = 180.99998
-scale = Vector2(1.635, 1.635)
+offset_left = 38.0
+offset_top = 44.0
+offset_right = 154.0
+offset_bottom = 70.0
+scale = Vector2(1.8, 1.8)
 text = "Length: 0.0 cm"
+
+[node name="MoneyEarnedLabel" type="Label" parent="." unique_id=1677846008]
+offset_left = 37.0
+offset_top = 105.0
+offset_right = 180.88885
+offset_bottom = 131.0
+scale = Vector2(1.8, 1.8)
+text = "Money Earned: $0"
+
+[node name="TotalMoneyLabel" type="Label" parent="." unique_id=740931299]
+offset_left = 34.00006
+offset_top = 175.0
+offset_right = 224.00006
+offset_bottom = 201.0
+scale = Vector2(1.8, 1.8)
+text = "Total Money: $0"
 
 [node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1640241803]
 modulate = Color(0.95179313, 1, 0.69071525, 1)
