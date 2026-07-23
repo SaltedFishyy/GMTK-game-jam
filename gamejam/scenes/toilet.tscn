@@ -7,22 +7,23 @@
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="." unique_id=138344141]
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_right = 1284.0
+offset_bottom = 720.0
 mouse_filter = 2
 color = Color(0.08316342, 0.108901225, 0.31615886, 1)
 
-[node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
+[node name="ButtPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
 modulate = Color(0.72, 0.82, 0.9, 1)
-position = Vector2(578, 129)
+z_index = 1
+position = Vector2(600, 129)
 scale = Vector2(2.104, 2)
 texture = ExtResource("2_icon")
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
-offset_left = 960.99994
-offset_top = 38.0
-offset_right = 1038.0
-offset_bottom = 109.0
+offset_left = 1030.0
+offset_top = 37.0
+offset_right = 1107.0
+offset_bottom = 108.0
 scale = Vector2(1.495, 1.495)
 theme_override_colors/font_color = Color(1, 0.9, 0.25, 1)
 theme_override_font_sizes/font_size = 48
@@ -31,11 +32,27 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PoopSpawnMarker" type="Marker2D" parent="." unique_id=956465810]
-position = Vector2(584, 271)
+position = Vector2(600, 220)
 
 [node name="PoopEndMarker" type="Marker2D" parent="." unique_id=476832437]
-position = Vector2(586, 539)
+position = Vector2(600, 611)
+gizmo_extents = 0.0
 
 [node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
+
+[node name="LengthLabel" type="Label" parent="." unique_id=1623993704]
+offset_left = 1000.0
+offset_top = 154.99998
+offset_right = 1116.0
+offset_bottom = 180.99998
+scale = Vector2(1.635, 1.635)
+text = "Length: 0.0 cm"
+
+[node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1640241803]
+modulate = Color(0.95179313, 1, 0.69071525, 1)
+z_index = 1
+position = Vector2(601, 658)
+scale = Vector2(3.3828125, 1)
+texture = ExtResource("2_icon")
 
 [connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
