@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://fwjvvnfheksn"]
+
+[ext_resource type="Script" uid="uid://b4nx4pyp6hjcl" path="res://scripts/toilet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
+
+[node name="Toilet" type="Node2D" unique_id=1523779622]
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=138344141]
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+color = Color(0.08316342, 0.108901225, 0.31615886, 1)
+
+[node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
+modulate = Color(0.72, 0.82, 0.9, 1)
+position = Vector2(578, 129)
+scale = Vector2(2.104, 2)
+texture = ExtResource("2_icon")
+
+[node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
+offset_left = 960.99994
+offset_top = 38.0
+offset_right = 1038.0
+offset_bottom = 109.0
+scale = Vector2(1.495, 1.495)
+theme_override_colors/font_color = Color(1, 0.9, 0.25, 1)
+theme_override_font_sizes/font_size = 48
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PoopSpawnMarker" type="Marker2D" parent="." unique_id=956465810]
+position = Vector2(584, 271)
+
+[node name="PoopEndMarker" type="Marker2D" parent="." unique_id=476832437]
+position = Vector2(586, 539)
+
+[node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
+
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
