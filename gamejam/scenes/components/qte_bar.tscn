@@ -1,16 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cnsex2x0g0mh8"]
 
-[ext_resource type="Script" path="res://scripts/components/qte_bar.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d3rp4f4t0esnr" path="res://scripts/components/qte_bar.gd" id="1_script"]
 
-[node name="QTEBar" type="Control"]
-visible = false
+[node name="QTEBar" type="Control" unique_id=60865455]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 600.0
 offset_bottom = 100.0
 script = ExtResource("1_script")
 
-[node name="BarBackground" type="ColorRect" parent="."]
+[node name="BarBackground" type="ColorRect" parent="." unique_id=1109969556]
 layout_mode = 0
 offset_top = 20.0
 offset_right = 600.0
@@ -18,7 +17,7 @@ offset_bottom = 80.0
 mouse_filter = 2
 color = Color(0.12, 0.12, 0.14, 1)
 
-[node name="TargetArea" type="ColorRect" parent="BarBackground"]
+[node name="TargetArea" type="ColorRect" parent="BarBackground" unique_id=998279927]
 layout_mode = 0
 offset_left = 200.0
 offset_right = 320.0
@@ -26,9 +25,18 @@ offset_bottom = 60.0
 mouse_filter = 2
 color = Color(0.2, 0.75, 0.3, 1)
 
-[node name="Pointer" type="ColorRect" parent="BarBackground"]
+[node name="Pointer" type="ColorRect" parent="BarBackground" unique_id=537756079]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 60.0
 mouse_filter = 2
 color = Color(1, 0.85, 0.15, 1)
+
+[node name="ProgressLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 250.0
+offset_right = 350.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 16
+text = "1 / 2"
+horizontal_alignment = 1

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Economy="*res://scripts/economy.gd"
 GameState="*res://scripts/game_state.gd"
+PlayerStats="*res://scripts/player_stats.gd"
 
 [display]
 

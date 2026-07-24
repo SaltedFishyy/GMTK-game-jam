@@ -6,16 +6,12 @@ const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
 const STARTING_SECONDS: int = 10
 
-@export_range(1.0, 1000.0, 1.0, "suffix:px/s") var poop_move_speed: float = 120.0
+@export_range(1.0, 1000.0, 1.0, "suffix:px/s") var poop_move_speed: float = 400.0
 @export_range(0.05, 1.0, 0.05, "suffix:s") var click_max_duration: float = 0.3
 @export_range(1.0, 200.0, 1.0, "suffix:px") var click_push_distance: float = 20.0
 @export_range(0.1, 3.0, 0.1, "suffix:s") var max_charge_duration: float = 1.5
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 120.0
-@export_range(1.0, 1000.0, 1.0) var max_stamina: float = 100.0
-@export_range(0.0, 100.0, 1.0) var click_stamina_cost: float = 5.0
-@export_range(0.0, 200.0, 1.0, "suffix:/s") var hold_stamina_drain_per_second: float = 30.0
-@export_range(0.1, 10.0, 0.1, "suffix:s") var stamina_recovery_duration: float = 1.0
 @export_range(0.0, 10.0, 0.1) var smoothness: float = 6.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_min_interval: float = 1.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_max_interval: float = 3.0
@@ -28,7 +24,6 @@ const STARTING_SECONDS: int = 10
 @onready var length_label: Label = $LengthLabel
 @onready var money_earned_label: Label = $MoneyEarnedLabel
 @onready var total_money_label: Label = $TotalMoneyLabel
-@onready var stamina_bar: ProgressBar = $StaminaBar
 @onready var day_label: Label = $DayLabel
 @onready var clog_progress_bar: ProgressBar = $ClogProgressBar
 @onready var smoothness_bar: ProgressBar = $SmoothnessBar
@@ -36,7 +31,6 @@ const STARTING_SECONDS: int = 10
 @onready var break_count_label: Label = $BreakCountLabel
 @onready var qte_bar: QTEBarScript = $QTEBar
 @onready var qte_wait_timer: Timer = $QTEWaitTimer
-@onready var result_label: Label = $ResultLabel
 @onready var enter_shop_button: Button = $EnterShopButton
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var poop_spawn_marker: Marker2D = $PoopSpawnMarker
@@ -44,6 +38,7 @@ const STARTING_SECONDS: int = 10
 
 var seconds_remaining: int = STARTING_SECONDS
 var has_spawned_poop: bool = false
+var has_round_started: bool = false
 var is_round_active: bool = true
 var final_length_cm: float = 0.0
 var money_earned: int = 0
@@ -52,7 +47,6 @@ var is_round_ending: bool = false
 var is_mouse_button_down: bool = false
 var has_active_mouse_action: bool = false
 var hold_duration: float = 0.0
-var current_stamina: float = 0.0
 var session_start_clog: float = 0.0
 var session_clog_gain: float = 0.0
 var break_count: int = 0
@@ -60,14 +54,11 @@ var qte_random_number_generator: RandomNumberGenerator = RandomNumberGenerator.n
 var poop_instance: PoopScript
 
 
-# 初始化倒计时、体力、长度、金钱显示、Poop 和本轮计时。
+# 初始化倒计时、长度、金钱显示、Poop 和本轮计时。
 func _ready() -> void:
 	enter_shop_button.hide()
-	result_label.hide()
 	qte_random_number_generator.randomize()
 	session_start_clog = GameState.clog_progress
-	current_stamina = maxf(max_stamina, 0.0)
-	_update_stamina_bar()
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
@@ -75,8 +66,6 @@ func _ready() -> void:
 	_update_game_progress_ui()
 	_update_smoothness_ui()
 	_update_break_count_label()
-	countdown_timer.start()
-	_schedule_next_qte()
 
 
 # 记录本轮有效的鼠标左键按下和松开。
@@ -98,7 +87,7 @@ func _input(event: InputEvent) -> void:
 			_release_mouse_action()
 
 
-# 更新输入、体力、Poop 平滑移动、长度和等待中的最终结算。
+# 更新输入、Poop 平滑移动、长度和等待中的最终结算。
 func _process(delta: float) -> void:
 	if not is_round_active or not is_instance_valid(poop_instance):
 		return
@@ -109,10 +98,6 @@ func _process(delta: float) -> void:
 	if not _is_long_hold_active():
 		poop_instance.update_movement(delta, poop_move_speed)
 
-	if _can_recover_stamina():
-		_recover_stamina(delta)
-
-	_update_stamina_bar()
 	_update_length_label()
 	_update_clog_preview()
 	_update_smoothness_ui()
@@ -168,27 +153,31 @@ func _start_mouse_action() -> void:
 		or is_round_ending
 		or seconds_remaining <= 0
 		or has_active_mouse_action
-		or current_stamina < click_stamina_cost
 	):
 		return
 
+	_start_round()
 	has_active_mouse_action = true
 	hold_duration = 0.0
 
 
-# 根据按住时间判定单击或长按，扣除对应体力并加入推出距离。
+# 第一次有效左键输入时启动倒计时和QTE调度。
+func _start_round() -> void:
+	if has_round_started:
+		return
+
+	has_round_started = true
+	countdown_timer.start()
+	_schedule_next_qte()
+
+
+# 根据按住时间判定单击或长按，并加入对应推出距离。
 func _release_mouse_action() -> void:
 	if not has_active_mouse_action:
 		return
 
 	var push_pixels: float = click_push_distance
-	if hold_duration < click_max_duration:
-		current_stamina = clampf(
-			current_stamina - click_stamina_cost,
-			0.0,
-			maxf(max_stamina, 0.0)
-		)
-	else:
+	if hold_duration >= click_max_duration:
 		push_pixels = lerpf(
 			min_charge_push_distance,
 			max_charge_push_distance,
@@ -197,28 +186,11 @@ func _release_mouse_action() -> void:
 
 	poop_instance.push_distance(push_pixels)
 	has_active_mouse_action = false
-	_update_stamina_bar()
 
 
-# 累计按住时间，并在进入长按后持续消耗体力。
+# 累计当前鼠标操作的按住时间。
 func _update_held_action(delta: float) -> void:
-	var previous_hold_duration: float = hold_duration
 	hold_duration += delta
-
-	if hold_duration < click_max_duration:
-		return
-
-	var drain_start: float = maxf(previous_hold_duration, click_max_duration)
-	var stamina_drain_time: float = maxf(hold_duration - drain_start, 0.0)
-	current_stamina = clampf(
-		current_stamina - hold_stamina_drain_per_second * stamina_drain_time,
-		0.0,
-		maxf(max_stamina, 0.0)
-	)
-
-	if is_zero_approx(current_stamina):
-		current_stamina = 0.0
-		_release_mouse_action()
 
 
 # 返回从长按阈值到最大按住时间之间的蓄力比例。
@@ -243,37 +215,6 @@ func _is_long_hold_active() -> bool:
 	)
 
 
-# 返回当前是否可以在鼠标松开后恢复体力。
-func _can_recover_stamina() -> bool:
-	return (
-		not is_mouse_button_down
-		and not has_active_mouse_action
-		and not is_round_ending
-		and current_stamina < max_stamina
-	)
-
-
-# 使用基于 delta 的固定速度恢复体力。
-func _recover_stamina(delta: float) -> void:
-	var safe_max_stamina: float = maxf(max_stamina, 0.0)
-	var recovery_rate: float = (
-		safe_max_stamina / maxf(stamina_recovery_duration, 0.001)
-	)
-	current_stamina = move_toward(
-		current_stamina,
-		safe_max_stamina,
-		recovery_rate * delta
-	)
-
-
-# 将当前体力同步到始终可见的 StaminaBar。
-func _update_stamina_bar() -> void:
-	var safe_max_stamina: float = maxf(max_stamina, 0.0)
-	current_stamina = clampf(current_stamina, 0.0, safe_max_stamina)
-	stamina_bar.max_value = maxf(safe_max_stamina, 0.001)
-	stamina_bar.value = current_stamina
-
-
 # 更新顺滑度数值与当前状态文字。
 func _update_smoothness_ui() -> void:
 	smoothness = clampf(smoothness, 0.0, 10.0)
@@ -295,7 +236,8 @@ func _update_break_count_label() -> void:
 # 返回当前厕所回合是否允许启动或继续调度QTE。
 func _can_run_qte() -> bool:
 	return (
-		is_round_active
+		has_round_started
+		and is_round_active
 		and not is_round_ending
 		and seconds_remaining > 0
 	)
@@ -442,11 +384,7 @@ func _show_round_destination() -> void:
 		enter_shop_button.show()
 		return
 
-	if GameState.is_clog_target_reached():
-		result_label.text = "TOILET CLOGGED!\nTARGET REACHED"
-	else:
-		result_label.text = "NOT CLOGGED ENOUGH"
-	result_label.show()
+
 
 
 # 最后一次移动完成后统一结算，并显示商店入口或第5天结果。
@@ -456,7 +394,6 @@ func _finish_round() -> void:
 
 	final_length_cm = maxf(poop_instance.get_length_cm(), 0.0)
 	is_round_active = false
-	_update_stamina_bar()
 	_update_length_label(true)
 	_settle_round()
 	_show_round_destination()
