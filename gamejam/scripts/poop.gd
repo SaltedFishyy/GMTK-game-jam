@@ -57,13 +57,13 @@ func get_length_cm() -> float:
 	return moved_pixels / pixels_per_cm
 
 
-# 根据 TopMarker 超过堵塞阈值的实际距离计算超出长度。
+# 根据 BottomMarker 超过堵塞阈值的实际距离计算超出长度。
 func get_excess_length_cm() -> float:
 	if not is_initialized or is_zero_approx(pixels_per_cm):
 		return 0.0
 
 	var excess_pixels: float = maxf(
-		top_marker.global_position.y - clog_threshold_y,
+		bottom_marker.global_position.y - clog_threshold_y,
 		0.0
 	)
 	return excess_pixels / pixels_per_cm

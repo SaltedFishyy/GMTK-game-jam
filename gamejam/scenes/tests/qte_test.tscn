@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/tests/qte_test.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/components/qte_bar.tscn" id="2_qte"]
+
+[node name="QTETest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.055, 0.065, 0.09, 1)
+
+[node name="TitleLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 80.0
+offset_right = 890.0
+offset_bottom = 125.0
+theme_override_font_sizes/font_size = 30
+text = "QTE COMPONENT TEST"
+horizontal_alignment = 1
+
+[node name="InstructionLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 340.0
+offset_top = 145.0
+offset_right = 940.0
+offset_bottom = 180.0
+text = "Press SPACE when the yellow pointer is inside the green area."
+horizontal_alignment = 1
+
+[node name="QTEBar" parent="." instance=ExtResource("2_qte")]
+layout_mode = 0
+offset_left = 340.0
+offset_top = 260.0
+offset_right = 940.0
+offset_bottom = 360.0
+
+[node name="ResultLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 410.0
+offset_right = 890.0
+offset_bottom = 465.0
+theme_override_font_sizes/font_size = 26
+text = "Waiting for the first QTE..."
+horizontal_alignment = 1
+
+[node name="NextQTELabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 390.0
+offset_top = 490.0
+offset_right = 890.0
+offset_bottom = 525.0
+text = "Next QTE in 2.0 seconds"
+horizontal_alignment = 1
+
+[node name="QTEWaitTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="qte_failed" from="QTEBar" to="." method="_on_qte_bar_qte_failed"]
+[connection signal="qte_succeeded" from="QTEBar" to="." method="_on_qte_bar_qte_succeeded"]
+[connection signal="timeout" from="QTEWaitTimer" to="." method="_on_qte_wait_timer_timeout"]
