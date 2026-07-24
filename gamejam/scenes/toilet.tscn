@@ -13,14 +13,14 @@ script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=780536879]
 texture_filter = 1
-position = Vector2(630.50006, 359.34375)
-scale = Vector2(0.65260416, 0.50687057)
+position = Vector2(638, 359.34375)
+scale = Vector2(0.66562504, 0.50687057)
 texture = ExtResource("2_5rr3v")
 
 [node name="ButtPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
 z_index = 1
-position = Vector2(620, 197)
-scale = Vector2(0.76761305, 0.6619127)
+position = Vector2(630, 182)
+scale = Vector2(0.81282866, 0.6111577)
 texture = ExtResource("3_ca85b")
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
@@ -35,10 +35,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PoopSpawnMarker" type="Marker2D" parent="." unique_id=956465810]
-position = Vector2(612, 297)
+position = Vector2(630, 297)
 
 [node name="PoopEndMarker" type="Marker2D" parent="." unique_id=476832437]
-position = Vector2(620, 718)
+position = Vector2(630, 717)
 gizmo_extents = 0.0
 
 [node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
@@ -94,18 +94,25 @@ theme_override_font_sizes/font_size = 26
 text = "BREAKS: 0"
 horizontal_alignment = 1
 
+[node name="ChargeBar" type="ProgressBar" parent="." unique_id=1679274371]
+offset_left = 80.0
+offset_top = 175.0
+offset_right = 139.0
+offset_bottom = 468.0
+fill_mode = 3
+
 [node name="StatsHUD" parent="." unique_id=1651731315 instance=ExtResource("4_stats")]
-offset_left = 851.0
-offset_top = 563.0
-offset_right = 1251.0
-offset_bottom = 713.0
+offset_left = 875.0
+offset_top = 567.0
+offset_right = 1275.0
+offset_bottom = 717.0
 
 [node name="QTEBar" parent="." unique_id=307051169 instance=ExtResource("3_qte")]
 z_index = 2
-offset_left = 10.0
-offset_top = 491.0
-offset_right = 634.0
-offset_bottom = 591.0
+offset_left = 18.0
+offset_top = 482.0
+offset_right = 642.0
+offset_bottom = 582.0
 scale = Vector2(0.8, 0.8)
 
 [node name="QTEWaitTimer" type="Timer" parent="." unique_id=70344431]

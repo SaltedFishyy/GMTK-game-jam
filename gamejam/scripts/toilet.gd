@@ -9,7 +9,7 @@ const STARTING_SECONDS: int = 10
 @export_range(1.0, 1000.0, 1.0, "suffix:px/s") var poop_move_speed: float = 400.0
 @export_range(0.05, 1.0, 0.05, "suffix:s") var click_max_duration: float = 0.3
 @export_range(1.0, 200.0, 1.0, "suffix:px") var click_push_distance: float = 20.0
-@export_range(0.1, 3.0, 0.1, "suffix:s") var max_charge_duration: float = 1.5
+@export_range(0.1, 5.0, 0.1, "suffix:s") var max_charge_duration: float = 3.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 120.0
 @export_range(0.0, 2.0, 0.05, "suffix:s") var idle_retract_delay: float = 0.3
@@ -29,6 +29,7 @@ const STARTING_SECONDS: int = 10
 @onready var clog_target_label: Label = $ClogTargetLabel
 @onready var clog_progress_bar: ProgressBar = $ClogProgressBar
 @onready var break_count_label: Label = $BreakCountLabel
+@onready var charge_bar: ProgressBar = $ChargeBar
 @onready var qte_bar: QTEBarScript = $QTEBar
 @onready var qte_wait_timer: Timer = $QTEWaitTimer
 @onready var result_label: Label = $ResultLabel
@@ -70,6 +71,7 @@ func _ready() -> void:
 	_update_money_earned_label()
 	_update_game_progress_ui()
 	_update_break_count_label()
+	_reset_charge_state()
 
 
 # 记录本轮有效的鼠标左键按下和松开。
@@ -188,8 +190,7 @@ func _break_active_poop() -> void:
 
 # 夹断时取消当前蓄力，但保留真实按键状态直到玩家松开。
 func _cancel_mouse_action_for_break() -> void:
-	has_active_mouse_action = false
-	hold_duration = 0.0
+	_reset_charge_state()
 	poop_idle_duration = 0.0
 
 
@@ -207,6 +208,7 @@ func _start_mouse_action() -> void:
 	poop_idle_duration = 0.0
 	has_active_mouse_action = true
 	hold_duration = 0.0
+	_update_charge_bar()
 
 
 # 第一次有效左键输入时启动倒计时和QTE调度。
@@ -233,12 +235,13 @@ func _release_mouse_action() -> void:
 		)
 
 	active_poop.push_distance(push_pixels)
-	has_active_mouse_action = false
+	_reset_charge_state()
 
 
-# 累计当前鼠标操作的按住时间。
+# 累计当前鼠标操作的按住时间，并在最大蓄力时间封顶。
 func _update_held_action(delta: float) -> void:
-	hold_duration += delta
+	hold_duration = minf(hold_duration + delta, max_charge_duration)
+	_update_charge_bar()
 
 
 # 返回从长按阈值到最大按住时间之间的蓄力比例。
@@ -252,6 +255,23 @@ func _get_charge_ratio() -> float:
 		0.0,
 		1.0
 	)
+
+
+# 根据从按下开始的总时间更新0到100的蓄力条。
+func _update_charge_bar() -> void:
+	var display_ratio: float = clampf(
+		hold_duration / maxf(max_charge_duration, 0.001),
+		0.0,
+		1.0
+	)
+	charge_bar.value = display_ratio * 100.0
+
+
+# 清空单次蓄力和输入状态，不影响真实鼠标按键状态。
+func _reset_charge_state() -> void:
+	has_active_mouse_action = false
+	hold_duration = 0.0
+	charge_bar.value = 0.0
 
 
 # 返回当前是否已经进入需要暂停 Poop 移动的有效长按状态。
@@ -350,6 +370,8 @@ func _begin_round_end() -> void:
 
 	if has_active_mouse_action:
 		_release_mouse_action()
+	else:
+		_reset_charge_state()
 
 	if _is_round_motion_complete():
 		_finish_round()

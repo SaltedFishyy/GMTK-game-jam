@@ -7,7 +7,6 @@
 script = ExtResource("2_script")
 
 [node name="Poopholder" type="Sprite2D" parent="." unique_id=724245124]
-modulate = Color(0.35, 0.16, 0.06, 1)
 position = Vector2(0, -959.06824)
 scale = Vector2(0.547486, 1.7630816)
 texture = ExtResource("2_pkbnx")
