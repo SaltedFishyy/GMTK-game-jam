@@ -1,7 +1,6 @@
 extends Node2D
 
 const POOP_SCENE: PackedScene = preload("res://scenes/poop.tscn")
-const PoopScript = preload("res://scripts/poop.gd")
 const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
 const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
@@ -39,7 +38,6 @@ const STARTING_SECONDS: int = 10
 @onready var poop_end_marker: Marker2D = $PoopEndMarker
 
 var seconds_remaining: int = STARTING_SECONDS
-var has_spawned_poop: bool = false
 var has_round_started: bool = false
 var is_round_active: bool = true
 var final_length_cm: float = 0.0
@@ -56,7 +54,9 @@ var break_count: int = 0
 var current_qte_is_double: bool = false
 var has_completed_double_qte: bool = false
 var qte_random_number_generator: RandomNumberGenerator = RandomNumberGenerator.new()
-var poop_instance: PoopScript
+var broken_length_cm: float = 0.0
+var broken_poops: Array[Poop] = []
+var active_poop: Poop
 
 
 # 初始化倒计时、长度、金钱显示、Poop 和本轮计时。
@@ -93,20 +93,20 @@ func _input(event: InputEvent) -> void:
 
 # 更新输入、Poop 平滑移动、长度和等待中的最终结算。
 func _process(delta: float) -> void:
-	if not is_round_active or not is_instance_valid(poop_instance):
+	if not is_round_active or not is_instance_valid(active_poop):
 		return
 
 	if has_active_mouse_action and not is_round_ending:
 		_update_held_action(delta)
 
 	if not _is_long_hold_active():
-		poop_instance.update_movement(delta, poop_move_speed)
+		active_poop.update_movement(delta, poop_move_speed)
 
 	_update_poop_retraction(delta)
 	_update_length_label()
 	_update_clog_preview()
 
-	if is_round_ending and not poop_instance.is_moving():
+	if is_round_ending and _is_round_motion_complete():
 		_finish_round()
 
 
@@ -155,15 +155,42 @@ func _on_qte_bar_qte_succeeded() -> void:
 	_schedule_next_qte()
 
 
-# QTE失败后增加一次夹断，并重新安排下一次等待。
+# QTE失败后夹断当前活动段、生成新段并继续本轮。
 func _on_qte_bar_qte_failed() -> void:
 	if not _can_run_qte():
 		return
 
 	break_count += 1
 	current_qte_is_double = false
+	_break_active_poop()
 	_update_break_count_label()
 	_schedule_next_qte()
+
+
+# 冻结当前实际段、启动掉落，并立即生成新的活动段。
+func _break_active_poop() -> void:
+	if not is_instance_valid(active_poop):
+		return
+
+	_cancel_mouse_action_for_break()
+	var segment_length_cm: float = maxf(active_poop.get_length_cm(), 0.0)
+	if segment_length_cm > 0.0:
+		broken_length_cm += segment_length_cm
+		broken_poops.append(active_poop)
+		active_poop.start_falling(poop_end_marker.global_position)
+	else:
+		active_poop.queue_free()
+
+	_spawn_poop()
+	_update_length_label()
+	_update_clog_preview()
+
+
+# 夹断时取消当前蓄力，但保留真实按键状态直到玩家松开。
+func _cancel_mouse_action_for_break() -> void:
+	has_active_mouse_action = false
+	hold_duration = 0.0
+	poop_idle_duration = 0.0
 
 
 # 在允许输入时开始记录一次新的鼠标操作。
@@ -205,7 +232,7 @@ func _release_mouse_action() -> void:
 			_get_charge_ratio()
 		)
 
-	poop_instance.push_distance(push_pixels)
+	active_poop.push_distance(push_pixels)
 	has_active_mouse_action = false
 
 
@@ -246,7 +273,7 @@ func _update_poop_retraction(delta: float) -> void:
 	if poop_idle_duration < idle_retract_delay:
 		return
 
-	poop_instance.retract(delta, poop_retract_speed)
+	active_poop.retract(delta, poop_retract_speed)
 
 
 # 返回当前回合和输入状态是否允许Poop开始或继续缩回。
@@ -259,7 +286,7 @@ func _can_retract_poop() -> bool:
 		and seconds_remaining > 0
 		and not has_active_mouse_action
 		and not is_mouse_button_down
-		and not poop_instance.is_moving()
+		and not active_poop.is_moving()
 	)
 
 
@@ -324,7 +351,7 @@ func _begin_round_end() -> void:
 	if has_active_mouse_action:
 		_release_mouse_action()
 
-	if not poop_instance.is_moving():
+	if _is_round_motion_complete():
 		_finish_round()
 
 
@@ -337,8 +364,8 @@ func _update_countdown_label() -> void:
 func _update_length_label(show_final_length: bool = false) -> void:
 	if show_final_length:
 		length_label.text = "Final Length: %.1f cm" % final_length_cm
-	elif is_instance_valid(poop_instance):
-		length_label.text = "Length: %.1f cm" % poop_instance.get_length_cm()
+	elif is_instance_valid(active_poop):
+		length_label.text = "Length: %.1f cm" % _get_total_length_cm()
 	else:
 		length_label.text = "Length: 0.0 cm"
 
@@ -361,9 +388,9 @@ func _update_game_progress_ui() -> void:
 
 # 根据本轮实时超出长度更新堵塞预览，但不写入永久进度。
 func _update_clog_preview() -> void:
-	if is_instance_valid(poop_instance):
+	if is_instance_valid(active_poop):
 		session_clog_gain = maxf(
-			poop_instance.get_excess_length_cm()
+			_get_current_clog_length_cm()
 			* GameState.CLOG_PROGRESS_PER_CM,
 			0.0
 		)
@@ -375,15 +402,56 @@ func _update_clog_preview() -> void:
 	)
 
 
-# 生成一次 Poop，并交给它完成起点对齐和终点计算。
-func _spawn_poop() -> void:
-	if has_spawned_poop:
-		return
+# 返回已断固定长度与当前活动段长度之和。
+func _get_total_length_cm() -> float:
+	var active_length_cm: float = 0.0
+	if is_instance_valid(active_poop):
+		active_length_cm = maxf(active_poop.get_length_cm(), 0.0)
+	return maxf(broken_length_cm + active_length_cm, 0.0)
 
-	has_spawned_poop = true
-	poop_instance = POOP_SCENE.instantiate() as PoopScript
-	add_child(poop_instance)
-	poop_instance.initialize(
+
+# 返回所有已经落定断段的完整长度。
+func _get_settled_broken_length_cm() -> float:
+	var settled_length_cm: float = 0.0
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment) and poop_segment.is_settled():
+			settled_length_cm += maxf(poop_segment.get_length_cm(), 0.0)
+	return settled_length_cm
+
+
+# 返回当前用于堵塞预览和结算的长度。
+func _get_current_clog_length_cm() -> float:
+	var active_excess_length_cm: float = 0.0
+	if is_instance_valid(active_poop):
+		active_excess_length_cm = maxf(
+			active_poop.get_excess_length_cm(),
+			0.0
+		)
+	return _get_settled_broken_length_cm() + active_excess_length_cm
+
+
+# 返回是否仍有已断段正在执行掉落Tween。
+func _has_falling_poops() -> bool:
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment) and poop_segment.is_falling():
+			return true
+	return false
+
+
+# 返回活动段与所有掉落段是否都已完成本轮运动。
+func _is_round_motion_complete() -> bool:
+	return (
+		is_instance_valid(active_poop)
+		and not active_poop.is_moving()
+		and not _has_falling_poops()
+	)
+
+
+# 生成新的活动Poop段，并交给它完成顶部对齐。
+func _spawn_poop() -> void:
+	active_poop = POOP_SCENE.instantiate() as Poop
+	add_child(active_poop)
+	active_poop.initialize(
 		poop_spawn_marker.global_position,
 		poop_end_marker.global_position
 	)
@@ -401,7 +469,7 @@ func _settle_round() -> void:
 
 	has_settled_round = true
 	session_clog_gain = maxf(
-		poop_instance.get_excess_length_cm()
+		_get_current_clog_length_cm()
 		* GameState.CLOG_PROGRESS_PER_CM,
 		0.0
 	)
@@ -440,7 +508,7 @@ func _finish_round() -> void:
 	if not is_round_active or not is_round_ending:
 		return
 
-	final_length_cm = maxf(poop_instance.get_length_cm(), 0.0)
+	final_length_cm = _get_total_length_cm()
 	is_round_active = false
 	_update_length_label(true)
 	_settle_round()

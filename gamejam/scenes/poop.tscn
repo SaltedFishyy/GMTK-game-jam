@@ -1,19 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://dq7570h5mjsx"]
+[gd_scene format=3 uid="uid://dq7570h5mjsx"]
 
-[ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="1_icon"]
-[ext_resource type="Script" path="res://scripts/poop.gd" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://bwox1whcf2mit" path="res://scenes/TestSHIT.png" id="2_pkbnx"]
+[ext_resource type="Script" uid="uid://bojkku67u56k6" path="res://scripts/poop.gd" id="2_script"]
 
 [node name="Poop" type="Node2D" unique_id=2138993551]
 script = ExtResource("2_script")
 
 [node name="Poopholder" type="Sprite2D" parent="." unique_id=724245124]
 modulate = Color(0.35, 0.16, 0.06, 1)
-position = Vector2(0, -286.00003)
-scale = Vector2(0.4684375, 4.465781)
-texture = ExtResource("1_icon")
+position = Vector2(0, -959.06824)
+scale = Vector2(0.547486, 1.7630816)
+texture = ExtResource("2_pkbnx")
 
-[node name="TopMarker" type="Marker2D" parent="."]
-position = Vector2(0, -571.81001)
+[node name="TopMarker" type="Marker2D" parent="." unique_id=136543169]
 
-[node name="BottomMarker" type="Marker2D" parent="."]
-position = Vector2(0, -0.190046)
+[node name="BottomMarker" type="Marker2D" parent="." unique_id=674355441]

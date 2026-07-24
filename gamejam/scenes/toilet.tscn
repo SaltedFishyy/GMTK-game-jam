@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://fwjvvnfheksn"]
 
 [ext_resource type="Script" uid="uid://b4nx4pyp6hjcl" path="res://scripts/toilet.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dq6i8307jtpbn" path="res://scenes/Testbackground.png" id="2_5rr3v"]
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Texture2D" uid="uid://bn67ehyd1xvx5" path="res://scenes/Testbutt.png" id="3_ca85b"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
 [ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
@@ -9,25 +11,23 @@
 [node name="Toilet" type="Node2D" unique_id=1523779622]
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="." unique_id=138344141]
-visible = false
-offset_right = 1284.0
-offset_bottom = 720.0
-mouse_filter = 2
-color = Color(0.08316342, 0.108901225, 0.31615886, 1)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=780536879]
+texture_filter = 1
+position = Vector2(630.50006, 359.34375)
+scale = Vector2(0.65260416, 0.50687057)
+texture = ExtResource("2_5rr3v")
 
 [node name="ButtPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
-modulate = Color(0.72, 0.82, 0.9, 1)
 z_index = 1
-position = Vector2(600, 129)
-scale = Vector2(2.104, 2)
-texture = ExtResource("2_icon")
+position = Vector2(620, 197)
+scale = Vector2(0.76761305, 0.6619127)
+texture = ExtResource("3_ca85b")
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
-offset_left = 171.0
-offset_top = 150.0
-offset_right = 263.0
-offset_bottom = 260.0
+offset_left = 1127.0
+offset_top = 213.0
+offset_right = 1219.0
+offset_bottom = 323.0
 theme_override_colors/font_color = Color(1, 0.9, 0.25, 1)
 theme_override_font_sizes/font_size = 80
 text = "10"
@@ -35,10 +35,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PoopSpawnMarker" type="Marker2D" parent="." unique_id=956465810]
-position = Vector2(600, 220)
+position = Vector2(612, 297)
 
 [node name="PoopEndMarker" type="Marker2D" parent="." unique_id=476832437]
-position = Vector2(600, 611)
+position = Vector2(620, 718)
 gizmo_extents = 0.0
 
 [node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
@@ -70,26 +70,26 @@ text = "DAY 1 / 5"
 horizontal_alignment = 1
 
 [node name="ClogTargetLabel" type="Label" parent="." unique_id=307464968]
-offset_left = 754.0
-offset_top = 97.0
-offset_right = 1117.0
-offset_bottom = 152.0
+offset_left = 855.0
+offset_top = 444.0
+offset_right = 1218.0
+offset_bottom = 499.0
 theme_override_font_sizes/font_size = 40
 text = "CLOG TARGET BAR"
 horizontal_alignment = 1
 
 [node name="ClogProgressBar" type="ProgressBar" parent="." unique_id=286305510]
-offset_left = 777.0
-offset_top = 160.0
-offset_right = 1105.0
-offset_bottom = 200.0
+offset_left = 855.0
+offset_top = 509.0
+offset_right = 1183.0
+offset_bottom = 549.0
 theme_override_font_sizes/font_size = 26
 
 [node name="BreakCountLabel" type="Label" parent="." unique_id=1093367737]
-offset_left = 702.0
-offset_top = 204.0
-offset_right = 1012.0
-offset_bottom = 240.0
+offset_left = -72.0
+offset_top = 578.0
+offset_right = 238.0
+offset_bottom = 614.0
 theme_override_font_sizes/font_size = 26
 text = "BREAKS: 0"
 horizontal_alignment = 1
@@ -124,15 +124,15 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EnterShopButton" type="Button" parent="." unique_id=1862970975]
-visible = false
-offset_left = 1026.0
-offset_top = 514.0
-offset_right = 1251.0
-offset_bottom = 579.0
+offset_left = 1014.0
+offset_top = 132.0
+offset_right = 1239.0
+offset_bottom = 197.0
 theme_override_font_sizes/font_size = 22
 text = "ENTER SHOP"
 
 [node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1640241803]
+visible = false
 modulate = Color(0.95179313, 1, 0.69071525, 1)
 z_index = 1
 position = Vector2(601, 658)
