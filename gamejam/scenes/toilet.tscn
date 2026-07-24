@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b4nx4pyp6hjcl" path="res://scripts/toilet.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
+[ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
 
 [node name="Toilet" type="Node2D" unique_id=1523779622]
 script = ExtResource("1_script")
@@ -57,14 +58,6 @@ offset_bottom = 649.0
 theme_override_font_sizes/font_size = 26
 text = "Money Earned: $0"
 
-[node name="TotalMoneyLabel" type="Label" parent="." unique_id=740931299]
-offset_left = 23.0
-offset_top = 572.0
-offset_right = 221.0
-offset_bottom = 608.0
-theme_override_font_sizes/font_size = 26
-text = "Total Money: $0"
-
 [node name="DayLabel" type="Label" parent="." unique_id=549327707]
 offset_left = 26.0
 offset_top = 21.0
@@ -90,43 +83,43 @@ offset_right = 1147.0
 offset_bottom = 137.0
 theme_override_font_sizes/font_size = 26
 
-[node name="SmoothnessBar" type="ProgressBar" parent="." unique_id=1401637541]
-offset_left = 870.0
-offset_top = 646.0
-offset_right = 1180.0
-offset_bottom = 681.0
-max_value = 10.0
-value = 5.0
-
-[node name="SmoothnessLabel" type="Label" parent="." unique_id=1729111167]
-offset_left = 869.0
-offset_top = 602.0
-offset_right = 1179.0
-offset_bottom = 638.0
-theme_override_font_sizes/font_size = 26
-text = "SMOOTHNESS: NORMAL"
-horizontal_alignment = 1
-
 [node name="BreakCountLabel" type="Label" parent="." unique_id=1093367737]
 offset_left = 800.0
 offset_top = 173.0
 offset_right = 1110.0
 offset_bottom = 209.0
 theme_override_font_sizes/font_size = 26
-text = "Test: BREAKS: 0"
+text = "BREAKS: 0"
 horizontal_alignment = 1
+
+[node name="StatsHUD" parent="." instance=ExtResource("4_stats")]
+offset_left = 820.0
+offset_top = 230.0
+offset_right = 1220.0
+offset_bottom = 380.0
 
 [node name="QTEBar" parent="." unique_id=307051169 instance=ExtResource("3_qte")]
 z_index = 2
-offset_left = 16.000002
-offset_top = 447.0
-offset_right = 640.0
-offset_bottom = 547.0
+offset_left = 10.0
+offset_top = 491.0
+offset_right = 634.0
+offset_bottom = 591.0
 scale = Vector2(0.8, 0.8)
-pointer_speed = 230.0
 
 [node name="QTEWaitTimer" type="Timer" parent="." unique_id=70344431]
 one_shot = true
+
+[node name="ResultLabel" type="Label" parent="."]
+visible = false
+z_index = 3
+offset_left = 350.0
+offset_top = 300.0
+offset_right = 830.0
+offset_bottom = 390.0
+theme_override_font_sizes/font_size = 30
+text = "NOT CLOGGED ENOUGH"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="EnterShopButton" type="Button" parent="." unique_id=1862970975]
 visible = false

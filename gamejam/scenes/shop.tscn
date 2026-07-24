@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="3_stats"]
 
 [node name="Shop" type="Control" unique_id=961482817]
 layout_mode = 3
@@ -117,6 +118,13 @@ offset_right = 463.0
 offset_bottom = 385.0
 disabled = true
 text = "COMING SOON"
+
+[node name="StatsHUD" parent="." instance=ExtResource("3_stats")]
+layout_mode = 0
+offset_left = 550.0
+offset_top = 565.0
+offset_right = 950.0
+offset_bottom = 715.0
 
 [node name="NextDayButton" type="Button" parent="." unique_id=982280668]
 layout_mode = 0

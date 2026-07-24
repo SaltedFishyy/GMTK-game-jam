@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/components/stats_hud.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleStorage"]
+bg_color = Color(0.25, 0.5, 0.78, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleSmoothness"]
+bg_color = Color(0.2, 0.7, 0.32, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleIntegrity"]
+bg_color = Color(0.78, 0.65, 0.25, 1)
+
+[node name="StatsHUD" type="Control"]
+custom_minimum_size = Vector2(400, 150)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 400.0
+offset_bottom = 150.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="StatsContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="StorageGroup" type="VBoxContainer" parent="StatsContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="StorageLabel" type="Label" parent="StatsContainer/StorageGroup"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "STORAGE: 5 / 10"
+
+[node name="StorageBar" type="ProgressBar" parent="StatsContainer/StorageGroup"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+max_value = 10.0
+value = 5.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleStorage")
+
+[node name="SmoothnessGroup" type="VBoxContainer" parent="StatsContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="SmoothnessLabel" type="Label" parent="StatsContainer/SmoothnessGroup"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "SMOOTHNESS: 5 / 10 - NORMAL"
+
+[node name="SmoothnessBar" type="ProgressBar" parent="StatsContainer/SmoothnessGroup"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+max_value = 10.0
+value = 5.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleSmoothness")
+
+[node name="IntegrityGroup" type="VBoxContainer" parent="StatsContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="IntegrityLabel" type="Label" parent="StatsContainer/IntegrityGroup"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "INTEGRITY: 5 / 10 - NORMAL"
+
+[node name="IntegrityBar" type="ProgressBar" parent="StatsContainer/IntegrityGroup"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+max_value = 10.0
+value = 5.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleIntegrity")

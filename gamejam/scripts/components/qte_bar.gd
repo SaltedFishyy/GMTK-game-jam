@@ -99,11 +99,6 @@ func cancel_qte() -> void:
 	_end_qte()
 
 
-# 安全设置指针速度，不暴露或操作组件内部节点。
-func configure_pointer_speed(speed: float) -> void:
-	configured_pointer_speed = maxf(speed, 0.0)
-
-
 # 让指针在判定条左右边界之间持续往返。
 func _process(delta: float) -> void:
 	if active_faded_display:

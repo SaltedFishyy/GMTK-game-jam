@@ -3,7 +3,6 @@ extends Node2D
 
 @export_range(0.1, 100.0, 0.1, "suffix:px/cm") var pixels_per_cm: float = 10.0
 
-@onready var top_marker: Marker2D = $TopMarker
 @onready var bottom_marker: Marker2D = $BottomMarker
 
 var initial_bottom_y: float = 0.0

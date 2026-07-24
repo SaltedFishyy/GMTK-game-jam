@@ -3,6 +3,7 @@ extends Node2D
 const POOP_SCENE: PackedScene = preload("res://scenes/poop.tscn")
 const PoopScript = preload("res://scripts/poop.gd")
 const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
+const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
 const STARTING_SECONDS: int = 10
 
@@ -12,25 +13,24 @@ const STARTING_SECONDS: int = 10
 @export_range(0.1, 3.0, 0.1, "suffix:s") var max_charge_duration: float = 1.5
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 120.0
-@export_range(0.0, 10.0, 0.1) var smoothness: float = 6.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_min_interval: float = 1.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_max_interval: float = 3.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_min_interval: float = 2.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_max_interval: float = 5.0
 @export_range(10.0, 1200.0, 10.0, "suffix:px/s") var normal_qte_pointer_speed: float = 400.0
 @export_range(1.0, 3.0, 0.1) var loose_qte_speed_multiplier: float = 1.5
+@export_range(1.0, 3.0, 0.1) var high_integrity_target_width_multiplier: float = 1.5
 
 @onready var countdown_label: Label = $CountdownLabel
 @onready var length_label: Label = $LengthLabel
 @onready var money_earned_label: Label = $MoneyEarnedLabel
-@onready var total_money_label: Label = $TotalMoneyLabel
 @onready var day_label: Label = $DayLabel
+@onready var clog_target_label: Label = $ClogTargetLabel
 @onready var clog_progress_bar: ProgressBar = $ClogProgressBar
-@onready var smoothness_bar: ProgressBar = $SmoothnessBar
-@onready var smoothness_label: Label = $SmoothnessLabel
 @onready var break_count_label: Label = $BreakCountLabel
 @onready var qte_bar: QTEBarScript = $QTEBar
 @onready var qte_wait_timer: Timer = $QTEWaitTimer
+@onready var result_label: Label = $ResultLabel
 @onready var enter_shop_button: Button = $EnterShopButton
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var poop_spawn_marker: Marker2D = $PoopSpawnMarker
@@ -50,6 +50,8 @@ var hold_duration: float = 0.0
 var session_start_clog: float = 0.0
 var session_clog_gain: float = 0.0
 var break_count: int = 0
+var current_qte_is_double: bool = false
+var has_completed_double_qte: bool = false
 var qte_random_number_generator: RandomNumberGenerator = RandomNumberGenerator.new()
 var poop_instance: PoopScript
 
@@ -62,9 +64,8 @@ func _ready() -> void:
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
-	_update_money_labels()
+	_update_money_earned_label()
 	_update_game_progress_ui()
-	_update_smoothness_ui()
 	_update_break_count_label()
 
 
@@ -100,7 +101,6 @@ func _process(delta: float) -> void:
 
 	_update_length_label()
 	_update_clog_preview()
-	_update_smoothness_ui()
 
 	if is_round_ending and not poop_instance.is_moving():
 		_finish_round()
@@ -120,11 +120,23 @@ func _on_qte_wait_timer_timeout() -> void:
 	if not _can_run_qte():
 		return
 
-	var pointer_speed: float = normal_qte_pointer_speed
-	if smoothness >= 8.0:
-		pointer_speed *= loose_qte_speed_multiplier
-
-	qte_bar.configure_pointer_speed(pointer_speed)
+	var smoothness: int = PlayerStats.smoothness
+	var integrity: int = PlayerStats.integrity
+	var required_successes: int = QTERulesScript.get_required_successes(integrity)
+	current_qte_is_double = required_successes > 1
+	qte_bar.configure_qte(
+		QTERulesScript.get_pointer_speed(
+			smoothness,
+			normal_qte_pointer_speed,
+			loose_qte_speed_multiplier
+		),
+		QTERulesScript.get_target_width_multiplier(
+			integrity,
+			high_integrity_target_width_multiplier
+		),
+		required_successes,
+		QTERulesScript.uses_faded_display(integrity)
+	)
 	qte_bar.start_qte()
 
 
@@ -133,6 +145,9 @@ func _on_qte_bar_qte_succeeded() -> void:
 	if not _can_run_qte():
 		return
 
+	if current_qte_is_double:
+		has_completed_double_qte = true
+	current_qte_is_double = false
 	_schedule_next_qte()
 
 
@@ -142,6 +157,7 @@ func _on_qte_bar_qte_failed() -> void:
 		return
 
 	break_count += 1
+	current_qte_is_double = false
 	_update_break_count_label()
 	_schedule_next_qte()
 
@@ -215,19 +231,6 @@ func _is_long_hold_active() -> bool:
 	)
 
 
-# 更新顺滑度数值与当前状态文字。
-func _update_smoothness_ui() -> void:
-	smoothness = clampf(smoothness, 0.0, 10.0)
-	smoothness_bar.value = smoothness
-
-	if smoothness <= 4.0:
-		smoothness_label.text = "SMOOTHNESS: HARD"
-	elif smoothness <= 7.0:
-		smoothness_label.text = "SMOOTHNESS: NORMAL"
-	else:
-		smoothness_label.text = "SMOOTHNESS: TOO LOOSE"
-
-
 # 更新本轮夹断次数文字。
 func _update_break_count_label() -> void:
 	break_count_label.text = "BREAKS: %d" % break_count
@@ -249,11 +252,15 @@ func _schedule_next_qte() -> void:
 	if not _can_run_qte():
 		return
 
-	var minimum_interval: float = normal_qte_min_interval
-	var maximum_interval: float = normal_qte_max_interval
-	if smoothness <= 4.0:
-		minimum_interval = hard_qte_min_interval
-		maximum_interval = hard_qte_max_interval
+	var wait_interval: Vector2 = QTERulesScript.get_wait_interval(
+		PlayerStats.smoothness,
+		hard_qte_min_interval,
+		hard_qte_max_interval,
+		normal_qte_min_interval,
+		normal_qte_max_interval
+	)
+	var minimum_interval: float = wait_interval.x
+	var maximum_interval: float = wait_interval.y
 
 	var safe_minimum: float = minf(minimum_interval, maximum_interval)
 	var safe_maximum: float = maxf(minimum_interval, maximum_interval)
@@ -269,6 +276,7 @@ func _schedule_next_qte() -> void:
 func _stop_qte_cycle() -> void:
 	qte_wait_timer.stop()
 	qte_bar.cancel_qte()
+	current_qte_is_double = false
 
 
 # 倒计时归零时自动释放当前操作，并禁止开始新输入。
@@ -313,6 +321,7 @@ func _update_game_progress_ui() -> void:
 		/ GameState.MAX_CLOG_PROGRESS
 		* 100.0
 	)
+	clog_target_label.text = "CLOG TARGET: %d%%" % target_percent
 	clog_progress_bar.max_value = GameState.MAX_CLOG_PROGRESS
 	_update_clog_preview()
 
@@ -347,10 +356,9 @@ func _spawn_poop() -> void:
 	)
 
 
-# 更新本轮获得金钱和当前总金钱的文字。
-func _update_money_labels() -> void:
+# 更新厕所中本轮实际获得金钱的文字。
+func _update_money_earned_label() -> void:
 	money_earned_label.text = "Money Earned: $%d" % money_earned
-	total_money_label.text = "Total Money: $%d" % Economy.total_money
 
 
 # 使用最终原始数据完成一次且仅一次的堵塞与金钱结算。
@@ -365,8 +373,12 @@ func _settle_round() -> void:
 		0.0
 	)
 	GameState.add_clog_progress(session_clog_gain)
-	money_earned = Economy.add_poop_value(final_length_cm, break_count)
-	_update_money_labels()
+	money_earned = Economy.add_poop_value(
+		final_length_cm,
+		PlayerStats.integrity,
+		has_completed_double_qte
+	)
+	_update_money_earned_label()
 	_update_clog_preview()
 
 
@@ -384,8 +396,11 @@ func _show_round_destination() -> void:
 		enter_shop_button.show()
 		return
 
-
-
+	if GameState.is_clog_target_reached():
+		result_label.text = "TOILET CLOGGED!\nTARGET REACHED"
+	else:
+		result_label.text = "NOT CLOGGED ENOUGH"
+	result_label.show()
 
 # 最后一次移动完成后统一结算，并显示商店入口或第5天结果。
 func _finish_round() -> void:
