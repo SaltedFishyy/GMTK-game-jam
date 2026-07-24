@@ -7,32 +7,42 @@ extends Node2D
 @onready var bottom_marker: Marker2D = $BottomMarker
 
 var initial_bottom_y: float = 0.0
-var target_global_position: Vector2
+var clog_threshold_y: float = 0.0
+var movement_target_global_position: Vector2
 var is_initialized: bool = false
-var reached_end: bool = false
 
 
-# 将底部 Marker 对齐出生点，并记录长度起点和根节点终点。
-func initialize(spawn_position: Vector2, end_position: Vector2) -> void:
+# 将底部 Marker 对齐出生点，并记录长度起点和堵塞阈值。
+func initialize(spawn_position: Vector2, clog_threshold_position: Vector2) -> void:
 	global_position += spawn_position - bottom_marker.global_position
 	initial_bottom_y = bottom_marker.global_position.y
-	target_global_position = global_position + end_position - top_marker.global_position
-	reached_end = global_position == target_global_position
+	clog_threshold_y = clog_threshold_position.y
+	movement_target_global_position = global_position
 	is_initialized = true
 
 
-# 让整个 Poop 根节点以指定速度向终点移动。
-func move_forward(delta: float, move_speed: float) -> void:
-	if not is_initialized or reached_end:
+# 将一次推出距离沿Y轴向下累加到当前移动目标。
+func push_distance(distance_pixels: float) -> void:
+	if not is_initialized or distance_pixels <= 0.0:
+		return
+
+	movement_target_global_position.y += distance_pixels
+
+
+# 让整个 Poop 根节点平滑追赶当前累计的移动目标。
+func update_movement(delta: float, move_speed: float) -> void:
+	if not is_initialized or not is_moving():
 		return
 
 	global_position = global_position.move_toward(
-		target_global_position,
+		movement_target_global_position,
 		maxf(move_speed, 0.0) * delta
 	)
 
-	if global_position == target_global_position:
-		reached_end = true
+
+# 返回 Poop 是否仍在追赶累计的移动目标。
+func is_moving() -> bool:
+	return not global_position.is_equal_approx(movement_target_global_position)
 
 
 # 根据 BottomMarker 从初始位置向下移动的距离计算当前长度。
@@ -47,6 +57,13 @@ func get_length_cm() -> float:
 	return moved_pixels / pixels_per_cm
 
 
-# 返回 Poop 是否已经准确到达终点。
-func has_reached_end() -> bool:
-	return reached_end
+# 根据 TopMarker 超过堵塞阈值的实际距离计算超出长度。
+func get_excess_length_cm() -> float:
+	if not is_initialized or is_zero_approx(pixels_per_cm):
+		return 0.0
+
+	var excess_pixels: float = maxf(
+		top_marker.global_position.y - clog_threshold_y,
+		0.0
+	)
+	return excess_pixels / pixels_per_cm

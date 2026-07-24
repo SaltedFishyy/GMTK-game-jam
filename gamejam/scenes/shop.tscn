@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://d4nx1lsthlle0"]
+
+[ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
+
+[node name="Shop" type="Control" unique_id=961482817]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1855759412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.5372549, 0.28235295, 0.17254902, 1)
+
+[node name="ShopTitleLabel" type="Label" parent="." unique_id=1397661078]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 780.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.96, 0.78, 0.28, 1)
+theme_override_font_sizes/font_size = 32
+text = "BIG GUT LARRY'S GUT GOODS"
+
+[node name="TotalMoneyLabel" type="Label" parent="." unique_id=1053568024]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 38.0
+offset_right = 1240.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 22
+text = "Total Money: $0"
+horizontal_alignment = 2
+
+[node name="LarryPlaceholder" type="TextureRect" parent="." unique_id=299747767]
+modulate = Color(0.72, 0.52, 0.16, 1)
+layout_mode = 0
+offset_left = 70.0
+offset_top = 146.0
+offset_right = 448.0
+offset_bottom = 530.0
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LarryNameLabel" type="Label" parent="." unique_id=551198705]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 545.0
+offset_right = 470.0
+offset_bottom = 580.0
+theme_override_font_sizes/font_size = 24
+text = "Big Gut Larry"
+horizontal_alignment = 1
+
+[node name="DialogueLabel" type="Label" parent="." unique_id=61790368]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 590.0
+offset_right = 520.0
+offset_bottom = 665.0
+text = "“Interesting specimen. Let’s improve the machinery.”"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ItemPanel" type="Panel" parent="." unique_id=980184799]
+layout_mode = 0
+offset_left = 589.0
+offset_top = 115.0
+offset_right = 1249.0
+offset_bottom = 571.0
+
+[node name="ItemNameLabel" type="Label" parent="ItemPanel" unique_id=1283407759]
+layout_mode = 0
+offset_left = 113.0
+offset_top = 41.0
+offset_right = 569.0
+offset_bottom = 81.0
+theme_override_font_sizes/font_size = 26
+text = "Improved Intestine"
+horizontal_alignment = 1
+
+[node name="ItemDescriptionLabel" type="Label" parent="ItemPanel" unique_id=1169445907]
+layout_mode = 0
+offset_left = 123.0
+offset_top = 122.0
+offset_right = 563.0
+offset_bottom = 162.0
+text = "Produce poop 20% faster."
+horizontal_alignment = 1
+
+[node name="ItemPriceLabel" type="Label" parent="ItemPanel" unique_id=1215914887]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 259.0
+offset_right = 556.0
+offset_bottom = 294.0
+theme_override_font_sizes/font_size = 20
+text = "Price: $20"
+horizontal_alignment = 1
+
+[node name="BuyButton" type="Button" parent="ItemPanel" unique_id=1241854162]
+layout_mode = 0
+offset_left = 203.0
+offset_top = 330.0
+offset_right = 463.0
+offset_bottom = 385.0
+disabled = true
+text = "COMING SOON"
+
+[node name="NextDayButton" type="Button" parent="." unique_id=982280668]
+layout_mode = 0
+offset_left = 980.0
+offset_top = 620.0
+offset_right = 1220.0
+offset_bottom = 685.0
+theme_override_font_sizes/font_size = 22
+text = "NEXT DAY"
+
+[connection signal="pressed" from="NextDayButton" to="." method="_on_next_day_button_pressed"]
