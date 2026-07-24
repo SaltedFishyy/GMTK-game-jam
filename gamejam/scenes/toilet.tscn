@@ -19,7 +19,7 @@ texture = ExtResource("2_5rr3v")
 
 [node name="ButtPlaceholder" type="Sprite2D" parent="." unique_id=1973851698]
 z_index = 1
-position = Vector2(630, 182)
+position = Vector2(636, 182)
 scale = Vector2(0.81282866, 0.6111577)
 texture = ExtResource("3_ca85b")
 
@@ -61,11 +61,11 @@ theme_override_font_sizes/font_size = 26
 text = "Money Earned: $0"
 
 [node name="DayLabel" type="Label" parent="." unique_id=549327707]
-offset_left = 26.0
-offset_top = 21.0
-offset_right = 371.0
-offset_bottom = 131.0
-theme_override_font_sizes/font_size = 80
+offset_left = -33.0
+offset_top = 20.0
+offset_right = 312.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 60
 text = "DAY 1 / 5"
 horizontal_alignment = 1
 
