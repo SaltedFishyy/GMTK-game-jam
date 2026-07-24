@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://lve02cka6pvo"]
+
+[ext_resource type="Script" uid="uid://da1hmjaupdw78" path="res://scripts/components/pause_menu.gd" id="1_script"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=207067854]
+process_mode = 3
+layer = 100
+script = ExtResource("1_script")
+
+[node name="MenuButton" type="Button" parent="." unique_id=1037408774]
+offset_left = 1063.0
+offset_top = 25.0
+offset_right = 1255.0
+offset_bottom = 117.0
+theme_override_font_sizes/font_size = 50
+text = "MENU"
+
+[node name="MenuRoot" type="Control" parent="." unique_id=1027966312]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="MenuRoot" unique_id=1243167601]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="PausePanel" type="Panel" parent="MenuRoot" unique_id=1230325731]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -140.0
+offset_right = 180.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PausedLabel" type="Label" parent="MenuRoot/PausePanel" unique_id=126876289]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 25.0
+offset_right = 320.0
+offset_bottom = 85.0
+theme_override_font_sizes/font_size = 36
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="MenuRoot/PausePanel" unique_id=749174291]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 105.0
+offset_right = 280.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 22
+text = "RESUME"
+
+[node name="OptionsButton" type="Button" parent="MenuRoot/PausePanel" unique_id=204895462]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 185.0
+offset_right = 280.0
+offset_bottom = 240.0
+theme_override_font_sizes/font_size = 22
+text = "OPTIONS"
+
+[node name="OptionsPanel" type="Panel" parent="MenuRoot" unique_id=440087083]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -160.0
+offset_right = 250.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=414908109]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 25.0
+offset_right = 440.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 32
+text = "OPTIONS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicVolumeLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=1549871623]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 95.0
+offset_right = 440.0
+offset_bottom = 130.0
+theme_override_font_sizes/font_size = 20
+text = "MUSIC VOLUME"
+horizontal_alignment = 1
+
+[node name="MusicVolumeSlider" type="HSlider" parent="MenuRoot/OptionsPanel" unique_id=348541080]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 145.0
+offset_right = 375.0
+offset_bottom = 185.0
+value = 100.0
+
+[node name="MusicPercentLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=1244974544]
+layout_mode = 0
+offset_left = 385.0
+offset_top = 145.0
+offset_right = 460.0
+offset_bottom = 185.0
+theme_override_font_sizes/font_size = 18
+text = "100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="MenuRoot/OptionsPanel" unique_id=1287387344]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 225.0
+offset_right = 350.0
+offset_bottom = 280.0
+theme_override_font_sizes/font_size = 22
+text = "BACK"
+
+[connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MenuRoot/PausePanel/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="MenuRoot/PausePanel/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="value_changed" from="MenuRoot/OptionsPanel/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
+[connection signal="pressed" from="MenuRoot/OptionsPanel/BackButton" to="." method="_on_back_button_pressed"]

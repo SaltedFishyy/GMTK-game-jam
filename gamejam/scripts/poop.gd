@@ -7,6 +7,7 @@ extends Node2D
 
 var initial_bottom_y: float = 0.0
 var clog_threshold_y: float = 0.0
+var initial_global_position: Vector2
 var movement_target_global_position: Vector2
 var is_initialized: bool = false
 
@@ -16,6 +17,7 @@ func initialize(spawn_position: Vector2, clog_threshold_position: Vector2) -> vo
 	global_position += spawn_position - bottom_marker.global_position
 	initial_bottom_y = bottom_marker.global_position.y
 	clog_threshold_y = clog_threshold_position.y
+	initial_global_position = global_position
 	movement_target_global_position = global_position
 	is_initialized = true
 
@@ -37,6 +39,20 @@ func update_movement(delta: float, move_speed: float) -> void:
 		movement_target_global_position,
 		maxf(move_speed, 0.0) * delta
 	)
+
+
+# 让整个 Poop 平滑缩回初始位置，并同步唯一的移动目标。
+func retract(delta: float, retract_speed: float) -> void:
+	if not is_initialized or is_moving():
+		return
+	if global_position.is_equal_approx(initial_global_position):
+		return
+
+	global_position = global_position.move_toward(
+		initial_global_position,
+		maxf(retract_speed, 0.0) * delta
+	)
+	movement_target_global_position = global_position
 
 
 # 返回 Poop 是否仍在追赶累计的移动目标。

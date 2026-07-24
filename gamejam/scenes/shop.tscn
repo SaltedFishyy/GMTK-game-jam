@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
-[ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="3_stats"]
+[ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="3_pause"]
 
 [node name="Shop" type="Control" unique_id=961482817]
 layout_mode = 3
@@ -35,10 +35,10 @@ text = "BIG GUT LARRY'S GUT GOODS"
 
 [node name="TotalMoneyLabel" type="Label" parent="." unique_id=1053568024]
 layout_mode = 0
-offset_left = 1000.0
-offset_top = 38.0
-offset_right = 1240.0
-offset_bottom = 72.0
+offset_left = 452.0
+offset_top = 78.0
+offset_right = 692.0
+offset_bottom = 112.0
 theme_override_font_sizes/font_size = 22
 text = "Total Money: $0"
 horizontal_alignment = 2
@@ -46,40 +46,40 @@ horizontal_alignment = 2
 [node name="LarryPlaceholder" type="TextureRect" parent="." unique_id=299747767]
 modulate = Color(0.72, 0.52, 0.16, 1)
 layout_mode = 0
-offset_left = 70.0
-offset_top = 146.0
-offset_right = 448.0
-offset_bottom = 530.0
+offset_left = 79.0
+offset_top = 145.0
+offset_right = 410.0
+offset_bottom = 500.0
 texture = ExtResource("2_icon")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="LarryNameLabel" type="Label" parent="." unique_id=551198705]
 layout_mode = 0
-offset_left = 70.0
-offset_top = 545.0
-offset_right = 470.0
-offset_bottom = 580.0
+offset_left = 35.0
+offset_top = 526.0
+offset_right = 435.0
+offset_bottom = 561.0
 theme_override_font_sizes/font_size = 24
 text = "Big Gut Larry"
 horizontal_alignment = 1
 
 [node name="DialogueLabel" type="Label" parent="." unique_id=61790368]
 layout_mode = 0
-offset_left = 70.0
-offset_top = 590.0
-offset_right = 520.0
-offset_bottom = 665.0
+offset_left = 28.0
+offset_top = 572.0
+offset_right = 478.0
+offset_bottom = 624.0
 text = "“Interesting specimen. Let’s improve the machinery.”"
 horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="ItemPanel" type="Panel" parent="." unique_id=980184799]
 layout_mode = 0
-offset_left = 589.0
-offset_top = 115.0
-offset_right = 1249.0
-offset_bottom = 571.0
+offset_left = 516.0
+offset_top = 122.0
+offset_right = 1243.0
+offset_bottom = 615.0
 
 [node name="ItemNameLabel" type="Label" parent="ItemPanel" unique_id=1283407759]
 layout_mode = 0
@@ -119,20 +119,15 @@ offset_bottom = 385.0
 disabled = true
 text = "COMING SOON"
 
-[node name="StatsHUD" parent="." instance=ExtResource("3_stats")]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 565.0
-offset_right = 950.0
-offset_bottom = 715.0
-
 [node name="NextDayButton" type="Button" parent="." unique_id=982280668]
 layout_mode = 0
-offset_left = 980.0
-offset_top = 620.0
-offset_right = 1220.0
-offset_bottom = 685.0
+offset_left = 970.0
+offset_top = 633.0
+offset_right = 1210.0
+offset_bottom = 698.0
 theme_override_font_sizes/font_size = 22
 text = "NEXT DAY"
+
+[node name="PauseMenu" parent="." unique_id=1149304133 instance=ExtResource("3_pause")]
 
 [connection signal="pressed" from="NextDayButton" to="." method="_on_next_day_button_pressed"]

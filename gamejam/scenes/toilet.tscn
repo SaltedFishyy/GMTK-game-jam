@@ -4,11 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
 [ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
+[ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
 
 [node name="Toilet" type="Node2D" unique_id=1523779622]
 script = ExtResource("1_script")
 
 [node name="Background" type="ColorRect" parent="." unique_id=138344141]
+visible = false
 offset_right = 1284.0
 offset_bottom = 720.0
 mouse_filter = 2
@@ -68,35 +70,35 @@ text = "DAY 1 / 5"
 horizontal_alignment = 1
 
 [node name="ClogTargetLabel" type="Label" parent="." unique_id=307464968]
-offset_left = 809.0
-offset_top = 31.0
-offset_right = 1172.0
-offset_bottom = 86.0
+offset_left = 754.0
+offset_top = 97.0
+offset_right = 1117.0
+offset_bottom = 152.0
 theme_override_font_sizes/font_size = 40
 text = "CLOG TARGET BAR"
 horizontal_alignment = 1
 
 [node name="ClogProgressBar" type="ProgressBar" parent="." unique_id=286305510]
-offset_left = 819.0
-offset_top = 97.0
-offset_right = 1147.0
-offset_bottom = 137.0
+offset_left = 777.0
+offset_top = 160.0
+offset_right = 1105.0
+offset_bottom = 200.0
 theme_override_font_sizes/font_size = 26
 
 [node name="BreakCountLabel" type="Label" parent="." unique_id=1093367737]
-offset_left = 800.0
-offset_top = 173.0
-offset_right = 1110.0
-offset_bottom = 209.0
+offset_left = 702.0
+offset_top = 204.0
+offset_right = 1012.0
+offset_bottom = 240.0
 theme_override_font_sizes/font_size = 26
 text = "BREAKS: 0"
 horizontal_alignment = 1
 
-[node name="StatsHUD" parent="." instance=ExtResource("4_stats")]
-offset_left = 820.0
-offset_top = 230.0
-offset_right = 1220.0
-offset_bottom = 380.0
+[node name="StatsHUD" parent="." unique_id=1651731315 instance=ExtResource("4_stats")]
+offset_left = 851.0
+offset_top = 563.0
+offset_right = 1251.0
+offset_bottom = 713.0
 
 [node name="QTEBar" parent="." unique_id=307051169 instance=ExtResource("3_qte")]
 z_index = 2
@@ -109,7 +111,7 @@ scale = Vector2(0.8, 0.8)
 [node name="QTEWaitTimer" type="Timer" parent="." unique_id=70344431]
 one_shot = true
 
-[node name="ResultLabel" type="Label" parent="."]
+[node name="ResultLabel" type="Label" parent="." unique_id=1960238663]
 visible = false
 z_index = 3
 offset_left = 350.0
@@ -136,6 +138,8 @@ z_index = 1
 position = Vector2(601, 658)
 scale = Vector2(3.3828125, 1)
 texture = ExtResource("2_icon")
+
+[node name="PauseMenu" parent="." unique_id=837409740 instance=ExtResource("5_pause")]
 
 [connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
 [connection signal="qte_failed" from="QTEBar" to="." method="_on_qte_bar_qte_failed"]

@@ -13,6 +13,8 @@ const STARTING_SECONDS: int = 10
 @export_range(0.1, 3.0, 0.1, "suffix:s") var max_charge_duration: float = 1.5
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 120.0
+@export_range(0.0, 2.0, 0.05, "suffix:s") var idle_retract_delay: float = 0.3
+@export_range(0.0, 200.0, 1.0, "suffix:px/s") var poop_retract_speed: float = 20.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_min_interval: float = 1.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_max_interval: float = 3.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_min_interval: float = 2.0
@@ -47,6 +49,7 @@ var is_round_ending: bool = false
 var is_mouse_button_down: bool = false
 var has_active_mouse_action: bool = false
 var hold_duration: float = 0.0
+var poop_idle_duration: float = 0.0
 var session_start_clog: float = 0.0
 var session_clog_gain: float = 0.0
 var break_count: int = 0
@@ -99,6 +102,7 @@ func _process(delta: float) -> void:
 	if not _is_long_hold_active():
 		poop_instance.update_movement(delta, poop_move_speed)
 
+	_update_poop_retraction(delta)
 	_update_length_label()
 	_update_clog_preview()
 
@@ -173,6 +177,7 @@ func _start_mouse_action() -> void:
 		return
 
 	_start_round()
+	poop_idle_duration = 0.0
 	has_active_mouse_action = true
 	hold_duration = 0.0
 
@@ -231,6 +236,33 @@ func _is_long_hold_active() -> bool:
 	)
 
 
+# 累计推出完成后的空闲时间，并在允许时持续缩回Poop。
+func _update_poop_retraction(delta: float) -> void:
+	if not _can_retract_poop():
+		poop_idle_duration = 0.0
+		return
+
+	poop_idle_duration += delta
+	if poop_idle_duration < idle_retract_delay:
+		return
+
+	poop_instance.retract(delta, poop_retract_speed)
+
+
+# 返回当前回合和输入状态是否允许Poop开始或继续缩回。
+func _can_retract_poop() -> bool:
+	return (
+		has_round_started
+		and is_round_active
+		and not is_round_ending
+		and not has_settled_round
+		and seconds_remaining > 0
+		and not has_active_mouse_action
+		and not is_mouse_button_down
+		and not poop_instance.is_moving()
+	)
+
+
 # 更新本轮夹断次数文字。
 func _update_break_count_label() -> void:
 	break_count_label.text = "BREAKS: %d" % break_count
@@ -285,6 +317,7 @@ func _begin_round_end() -> void:
 		return
 
 	is_round_ending = true
+	poop_idle_duration = 0.0
 	countdown_timer.stop()
 	_stop_qte_cycle()
 
