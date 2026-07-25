@@ -4,6 +4,11 @@ var money_per_cm: float = 0.5
 var total_money: int = 0
 
 
+# 将本局累计金钱恢复为初始值，不改变每厘米价格配置。
+func reset_to_defaults() -> void:
+	total_money = 0
+
+
 # 根据原始长度与完整度结果计算本轮价值，但不修改总金钱。
 func calculate_poop_value(
 	length_cm: float,

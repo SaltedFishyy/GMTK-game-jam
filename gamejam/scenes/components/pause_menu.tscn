@@ -41,9 +41,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -180.0
-offset_top = -140.0
+offset_top = -190.0
 offset_right = 180.0
-offset_bottom = 140.0
+offset_bottom = 190.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -61,20 +61,29 @@ vertical_alignment = 1
 [node name="ResumeButton" type="Button" parent="MenuRoot/PausePanel" unique_id=749174291]
 layout_mode = 0
 offset_left = 80.0
-offset_top = 105.0
+offset_top = 100.0
 offset_right = 280.0
-offset_bottom = 160.0
+offset_bottom = 155.0
 theme_override_font_sizes/font_size = 22
 text = "RESUME"
 
 [node name="OptionsButton" type="Button" parent="MenuRoot/PausePanel" unique_id=204895462]
 layout_mode = 0
 offset_left = 80.0
-offset_top = 185.0
+offset_top = 180.0
 offset_right = 280.0
-offset_bottom = 240.0
+offset_bottom = 235.0
 theme_override_font_sizes/font_size = 22
 text = "OPTIONS"
+
+[node name="RestartRunButton" type="Button" parent="MenuRoot/PausePanel"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 260.0
+offset_right = 280.0
+offset_bottom = 315.0
+theme_override_font_sizes/font_size = 22
+text = "RESTART RUN"
 
 [node name="OptionsPanel" type="Panel" parent="MenuRoot" unique_id=440087083]
 visible = false
@@ -140,8 +149,66 @@ offset_bottom = 280.0
 theme_override_font_sizes/font_size = 22
 text = "BACK"
 
+[node name="RestartConfirmationPanel" type="Panel" parent="MenuRoot"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -150.0
+offset_right = 260.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RestartTitleLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 35.0
+offset_right = 475.0
+offset_bottom = 85.0
+theme_override_font_sizes/font_size = 28
+text = "Restart from Day 1?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RestartWarningLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 100.0
+offset_right = 475.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 18
+text = "All current progress will be lost."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CancelButton" type="Button" parent="MenuRoot/RestartConfirmationPanel"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 195.0
+offset_right = 235.0
+offset_bottom = 250.0
+theme_override_font_sizes/font_size = 20
+text = "CANCEL"
+
+[node name="RestartButton" type="Button" parent="MenuRoot/RestartConfirmationPanel"]
+layout_mode = 0
+offset_left = 285.0
+offset_top = 195.0
+offset_right = 455.0
+offset_bottom = 250.0
+theme_override_font_sizes/font_size = 20
+text = "RESTART"
+
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MenuRoot/PausePanel/ResumeButton" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="MenuRoot/PausePanel/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="MenuRoot/PausePanel/RestartRunButton" to="." method="_on_restart_run_button_pressed"]
 [connection signal="value_changed" from="MenuRoot/OptionsPanel/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
 [connection signal="pressed" from="MenuRoot/OptionsPanel/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="MenuRoot/RestartConfirmationPanel/CancelButton" to="." method="_on_restart_cancel_button_pressed"]
+[connection signal="pressed" from="MenuRoot/RestartConfirmationPanel/RestartButton" to="." method="_on_restart_confirm_button_pressed"]

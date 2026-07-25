@@ -20,6 +20,14 @@ var sphincter_level: int = 0
 var abdominal_muscles_level: int = 0
 
 
+# 将四种器官恢复为0级，派生食物槽会自动恢复为1。
+func reset_to_defaults() -> void:
+	stomach_level = 0
+	large_intestine_level = 0
+	sphincter_level = 0
+	abdominal_muscles_level = 0
+
+
 # 返回指定器官当前等级，无效器官返回0。
 func get_level(organ: int) -> int:
 	match organ:

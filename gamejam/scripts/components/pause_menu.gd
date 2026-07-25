@@ -7,6 +7,7 @@ const MUSIC_BUS_NAME: StringName = &"Music"
 @onready var menu_button: Button = $MenuButton
 @onready var pause_panel: Panel = $MenuRoot/PausePanel
 @onready var options_panel: Panel = $MenuRoot/OptionsPanel
+@onready var restart_confirmation_panel: Panel = $MenuRoot/RestartConfirmationPanel
 @onready var music_volume_slider: HSlider = $MenuRoot/OptionsPanel/MusicVolumeSlider
 @onready var music_percent_label: Label = $MenuRoot/OptionsPanel/MusicPercentLabel
 
@@ -29,7 +30,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	get_viewport().set_input_as_handled()
-	if has_paused_tree and options_panel.visible:
+	if (
+		has_paused_tree
+		and (
+			options_panel.visible
+			or restart_confirmation_panel.visible
+		)
+	):
 		_show_pause_panel()
 	else:
 		toggle_pause()
@@ -74,12 +81,21 @@ func resume_game() -> void:
 func _show_pause_panel() -> void:
 	pause_panel.show()
 	options_panel.hide()
+	restart_confirmation_panel.hide()
 
 
 # 显示音乐设置页面，游戏继续保持暂停。
 func _show_options_panel() -> void:
 	pause_panel.hide()
 	options_panel.show()
+	restart_confirmation_panel.hide()
+
+
+# 显示重新开始确认页，并保持游戏暂停。
+func _show_restart_confirmation() -> void:
+	pause_panel.hide()
+	options_panel.hide()
+	restart_confirmation_panel.show()
 
 
 # 从Music总线读取当前状态，避免切换场景时重置音量。
@@ -140,9 +156,24 @@ func _on_options_button_pressed() -> void:
 	_show_options_panel()
 
 
+# 点击RESTART RUN时只打开确认页，不修改本局状态。
+func _on_restart_run_button_pressed() -> void:
+	_show_restart_confirmation()
+
+
 # 点击BACK按钮时返回暂停主页。
 func _on_back_button_pressed() -> void:
 	_show_pause_panel()
+
+
+# 点击CANCEL时返回暂停主页，不修改任何状态。
+func _on_restart_cancel_button_pressed() -> void:
+	_show_pause_panel()
+
+
+# 确认重新开始时只调用GameState的统一协调入口。
+func _on_restart_confirm_button_pressed() -> void:
+	GameState.restart_run()
 
 
 # 滑动条改变时实时更新Music总线和百分比。

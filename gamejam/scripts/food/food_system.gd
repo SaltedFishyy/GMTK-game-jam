@@ -9,6 +9,13 @@ var pending_food_ids: Array[int] = []
 var active_food_ids: Array[int] = []
 
 
+# 清空待生效和当前生效食物，并通知现有UI监听者。
+func reset_to_defaults() -> void:
+	pending_food_ids.clear()
+	active_food_ids.clear()
+	food_state_changed.emit()
+
+
 # 返回当前商店阶段是否可以购买指定食物。
 func can_purchase_food(food_id: int, slot_limit: int) -> bool:
 	if not FoodDefinitionsScript.is_valid_food(food_id):
@@ -68,6 +75,11 @@ func get_pending_food_ids() -> Array[int]:
 	return pending_food_ids.duplicate()
 
 
+# 返回待下一天生效食物的加法价值倍率，并限制在1.0到2.0。
+func get_pending_value_multiplier() -> float:
+	return _get_food_value_multiplier(pending_food_ids)
+
+
 # 返回当前厕所回合的蓄力等级加成。
 func get_active_charge_bonus() -> int:
 	return _get_active_integer_bonus("charge_bonus")
@@ -90,8 +102,13 @@ func get_active_integrity_bonus() -> int:
 
 # 以加法合并当前食物价值，并限制在1.0到2.0。
 func get_active_value_multiplier() -> float:
+	return _get_food_value_multiplier(active_food_ids)
+
+
+# 使用同一份规则合计指定食物列表的价值倍率。
+func _get_food_value_multiplier(food_ids: Array[int]) -> float:
 	var multiplier: float = 1.0
-	for food_id: int in active_food_ids:
+	for food_id: int in food_ids:
 		var definition: Dictionary = FoodDefinitionsScript.get_food(food_id)
 		multiplier += float(definition["value_multiplier"]) - 1.0
 	return clampf(multiplier, 1.0, MAX_VALUE_MULTIPLIER)

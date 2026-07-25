@@ -34,6 +34,13 @@ const DEFAULT_STAT_VALUE: int = 5
 			_emit_stats_changed()
 
 
+# 将三项永久基础属性恢复为本局初始值。
+func reset_to_defaults() -> void:
+	storage_capacity = DEFAULT_STAT_VALUE
+	smoothness = DEFAULT_STAT_VALUE
+	integrity = DEFAULT_STAT_VALUE
+
+
 # 返回当前储存量。
 func get_storage_capacity() -> int:
 	return storage_capacity

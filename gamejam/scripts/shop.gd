@@ -329,7 +329,6 @@ func _update_queued_food_ui() -> void:
 	var storage_bonus: int = 0
 	var smoothness_bonus: int = 0
 	var integrity_bonus: int = 0
-	var value_multiplier: float = 1.0
 
 	for food_id: int in pending_food_ids:
 		var definition: Dictionary = FoodDefinitionsScript.get_food(food_id)
@@ -338,13 +337,8 @@ func _update_queued_food_ui() -> void:
 		storage_bonus += int(definition["storage_bonus"])
 		smoothness_bonus += int(definition["smoothness_bonus"])
 		integrity_bonus += int(definition["integrity_bonus"])
-		value_multiplier += float(definition["value_multiplier"]) - 1.0
 
-	value_multiplier = clampf(
-		value_multiplier,
-		1.0,
-		FoodSystem.MAX_VALUE_MULTIPLIER
-	)
+	var value_multiplier: float = FoodSystem.get_pending_value_multiplier()
 	queued_food_names_label.text = ", ".join(food_names)
 	queued_effects_label.text = (
 		"Charge %+d | Storage %+d | Smoothness %+d | "
