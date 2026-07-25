@@ -39,6 +39,15 @@ func get_storage_capacity() -> int:
 	return storage_capacity
 
 
+# 返回叠加当前回合食物效果后的有效储存量。
+func get_effective_storage_capacity() -> int:
+	return clampi(
+		storage_capacity + FoodSystem.get_active_storage_bonus(),
+		MIN_STAT_VALUE,
+		MAX_STAT_VALUE
+	)
+
+
 # 设置储存量，并限制在0到10。
 func set_storage_capacity(value: int) -> void:
 	storage_capacity = value
@@ -54,6 +63,15 @@ func get_smoothness() -> int:
 	return smoothness
 
 
+# 返回叠加当前回合食物效果后的有效顺滑度。
+func get_effective_smoothness() -> int:
+	return clampi(
+		smoothness + FoodSystem.get_active_smoothness_bonus(),
+		MIN_STAT_VALUE,
+		MAX_STAT_VALUE
+	)
+
+
 # 设置顺滑度，并限制在0到10。
 func set_smoothness(value: int) -> void:
 	smoothness = value
@@ -67,6 +85,15 @@ func upgrade_smoothness(amount: int = 1) -> void:
 # 返回当前完整度。
 func get_integrity() -> int:
 	return integrity
+
+
+# 返回叠加当前回合食物效果后的有效完整度。
+func get_effective_integrity() -> int:
+	return clampi(
+		integrity + FoodSystem.get_active_integrity_bonus(),
+		MIN_STAT_VALUE,
+		MAX_STAT_VALUE
+	)
 
 
 # 设置完整度，并限制在0到10。

@@ -139,6 +139,11 @@ func get_length_cm() -> float:
 	return length_pixels / pixels_per_cm
 
 
+# 返回当前Poop使用的安全像素到厘米换算率。
+func get_pixels_per_cm() -> float:
+	return maxf(pixels_per_cm, 0.001)
+
+
 # 根据活动段BottomMarker超过堵塞阈值的距离计算超出长度。
 func get_excess_length_cm() -> float:
 	if (

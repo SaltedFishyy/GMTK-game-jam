@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://fwjvvnfheksn"]
 
 [ext_resource type="Script" uid="uid://b4nx4pyp6hjcl" path="res://scripts/toilet.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://dq6i8307jtpbn" path="res://scenes/Testbackground.png" id="2_5rr3v"]
+[ext_resource type="Texture2D" uid="uid://dq6i8307jtpbn" path="res://scenes/resources/Testbackground.png" id="2_5rr3v"]
 [ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
-[ext_resource type="Texture2D" uid="uid://bn67ehyd1xvx5" path="res://scenes/Testbutt.png" id="3_ca85b"]
+[ext_resource type="Texture2D" uid="uid://bn67ehyd1xvx5" path="res://scenes/resources/Testbutt.png" id="3_ca85b"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
 [ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
@@ -24,10 +24,10 @@ scale = Vector2(0.81282866, 0.6111577)
 texture = ExtResource("3_ca85b")
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
-offset_left = 1127.0
-offset_top = 213.0
-offset_right = 1219.0
-offset_bottom = 323.0
+offset_left = 1135.0
+offset_top = 96.0
+offset_right = 1227.0
+offset_bottom = 206.0
 theme_override_colors/font_color = Color(1, 0.9, 0.25, 1)
 theme_override_font_sizes/font_size = 80
 text = "10"
@@ -51,6 +51,14 @@ offset_bottom = 689.0
 theme_override_font_sizes/font_size = 26
 text = "Length: 0.0 cm"
 metadata/_edit_use_anchors_ = true
+
+[node name="ReserveLabel" type="Label" parent="." unique_id=144510648]
+offset_left = 280.0
+offset_top = 650.0
+offset_right = 600.0
+offset_bottom = 690.0
+theme_override_font_sizes/font_size = 24
+text = "RESERVE: 50.0 / 50.0 cm"
 
 [node name="MoneyEarnedLabel" type="Label" parent="." unique_id=1677846008]
 offset_left = 22.0
@@ -131,10 +139,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="EnterShopButton" type="Button" parent="." unique_id=1862970975]
-offset_left = 1014.0
-offset_top = 132.0
-offset_right = 1239.0
-offset_bottom = 197.0
+offset_left = 955.0
+offset_top = 374.0
+offset_right = 1180.0
+offset_bottom = 439.0
 theme_override_font_sizes/font_size = 22
 text = "ENTER SHOP"
 

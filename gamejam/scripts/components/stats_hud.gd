@@ -12,20 +12,31 @@ extends Control
 # 初次显示PlayerStats，并监听之后的属性变化。
 func _ready() -> void:
 	PlayerStats.stats_changed.connect(_on_player_stats_changed)
-	_update_stats(
-		PlayerStats.storage_capacity,
-		PlayerStats.smoothness,
-		PlayerStats.integrity
-	)
+	FoodSystem.food_state_changed.connect(_on_food_state_changed)
+	_refresh_effective_stats()
 
 
 # 属性变化后立即刷新三组文字和进度条。
 func _on_player_stats_changed(
-	storage_capacity: int,
-	smoothness: int,
-	integrity: int
+	_storage_capacity: int,
+	_smoothness: int,
+	_integrity: int
 ) -> void:
-	_update_stats(storage_capacity, smoothness, integrity)
+	_refresh_effective_stats()
+
+
+# 食物待生效或当前效果变化后刷新有效属性显示。
+func _on_food_state_changed() -> void:
+	_refresh_effective_stats()
+
+
+# 从PlayerStats读取当前有效属性，不在HUD保存副本。
+func _refresh_effective_stats() -> void:
+	_update_stats(
+		PlayerStats.get_effective_storage_capacity(),
+		PlayerStats.get_effective_smoothness(),
+		PlayerStats.get_effective_integrity()
+	)
 
 
 # 将PlayerStats的当前值同步到占位状态栏。

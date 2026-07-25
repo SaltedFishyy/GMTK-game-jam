@@ -8,7 +8,8 @@ var total_money: int = 0
 func calculate_poop_value(
 	length_cm: float,
 	integrity: int = 5,
-	completed_double_qte: bool = false
+	completed_double_qte: bool = false,
+	food_value_multiplier: float = 1.0
 ) -> int:
 	var safe_length_cm: float = maxf(length_cm, 0.0)
 	var safe_money_per_cm: float = maxf(money_per_cm, 0.0)
@@ -20,6 +21,7 @@ func calculate_poop_value(
 		safe_length_cm
 		* safe_money_per_cm
 		* value_multiplier
+		* clampf(food_value_multiplier, 0.0, 2.0)
 	)
 	return maxi(floori(final_value), 0)
 
@@ -28,15 +30,31 @@ func calculate_poop_value(
 func add_poop_value(
 	length_cm: float,
 	integrity: int = 5,
-	completed_double_qte: bool = false
+	completed_double_qte: bool = false,
+	food_value_multiplier: float = 1.0
 ) -> int:
 	var money_earned: int = calculate_poop_value(
 		length_cm,
 		integrity,
-		completed_double_qte
+		completed_double_qte,
+		food_value_multiplier
 	)
 	total_money += money_earned
 	return money_earned
+
+
+# 返回当前总金钱是否足以支付指定正整数金额。
+func can_afford(amount: int) -> bool:
+	return amount > 0 and total_money >= amount
+
+
+# 金钱足够时安全扣除指定金额，并返回是否成功。
+func try_spend_money(amount: int) -> bool:
+	if not can_afford(amount):
+		return false
+
+	total_money -= amount
+	return true
 
 
 # 返回当前完整度对应的最终价值倍率。

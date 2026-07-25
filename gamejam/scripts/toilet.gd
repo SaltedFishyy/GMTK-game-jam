@@ -3,6 +3,7 @@ extends Node2D
 const POOP_SCENE: PackedScene = preload("res://scenes/poop.tscn")
 const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
 const QTERulesScript = preload("res://scripts/qte_rules.gd")
+const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
 const STARTING_SECONDS: int = 10
 
@@ -11,7 +12,7 @@ const STARTING_SECONDS: int = 10
 @export_range(1.0, 200.0, 1.0, "suffix:px") var click_push_distance: float = 20.0
 @export_range(0.1, 5.0, 0.1, "suffix:s") var max_charge_duration: float = 3.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
-@export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 120.0
+@export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 400.0
 @export_range(0.0, 2.0, 0.05, "suffix:s") var idle_retract_delay: float = 0.3
 @export_range(0.0, 200.0, 1.0, "suffix:px/s") var poop_retract_speed: float = 20.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_min_interval: float = 1.0
@@ -24,6 +25,7 @@ const STARTING_SECONDS: int = 10
 
 @onready var countdown_label: Label = $CountdownLabel
 @onready var length_label: Label = $LengthLabel
+@onready var reserve_label: Label = $ReserveLabel
 @onready var money_earned_label: Label = $MoneyEarnedLabel
 @onready var day_label: Label = $DayLabel
 @onready var clog_target_label: Label = $ClogTargetLabel
@@ -58,6 +60,7 @@ var qte_random_number_generator: RandomNumberGenerator = RandomNumberGenerator.n
 var broken_length_cm: float = 0.0
 var broken_poops: Array[Poop] = []
 var active_poop: Poop
+var poop_reserve: PoopReserveScript = PoopReserveScript.new()
 
 
 # 初始化倒计时、长度、金钱显示、Poop 和本轮计时。
@@ -65,9 +68,11 @@ func _ready() -> void:
 	enter_shop_button.hide()
 	qte_random_number_generator.randomize()
 	session_start_clog = GameState.clog_progress
+	poop_reserve.reset(PlayerStats.get_effective_storage_capacity())
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
+	_update_reserve_label()
 	_update_money_earned_label()
 	_update_game_progress_ui()
 	_update_break_count_label()
@@ -126,9 +131,17 @@ func _on_qte_wait_timer_timeout() -> void:
 	if not _can_run_qte():
 		return
 
-	var smoothness: int = PlayerStats.smoothness
-	var integrity: int = PlayerStats.integrity
+	var smoothness: int = PlayerStats.get_effective_smoothness()
+	var integrity: int = PlayerStats.get_effective_integrity()
 	var required_successes: int = QTERulesScript.get_required_successes(integrity)
+	var integrity_width_multiplier: float = QTERulesScript.get_target_width_multiplier(
+		integrity,
+		high_integrity_target_width_multiplier
+	)
+	var final_width_multiplier: float = (
+		integrity_width_multiplier
+		* OrganProgression.get_sphincter_qte_width_multiplier()
+	)
 	current_qte_is_double = required_successes > 1
 	qte_bar.configure_qte(
 		QTERulesScript.get_pointer_speed(
@@ -136,10 +149,7 @@ func _on_qte_wait_timer_timeout() -> void:
 			normal_qte_pointer_speed,
 			loose_qte_speed_multiplier
 		),
-		QTERulesScript.get_target_width_multiplier(
-			integrity,
-			high_integrity_target_width_multiplier
-		),
+		final_width_multiplier,
 		required_successes,
 		QTERulesScript.uses_faded_display(integrity)
 	)
@@ -228,14 +238,33 @@ func _release_mouse_action() -> void:
 
 	var push_pixels: float = click_push_distance
 	if hold_duration >= click_max_duration:
-		push_pixels = lerpf(
-			min_charge_push_distance,
-			max_charge_push_distance,
-			_get_charge_ratio()
-		)
+		push_pixels = _get_charged_push_distance()
 
-	active_poop.push_distance(push_pixels)
+	var pixels_per_cm: float = active_poop.get_pixels_per_cm()
+	var requested_cm: float = push_pixels / pixels_per_cm
+	var consumed_cm: float = poop_reserve.consume(requested_cm)
+	var allowed_push_pixels: float = consumed_cm * pixels_per_cm
+	if allowed_push_pixels > 0.0:
+		active_poop.push_distance(allowed_push_pixels)
+	_update_reserve_label()
 	_reset_charge_state()
+
+
+# 先计算基础长按距离，再应用腹肌与当前食物蓄力倍率。
+func _get_charged_push_distance() -> float:
+	var base_push_distance: float = lerpf(
+		min_charge_push_distance,
+		max_charge_push_distance,
+		_get_charge_ratio()
+	)
+	var food_charge_multiplier: float = (
+		1.0 + float(FoodSystem.get_active_charge_bonus()) * 0.1
+	)
+	return (
+		base_push_distance
+		* OrganProgression.get_abdominal_push_multiplier()
+		* food_charge_multiplier
+	)
 
 
 # 累计当前鼠标操作的按住时间，并在最大蓄力时间封顶。
@@ -332,7 +361,7 @@ func _schedule_next_qte() -> void:
 		return
 
 	var wait_interval: Vector2 = QTERulesScript.get_wait_interval(
-		PlayerStats.smoothness,
+		PlayerStats.get_effective_smoothness(),
 		hard_qte_min_interval,
 		hard_qte_max_interval,
 		normal_qte_min_interval,
@@ -390,6 +419,14 @@ func _update_length_label(show_final_length: bool = false) -> void:
 		length_label.text = "Length: %.1f cm" % _get_total_length_cm()
 	else:
 		length_label.text = "Length: 0.0 cm"
+
+
+# 更新本轮剩余与最大Poop储备文字。
+func _update_reserve_label() -> void:
+	reserve_label.text = "RESERVE: %.1f / %.1f cm" % [
+		poop_reserve.get_remaining_reserve_cm(),
+		poop_reserve.get_max_reserve_cm()
+	]
 
 
 # 更新当前天数、堵塞目标和堵塞条范围。
@@ -498,11 +535,13 @@ func _settle_round() -> void:
 	GameState.add_clog_progress(session_clog_gain)
 	money_earned = Economy.add_poop_value(
 		final_length_cm,
-		PlayerStats.integrity,
-		has_completed_double_qte
+		PlayerStats.get_effective_integrity(),
+		has_completed_double_qte,
+		FoodSystem.get_active_value_multiplier()
 	)
 	_update_money_earned_label()
 	_update_clog_preview()
+	FoodSystem.clear_active_foods()
 
 
 # 结算完成后进入商店场景。
