@@ -102,7 +102,7 @@ animations = [{
 }]
 
 [node name="Toilet" type="Node2D" unique_id=1523779622]
-position = Vector2(39, -130)
+position = Vector2(-121, -111)
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=780536879]
@@ -221,9 +221,9 @@ metadata/_edit_use_anchors_ = true
 [node name="QTEBar" parent="." unique_id=307051169 instance=ExtResource("3_qte")]
 z_index = 2
 offset_left = 18.0
-offset_top = 482.0
+offset_top = 380.0
 offset_right = 642.0
-offset_bottom = 582.0
+offset_bottom = 480.0
 scale = Vector2(0.8, 0.8)
 metadata/_edit_use_anchors_ = true
 

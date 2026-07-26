@@ -24,9 +24,12 @@ func _ready() -> void:
 
 # 在2到5秒之间随机安排下一次QTE。
 func _schedule_next_qte() -> void:
+	var interval_multiplier: float = QTERulesScript.get_sphincter_interval_multiplier(
+		selected_sphincter_level
+	)
 	var wait_seconds: float = random_number_generator.randf_range(
-		MIN_WAIT_SECONDS,
-		MAX_WAIT_SECONDS
+		MIN_WAIT_SECONDS * interval_multiplier,
+		MAX_WAIT_SECONDS * interval_multiplier
 	)
 	next_qte_label.text = "Next QTE in %.1f seconds" % wait_seconds
 	qte_wait_timer.start(wait_seconds)
@@ -37,7 +40,8 @@ func _on_qte_wait_timer_timeout() -> void:
 	next_qte_label.text = "QTE ACTIVE - PRESS SPACE"
 	result_label.text = "Move the pointer center into the stitched target."
 	qte_bar.configure_qte(
-		qte_bar.pointer_speed,
+		qte_bar.track_speed
+		* QTERulesScript.get_sphincter_track_speed_multiplier(selected_sphincter_level),
 		QTERulesScript.get_target_center_count(selected_sphincter_level),
 		1,
 		false
@@ -76,4 +80,11 @@ func _on_low_button_pressed() -> void:
 func _select_sphincter_level(level: int, state_name: String) -> void:
 	selected_sphincter_level = level
 	var center_count: int = QTERulesScript.get_target_center_count(level)
-	mode_label.text = "NEXT MODE: %s - %d CENTER CELLS" % [state_name, center_count]
+	var speed_multiplier: float = QTERulesScript.get_sphincter_track_speed_multiplier(level)
+	var interval_multiplier: float = QTERulesScript.get_sphincter_interval_multiplier(level)
+	mode_label.text = "NEXT: %s - %d CELLS - SPEED x%.2f - WAIT x%.2f" % [
+		state_name,
+		center_count,
+		speed_multiplier,
+		interval_multiplier,
+	]

@@ -56,7 +56,7 @@ func _ready() -> void:
 
 # 统一刷新新UI中的总金钱和器官信息。
 func _update_shop_ui() -> void:
-	total_money_label.text = "TOTAL MONEY: $%d" % Economy.total_money
+	total_money_label.text = "%d" % Economy.total_money
 	_update_organ_shop_ui()
 	_update_food_offers_ui()
 

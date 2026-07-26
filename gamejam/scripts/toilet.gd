@@ -22,8 +22,8 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_max_interval: float = 3.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_min_interval: float = 2.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_max_interval: float = 5.0
-@export_range(10.0, 1200.0, 10.0, "suffix:px/s") var normal_qte_pointer_speed: float = 400.0
-@export_range(1.0, 3.0, 0.1) var loose_qte_speed_multiplier: float = 1.5
+@export_range(10.0, 1200.0, 10.0, "suffix:px/s") var normal_qte_track_speed: float = 400.0
+@export_range(1.0, 3.0, 0.1) var loose_qte_track_speed_multiplier: float = 1.5
 
 @onready var countdown_label: Label = $CountdownLabel
 @onready var length_label: Label = $LengthLabel
@@ -143,17 +143,19 @@ func _on_qte_wait_timer_timeout() -> void:
 
 	var smoothness: int = PlayerStats.get_effective_smoothness()
 	var integrity: int = PlayerStats.get_effective_integrity()
+	var sphincter_level: int = OrganProgression.get_level(OrganProgression.Organ.SPHINCTER)
 	var required_successes: int = QTERulesScript.get_required_successes(integrity)
 	var target_center_count: int = QTERulesScript.get_target_center_count(
-		OrganProgression.get_level(OrganProgression.Organ.SPHINCTER)
+		sphincter_level
 	)
 	current_qte_is_double = required_successes > 1
 	qte_bar.configure_qte(
-		QTERulesScript.get_pointer_speed(
+		QTERulesScript.get_track_speed(
 			smoothness,
-			normal_qte_pointer_speed,
-			loose_qte_speed_multiplier
-		),
+			normal_qte_track_speed,
+			loose_qte_track_speed_multiplier
+		)
+		* QTERulesScript.get_sphincter_track_speed_multiplier(sphincter_level),
 		target_center_count,
 		required_successes,
 		QTERulesScript.uses_faded_display(integrity)
@@ -374,8 +376,12 @@ func _schedule_next_qte() -> void:
 		normal_qte_min_interval,
 		normal_qte_max_interval
 	)
-	var minimum_interval: float = wait_interval.x
-	var maximum_interval: float = wait_interval.y
+	var sphincter_level: int = OrganProgression.get_level(OrganProgression.Organ.SPHINCTER)
+	var interval_multiplier: float = QTERulesScript.get_sphincter_interval_multiplier(
+		sphincter_level
+	)
+	var minimum_interval: float = wait_interval.x * interval_multiplier
+	var maximum_interval: float = wait_interval.y * interval_multiplier
 
 	var safe_minimum: float = minf(minimum_interval, maximum_interval)
 	var safe_maximum: float = maxf(minimum_interval, maximum_interval)
