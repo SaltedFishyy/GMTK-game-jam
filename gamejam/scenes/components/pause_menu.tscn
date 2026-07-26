@@ -8,10 +8,10 @@ layer = 100
 script = ExtResource("1_script")
 
 [node name="MenuButton" type="Button" parent="." unique_id=1037408774]
-offset_left = 1101.0
-offset_top = 14.0
-offset_right = 1259.0
-offset_bottom = 91.0
+offset_left = 825.0
+offset_top = 19.0
+offset_right = 983.0
+offset_bottom = 96.0
 theme_override_font_sizes/font_size = 50
 text = "MENU"
 
@@ -76,7 +76,7 @@ offset_bottom = 235.0
 theme_override_font_sizes/font_size = 22
 text = "OPTIONS"
 
-[node name="RestartRunButton" type="Button" parent="MenuRoot/PausePanel"]
+[node name="RestartRunButton" type="Button" parent="MenuRoot/PausePanel" unique_id=1158543995]
 layout_mode = 0
 offset_left = 80.0
 offset_top = 260.0
@@ -149,7 +149,7 @@ offset_bottom = 280.0
 theme_override_font_sizes/font_size = 22
 text = "BACK"
 
-[node name="RestartConfirmationPanel" type="Panel" parent="MenuRoot"]
+[node name="RestartConfirmationPanel" type="Panel" parent="MenuRoot" unique_id=615695406]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -164,7 +164,7 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RestartTitleLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel"]
+[node name="RestartTitleLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel" unique_id=960435731]
 layout_mode = 0
 offset_left = 45.0
 offset_top = 35.0
@@ -175,7 +175,7 @@ text = "Restart from Day 1?"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RestartWarningLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel"]
+[node name="RestartWarningLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel" unique_id=1108976771]
 layout_mode = 0
 offset_left = 45.0
 offset_top = 100.0
@@ -186,7 +186,7 @@ text = "All current progress will be lost."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CancelButton" type="Button" parent="MenuRoot/RestartConfirmationPanel"]
+[node name="CancelButton" type="Button" parent="MenuRoot/RestartConfirmationPanel" unique_id=1071051438]
 layout_mode = 0
 offset_left = 65.0
 offset_top = 195.0
@@ -195,7 +195,7 @@ offset_bottom = 250.0
 theme_override_font_sizes/font_size = 20
 text = "CANCEL"
 
-[node name="RestartButton" type="Button" parent="MenuRoot/RestartConfirmationPanel"]
+[node name="RestartButton" type="Button" parent="MenuRoot/RestartConfirmationPanel" unique_id=188863786]
 layout_mode = 0
 offset_left = 285.0
 offset_top = 195.0

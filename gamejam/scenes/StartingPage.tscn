@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://cflp580a80fgv"]
+
+[ext_resource type="Texture2D" uid="uid://1auhinw0mw8h" path="res://scenes/resources/StartingPage/Background.png" id="1_au4a1"]
+[ext_resource type="Texture2D" uid="uid://kkosxu7en0o5" path="res://scenes/resources/StartingPage/Title.png" id="1_q33cr"]
+[ext_resource type="Texture2D" uid="uid://c4rsfbd4vrsck" path="res://scenes/resources/StartingPage/NormalButton.png" id="2_q33cr"]
+[ext_resource type="Texture2D" uid="uid://cp2tto0wcimo2" path="res://scenes/resources/StartingPage/PressedButton.png" id="4_l1efk"]
+[ext_resource type="Script" uid="uid://48b37scyv2xx" path="res://scenes/start_button.gd" id="5_q33cr"]
+
+[node name="Node2D" type="Node2D" unique_id=1886377140]
+
+[node name="Title" type="Sprite2D" parent="." unique_id=900906609]
+z_index = 1
+position = Vector2(505, 177)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_q33cr")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=684113433]
+position = Vector2(512, 256)
+scale = Vector2(0.25, 0.249)
+texture = ExtResource("1_au4a1")
+
+[node name="StartButton" type="TextureButton" parent="." unique_id=432984958]
+offset_left = 415.0
+offset_top = 358.0
+offset_right = 1160.0
+offset_bottom = 582.0
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("2_q33cr")
+texture_pressed = ExtResource("4_l1efk")
+stretch_mode = 0
+script = ExtResource("5_q33cr")
