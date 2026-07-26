@@ -1,15 +1,30 @@
 [gd_scene format=3 uid="uid://dq7570h5mjsx"]
 
-[ext_resource type="Texture2D" uid="uid://bwox1whcf2mit" path="res://scenes/TestSHIT.png" id="2_pkbnx"]
-[ext_resource type="Script" uid="uid://bojkku67u56k6" path="res://scripts/poop.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://bojkku67u56k6" path="res://scripts/poop.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b5fg10gjpacmx" path="res://scenes/resources/ingame/poop/poop_body.png" id="2_body"]
+[ext_resource type="Texture2D" uid="uid://nj6axc88qwpr" path="res://scenes/resources/ingame/poop/poop_top.png" id="3_top"]
+[ext_resource type="Texture2D" uid="uid://gfvi4ol1cpx" path="res://scenes/resources/ingame/poop/poop_bottom.png" id="4_bottom"]
 
 [node name="Poop" type="Node2D" unique_id=2138993551]
-script = ExtResource("2_script")
+script = ExtResource("1_script")
 
-[node name="Poopholder" type="Sprite2D" parent="." unique_id=724245124]
-position = Vector2(0, -959.06824)
-scale = Vector2(0.547486, 1.7630816)
-texture = ExtResource("2_pkbnx")
+[node name="Visuals" type="Node2D" parent="." unique_id=1546118308]
+scale = Vector2(0.2, 0.2)
+
+[node name="Body" type="Sprite2D" parent="Visuals" unique_id=1355543436]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("2_body")
+region_enabled = true
+region_rect = Rect2(0, 0, 288, 1)
+
+[node name="TopCap" type="Sprite2D" parent="Visuals" unique_id=785065412]
+texture_filter = 1
+texture = ExtResource("3_top")
+
+[node name="BottomCap" type="Sprite2D" parent="Visuals" unique_id=1457984838]
+texture_filter = 1
+texture = ExtResource("4_bottom")
 
 [node name="TopMarker" type="Marker2D" parent="." unique_id=136543169]
 

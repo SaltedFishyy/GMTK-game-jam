@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn67ehyd1xvx5"
-path="res://.godot/imported/Testbutt.png-daadb812c26a90b63d621aa425b6eb3c.ctex"
+uid="uid://b5fg10gjpacmx"
+path="res://.godot/imported/poop_body.png-636044b8c6d1c5078667fbfb8be6e4c6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Testbutt.png"
-dest_files=["res://.godot/imported/Testbutt.png-daadb812c26a90b63d621aa425b6eb3c.ctex"]
+source_file="res://scenes/resources/ingame/poop/poop_body.png"
+dest_files=["res://.godot/imported/poop_body.png-636044b8c6d1c5078667fbfb8be6e4c6.ctex"]
 
 [params]
 

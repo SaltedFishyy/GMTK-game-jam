@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cnsex2x0g0mh8"]
+[gd_scene format=3 uid="uid://cnsex2x0g0mh8"]
 
 [ext_resource type="Script" uid="uid://d3rp4f4t0esnr" path="res://scripts/components/qte_bar.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://o1flopad0qs8" path="res://scenes/resources/qte/qte_frame.png" id="2_frame"]
@@ -15,8 +15,8 @@ offset_right = 600.0
 offset_bottom = 100.0
 script = ExtResource("1_script")
 
-[node name="VisualRoot" type="Control" parent="."]
-layout_mode = 0
+[node name="VisualRoot" type="Control" parent="." unique_id=443811264]
+anchors_preset = 0
 offset_left = 12.0
 offset_top = 16.0
 offset_right = 1488.0
@@ -24,43 +24,44 @@ offset_bottom = 563.0
 scale = Vector2(0.25, 0.25)
 mouse_filter = 2
 
-[node name="Frame" type="TextureRect" parent="VisualRoot"]
+[node name="Frame" type="TextureRect" parent="VisualRoot" unique_id=1133980192]
+texture_filter = 1
 layout_mode = 0
 offset_right = 1476.0
 offset_bottom = 547.0
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("2_frame")
 expand_mode = 1
 
-[node name="VisibleWindow" type="Control" parent="VisualRoot"]
+[node name="VisibleWindow" type="Control" parent="VisualRoot" unique_id=982204040]
 clip_contents = true
-layout_mode = 0
+anchors_preset = 0
 offset_left = 162.0
 offset_top = 267.0
 offset_right = 1314.0
 offset_bottom = 427.0
 mouse_filter = 2
 
-[node name="MovingTrack" type="Control" parent="VisualRoot/VisibleWindow"]
-layout_mode = 0
-offset_left = 1152.0
-offset_right = 6912.0
-offset_bottom = 160.0
+[node name="MovingTrack" type="Control" parent="VisualRoot/VisibleWindow" unique_id=2125245704]
+anchors_preset = 0
+offset_left = 1154.0
+offset_top = -71.0
+offset_right = 6914.0
+offset_bottom = 89.0
 mouse_filter = 2
 
-[node name="MissBefore" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack"]
+[node name="MissBefore" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack" unique_id=922820216]
+texture_filter = 1
+texture_repeat = 2
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 160.0
 mouse_filter = 2
-texture_filter = 1
-texture_repeat = 2
 texture = ExtResource("3_miss")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="TargetArea" type="HBoxContainer" parent="VisualRoot/VisibleWindow/MovingTrack"]
+[node name="TargetArea" type="HBoxContainer" parent="VisualRoot/VisibleWindow/MovingTrack" unique_id=300642047]
 layout_mode = 0
 offset_left = 1152.0
 offset_right = 1792.0
@@ -68,107 +69,107 @@ offset_bottom = 160.0
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="LeftCap" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="LeftCap" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=240825381]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("5_left")
 expand_mode = 1
 
-[node name="Center1" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center1" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=499390181]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center2" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center2" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=1982137972]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center3" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center3" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=73497975]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center4" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center4" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=186282580]
 visible = false
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center5" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center5" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=528498212]
 visible = false
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center6" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center6" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=855137907]
 visible = false
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="Center7" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="Center7" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=480763715]
 visible = false
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("6_center")
 expand_mode = 1
 
-[node name="RightCap" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea"]
+[node name="RightCap" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack/TargetArea" unique_id=1954007143]
+texture_filter = 1
 custom_minimum_size = Vector2(128, 160)
 layout_mode = 2
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("7_right")
 expand_mode = 1
 
-[node name="MissAfter" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack"]
+[node name="MissAfter" type="TextureRect" parent="VisualRoot/VisibleWindow/MovingTrack" unique_id=1228417228]
+texture_filter = 1
+texture_repeat = 2
 layout_mode = 0
 offset_left = 1792.0
 offset_right = 5760.0
 offset_bottom = 160.0
 mouse_filter = 2
-texture_filter = 1
-texture_repeat = 2
 texture = ExtResource("3_miss")
 expand_mode = 1
 stretch_mode = 1
 
-[node name="Pointer" type="TextureRect" parent="VisualRoot"]
+[node name="Pointer" type="TextureRect" parent="VisualRoot" unique_id=495927489]
 z_index = 2
+texture_filter = 1
 layout_mode = 0
 offset_left = 656.0
-offset_top = 139.0
+offset_top = 48.0
 offset_right = 820.0
-offset_bottom = 555.0
+offset_bottom = 464.0
 mouse_filter = 2
-texture_filter = 1
 texture = ExtResource("4_pointer")
 expand_mode = 1
 
-[node name="ProgressLabel" type="Label" parent="."]
+[node name="ProgressLabel" type="Label" parent="." unique_id=65080176]
 visible = false
 layout_mode = 0
 offset_left = 146.5

@@ -12,14 +12,18 @@ const DEFAULT_PIXELS_PER_CM: float = 10.0
 @export_range(0.1, 100.0, 0.1, "suffix:px/cm") var pixels_per_cm: float = DEFAULT_PIXELS_PER_CM
 @export_range(0.0, 3.0, 0.05, "suffix:s") var fall_duration: float = 0.5
 
-@onready var poop_visual: Sprite2D = $Poopholder
-@onready var top_marker: Marker2D = $TopMarker
-@onready var bottom_marker: Marker2D = $BottomMarker
-
 var clog_threshold_y: float = 0.0
 var movement_target_length_pixels: float = 0.0
 var segment_state: SegmentState = SegmentState.ACTIVE
 var is_initialized: bool = false
+var fall_tween: Tween
+
+@onready var visuals: Node2D = $Visuals
+@onready var body: Sprite2D = $Visuals/Body
+@onready var top_cap: Sprite2D = $Visuals/TopCap
+@onready var bottom_cap: Sprite2D = $Visuals/BottomCap
+@onready var top_marker: Marker2D = $TopMarker
+@onready var bottom_marker: Marker2D = $BottomMarker
 
 
 # 将活动段顶部对齐出生点，并初始化为0长度。
@@ -85,6 +89,7 @@ func start_falling(end_position: Vector2) -> void:
 		return
 
 	movement_target_length_pixels = _get_length_pixels()
+	top_cap.visible = true
 	segment_state = SegmentState.FALLING
 	var target_root_position: Vector2 = (
 		global_position
@@ -97,15 +102,27 @@ func start_falling(end_position: Vector2) -> void:
 		segment_state = SegmentState.SETTLED
 		return
 
-	var new_fall_tween: Tween = create_tween()
-	new_fall_tween.set_trans(Tween.TRANS_LINEAR)
-	new_fall_tween.tween_property(
+	fall_tween = create_tween()
+	fall_tween.set_trans(Tween.TRANS_LINEAR)
+	fall_tween.tween_property(
 		self,
 		"global_position",
 		target_root_position,
 		fall_duration
 	)
-	new_fall_tween.finished.connect(_on_fall_tween_finished)
+	fall_tween.finished.connect(_on_fall_tween_finished)
+
+
+# 暂停当前断段的掉落Tween，不改变段状态或目标位置。
+func pause_fall_motion() -> void:
+	if segment_state == SegmentState.FALLING and fall_tween != null and fall_tween.is_valid():
+		fall_tween.pause()
+
+
+# 从原进度继续当前断段的掉落Tween。
+func resume_fall_motion() -> void:
+	if segment_state == SegmentState.FALLING and fall_tween != null and fall_tween.is_valid():
+		fall_tween.play()
 
 
 # 返回活动段是否仍在追赶累计的推出目标。
@@ -171,19 +188,24 @@ func _get_length_pixels() -> float:
 func _set_length_pixels(length_pixels: float) -> void:
 	var safe_length: float = maxf(length_pixels, 0.0)
 	bottom_marker.position = Vector2(top_marker.position.x, top_marker.position.y + safe_length)
-	poop_visual.position = Vector2(
-		top_marker.position.x,
-		top_marker.position.y + safe_length * 0.5
-	)
-	poop_visual.visible = safe_length > 0.0
+	visuals.position = top_marker.position
 
-	if poop_visual.texture == null:
-		return
+	var visual_scale_y: float = maxf(absf(visuals.scale.y), 0.001)
+	var source_length: float = safe_length / visual_scale_y
+	body.visible = safe_length > 0.0
+	body.position = Vector2(0.0, source_length * 0.5)
+	bottom_cap.position = Vector2(0.0, source_length)
 
-	var texture_height: float = maxf(float(poop_visual.texture.get_height()), 1.0)
-	poop_visual.scale.y = safe_length / texture_height
+	if body.texture != null:
+		body.region_rect = Rect2(
+			0.0,
+			0.0,
+			float(body.texture.get_width()),
+			maxf(source_length, 1.0)
+		)
 
 
 # 掉落Tween结束后将当前段锁定为SETTLED。
 func _on_fall_tween_finished() -> void:
 	segment_state = SegmentState.SETTLED
+	fall_tween = null

@@ -11,10 +11,10 @@ var current_day: int = 1
 var clog_progress: float = 0.0
 
 
-# 将天数和跨天堵塞进度恢复为本局初始值。
+# 将天数和当天堵塞进度恢复为本局初始值。
 func reset_to_defaults() -> void:
 	current_day = 1
-	clog_progress = 0.0
+	reset_daily_clog_progress()
 
 
 # 协调全部跨场景系统重置，并从第1天每日状态页重新开始。
@@ -36,18 +36,27 @@ func restart_run() -> void:
 		)
 
 
-# 增加跨天堵塞进度，并将结果限制在有效范围内。
-func add_clog_progress(amount: float) -> void:
+# 将本轮实时变化量应用到当天堵塞进度，并限制在有效范围内。
+func apply_daily_clog_progress_delta(amount: float) -> void:
 	clog_progress = clampf(
-		clog_progress + maxf(amount, 0.0),
+		clog_progress + amount,
 		0.0,
 		MAX_CLOG_PROGRESS
 	)
 
 
+# 清空当天堵塞进度，不修改天数或其他跨场景状态。
+func reset_daily_clog_progress() -> void:
+	clog_progress = 0.0
+
+
 # 进入下一天，但不允许天数超过总天数。
 func advance_day() -> void:
-	current_day = mini(current_day + 1, MAX_DAYS)
+	if current_day >= MAX_DAYS:
+		return
+
+	current_day += 1
+	reset_daily_clog_progress()
 
 
 # 返回当前是否已经是第5天。
@@ -55,6 +64,6 @@ func is_final_day() -> bool:
 	return current_day >= MAX_DAYS
 
 
-# 返回累计堵塞进度是否已经达到目标。
+# 返回当天堵塞进度是否已经达到目标。
 func is_clog_target_reached() -> bool:
 	return clog_progress >= TARGET_CLOG_PROGRESS

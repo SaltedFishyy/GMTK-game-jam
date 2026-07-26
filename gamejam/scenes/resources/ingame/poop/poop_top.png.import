@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cwyw8xsun2ccg"
-path="res://.godot/imported/PoopBodyMiddleA.png-149fa86f2a69b0bb146e77264a409874.ctex"
+uid="uid://nj6axc88qwpr"
+path="res://.godot/imported/poop_top.png-d8bc4c4aec2683ca1825c32d8c037e69.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/poop/PoopBodyMiddleA.png"
-dest_files=["res://.godot/imported/PoopBodyMiddleA.png-149fa86f2a69b0bb146e77264a409874.ctex"]
+source_file="res://scenes/resources/ingame/poop/poop_top.png"
+dest_files=["res://.godot/imported/poop_top.png-d8bc4c4aec2683ca1825c32d8c037e69.ctex"]
 
 [params]
 

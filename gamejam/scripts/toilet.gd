@@ -37,10 +37,11 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @onready var qte_bar: QTEBarScript = $QTEBar
 @onready var qte_wait_timer: Timer = $QTEWaitTimer
 @onready var result_label: Label = $ResultLabel
-@onready var enter_shop_button: Button = $EnterShopButton
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var poop_spawn_marker: Marker2D = $PoopSpawnMarker
 @onready var poop_end_marker: Marker2D = $PoopEndMarker
+@onready var round_end_overlay: CanvasLayer = $RoundEndOverlay
+@onready var round_end_click_catcher: Button = $RoundEndOverlay/ClickCatcher
 
 var seconds_remaining: int = STARTING_SECONDS
 var has_round_started: bool = false
@@ -53,8 +54,7 @@ var is_mouse_button_down: bool = false
 var has_active_mouse_action: bool = false
 var hold_duration: float = 0.0
 var poop_idle_duration: float = 0.0
-var session_start_clog: float = 0.0
-var session_clog_gain: float = 0.0
+var last_round_clog_contribution: float = 0.0
 var break_count: int = 0
 var current_qte_is_double: bool = false
 var has_completed_double_qte: bool = false
@@ -63,6 +63,11 @@ var broken_length_cm: float = 0.0
 var broken_poops: Array[Poop] = []
 var active_poop: Poop
 var poop_reserve: PoopReserveScript = PoopReserveScript.new()
+var is_qte_active: bool = false
+var qte_had_mouse_action: bool = false
+var qte_frozen_hold_duration: float = 0.0
+var qte_mouse_release_pending: bool = false
+var has_requested_shop_transition: bool = false
 
 
 # 返回默认满蓄力距离加上当前腹肌升级后的厘米数，不包含食物临时加成。
@@ -75,10 +80,10 @@ static func get_max_charged_push_distance_cm_without_food() -> float:
 
 # 初始化倒计时、长度、金钱显示、Poop 和本轮计时。
 func _ready() -> void:
-	enter_shop_button.hide()
 	qte_random_number_generator.randomize()
-	session_start_clog = GameState.clog_progress
 	poop_reserve.reset(PlayerStats.get_effective_storage_capacity_cm())
+	round_end_overlay.visible = false
+	round_end_click_catcher.disabled = true
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
@@ -97,6 +102,11 @@ func _input(event: InputEvent) -> void:
 	var mouse_event: InputEventMouseButton = event
 	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
 		return
+	if is_qte_active:
+		if not mouse_event.pressed and is_mouse_button_down:
+			is_mouse_button_down = false
+			qte_mouse_release_pending = qte_had_mouse_action
+		return
 
 	if mouse_event.pressed:
 		if not is_mouse_button_down:
@@ -111,6 +121,8 @@ func _input(event: InputEvent) -> void:
 # 更新输入、Poop 平滑移动、长度和等待中的最终结算。
 func _process(delta: float) -> void:
 	if not is_round_active or not is_instance_valid(active_poop):
+		return
+	if is_qte_active:
 		return
 
 	if has_active_mouse_action and not is_round_ending:
@@ -161,29 +173,32 @@ func _on_qte_wait_timer_timeout() -> void:
 		QTERulesScript.uses_faded_display(integrity)
 	)
 	qte_bar.start_qte()
+	if qte_bar.is_active:
+		_begin_qte_gameplay_pause()
 
 
 # QTE成功后保持完整，并重新安排下一次等待。
 func _on_qte_bar_qte_succeeded() -> void:
-	if not _can_run_qte():
-		return
-
-	if current_qte_is_double:
+	var should_continue_round: bool = _can_run_qte()
+	if should_continue_round and current_qte_is_double:
 		has_completed_double_qte = true
 	current_qte_is_double = false
-	_schedule_next_qte()
+	_end_qte_gameplay_pause(should_continue_round)
+	if should_continue_round:
+		_schedule_next_qte()
 
 
 # QTE失败后夹断当前活动段、生成新段并继续本轮。
 func _on_qte_bar_qte_failed() -> void:
-	if not _can_run_qte():
-		return
-
-	break_count += 1
+	var should_continue_round: bool = _can_run_qte()
+	if should_continue_round:
+		break_count += 1
+		_break_active_poop()
+		_update_break_count_label()
 	current_qte_is_double = false
-	_break_active_poop()
-	_update_break_count_label()
-	_schedule_next_qte()
+	_end_qte_gameplay_pause(should_continue_round)
+	if should_continue_round:
+		_schedule_next_qte()
 
 
 # 冻结当前实际段、启动掉落，并立即生成新的活动段。
@@ -191,24 +206,36 @@ func _break_active_poop() -> void:
 	if not is_instance_valid(active_poop):
 		return
 
+	var detached_poop: Poop = active_poop
 	_cancel_mouse_action_for_break()
-	var segment_length_cm: float = maxf(active_poop.get_length_cm(), 0.0)
+	var segment_length_cm: float = maxf(detached_poop.get_length_cm(), 0.0)
 	if segment_length_cm > 0.0:
 		broken_length_cm += segment_length_cm
-		broken_poops.append(active_poop)
-		active_poop.start_falling(poop_end_marker.global_position)
+		broken_poops.append(detached_poop)
+		detached_poop.start_falling(poop_end_marker.global_position)
+		if is_qte_active:
+			detached_poop.pause_fall_motion()
 	else:
-		active_poop.queue_free()
+		detached_poop.queue_free()
 
 	_spawn_poop()
+	_resume_mouse_action_after_break()
 	_update_length_label()
 	_update_clog_preview()
 
 
-# 夹断时取消当前蓄力，但保留真实按键状态直到玩家松开。
+# 夹断时取消旧段的当前蓄力，同时保留真实按键状态供新段继续输入。
 func _cancel_mouse_action_for_break() -> void:
 	_reset_charge_state()
 	poop_idle_duration = 0.0
+
+
+# 左键仍按住时，在新活动段上从0重新开始一次输入操作。
+func _resume_mouse_action_after_break() -> void:
+	if not is_mouse_button_down:
+		return
+
+	_start_mouse_action()
 
 
 # 在允许输入时开始记录一次新的鼠标操作。
@@ -216,6 +243,7 @@ func _start_mouse_action() -> void:
 	if (
 		not is_round_active
 		or is_round_ending
+		or is_qte_active
 		or seconds_remaining <= 0
 		or has_active_mouse_action
 	):
@@ -363,10 +391,53 @@ func _can_run_qte() -> bool:
 	)
 
 
+# 冻结QTE之外的厕所玩法，并保存QTE开始前的鼠标操作状态。
+func _begin_qte_gameplay_pause() -> void:
+	if is_qte_active:
+		return
+
+	is_qte_active = true
+	qte_wait_timer.stop()
+	qte_had_mouse_action = has_active_mouse_action
+	qte_frozen_hold_duration = hold_duration
+	qte_mouse_release_pending = false
+	countdown_timer.paused = true
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment):
+			poop_segment.pause_fall_motion()
+
+
+# 清理QTE暂停，并在回合仍可继续时恢复冻结的输入与掉落运动。
+func _end_qte_gameplay_pause(should_resume_round: bool) -> void:
+	if not is_qte_active:
+		return
+
+	var had_mouse_action: bool = qte_had_mouse_action
+	var frozen_hold_duration: float = qte_frozen_hold_duration
+	var release_pending: bool = qte_mouse_release_pending
+	is_qte_active = false
+	countdown_timer.paused = false
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment):
+			poop_segment.resume_fall_motion()
+
+	qte_had_mouse_action = false
+	qte_frozen_hold_duration = 0.0
+	qte_mouse_release_pending = false
+	if not should_resume_round or not _can_run_qte() or not had_mouse_action:
+		return
+
+	has_active_mouse_action = true
+	hold_duration = frozen_hold_duration
+	_update_charge_bar()
+	if release_pending or not is_mouse_button_down:
+		_release_mouse_action()
+
+
 # 根据顺滑度随机安排下一次QTE等待时间。
 func _schedule_next_qte() -> void:
 	qte_wait_timer.stop()
-	if not _can_run_qte():
+	if is_qte_active or not _can_run_qte():
 		return
 
 	var wait_interval: Vector2 = QTERulesScript.get_wait_interval(
@@ -398,6 +469,8 @@ func _stop_qte_cycle() -> void:
 	qte_wait_timer.stop()
 	qte_bar.cancel_qte()
 	current_qte_is_double = false
+	if is_qte_active:
+		_end_qte_gameplay_pause(false)
 
 
 # 倒计时归零时自动释放当前操作，并禁止开始新输入。
@@ -458,20 +531,25 @@ func _update_game_progress_ui() -> void:
 	_update_clog_preview()
 
 
-# 根据本轮实时超出长度更新堵塞预览，但不写入永久进度。
+# 将本轮实时堵塞贡献的变化同步到当天唯一进度，并检查是否立即达标。
 func _update_clog_preview() -> void:
-	if is_instance_valid(active_poop):
-		session_clog_gain = maxf(
-			_get_current_clog_length_cm()
-			* GameState.CLOG_PROGRESS_PER_CM,
-			0.0
-		)
-
-	clog_progress_bar.value = clampf(
-		session_start_clog + session_clog_gain,
-		0.0,
-		GameState.MAX_CLOG_PROGRESS
+	var current_round_contribution: float = maxf(
+		_get_current_clog_length_cm() * GameState.CLOG_PROGRESS_PER_CM,
+		0.0
 	)
+	var contribution_delta: float = (
+		current_round_contribution - last_round_clog_contribution
+	)
+	last_round_clog_contribution = current_round_contribution
+	GameState.apply_daily_clog_progress_delta(contribution_delta)
+	clog_progress_bar.value = GameState.clog_progress
+
+	if (
+		GameState.is_clog_target_reached()
+		and is_round_active
+		and not is_round_ending
+	):
+		_begin_round_end()
 
 
 # 返回已断固定长度与当前活动段长度之和。
@@ -540,12 +618,7 @@ func _settle_round() -> void:
 		return
 
 	has_settled_round = true
-	session_clog_gain = maxf(
-		_get_current_clog_length_cm()
-		* GameState.CLOG_PROGRESS_PER_CM,
-		0.0
-	)
-	GameState.add_clog_progress(session_clog_gain)
+	_update_clog_preview()
 	money_earned = Economy.add_poop_value(
 		final_length_cm,
 		PlayerStats.get_effective_integrity(),
@@ -557,25 +630,47 @@ func _settle_round() -> void:
 	FoodSystem.clear_active_foods()
 
 
-# 结算完成后进入商店场景。
-func _on_enter_shop_button_pressed() -> void:
-	if is_round_active or not has_settled_round or GameState.is_final_day():
+# 前4天未达标结算后，由全屏点击层进入商店且只允许切换一次。
+func _on_round_end_click_catcher_pressed() -> void:
+	if (
+		has_requested_shop_transition
+		or is_round_active
+		or not has_settled_round
+		or GameState.is_final_day()
+		or GameState.is_clog_target_reached()
+		or not round_end_overlay.visible
+	):
 		return
 
-	get_tree().change_scene_to_file(SHOP_SCENE_PATH)
+	has_requested_shop_transition = true
+	round_end_click_catcher.disabled = true
+	round_end_overlay.visible = false
+	var scene_change_error: Error = get_tree().change_scene_to_file(SHOP_SCENE_PATH)
+	if scene_change_error != OK:
+		has_requested_shop_transition = false
+		round_end_click_catcher.disabled = false
+		round_end_overlay.visible = true
+		push_error("Failed to enter shop: %s" % error_string(scene_change_error))
 
 
-# 第5天显示最终结果，其他天显示商店入口。
+# 达标立即显示成功；第5天未达标显示失败；其余天显示点击进入商店层。
 func _show_round_destination() -> void:
-	if not GameState.is_final_day():
-		enter_shop_button.show()
-		return
-
+	round_end_overlay.visible = false
+	round_end_click_catcher.disabled = true
 	if GameState.is_clog_target_reached():
 		result_label.text = "TOILET CLOGGED!\nTARGET REACHED"
-	else:
+		result_label.self_modulate.a = 1.0
+		result_label.show()
+		return
+
+	if GameState.is_final_day():
 		result_label.text = "NOT CLOGGED ENOUGH"
-	result_label.show()
+		result_label.self_modulate.a = 1.0
+		result_label.show()
+		return
+
+	round_end_click_catcher.disabled = false
+	round_end_overlay.visible = true
 
 # 最后一次移动完成后统一结算，并显示商店入口或第5天结果。
 func _finish_round() -> void:
@@ -587,3 +682,15 @@ func _finish_round() -> void:
 	_update_length_label(true)
 	_settle_round()
 	_show_round_destination()
+
+
+# 场景退出时解除局部QTE暂停，避免Timer或Tween留下暂停状态。
+func _exit_tree() -> void:
+	if is_instance_valid(qte_bar):
+		qte_bar.cancel_qte()
+	if is_instance_valid(countdown_timer):
+		countdown_timer.paused = false
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment):
+			poop_segment.resume_fall_motion()
+	is_qte_active = false

@@ -3,6 +3,10 @@ extends CanvasLayer
 
 const MUSIC_BUS_NAME: StringName = &"Music"
 
+@export var show_menu_button_when_running: bool = true
+
+var has_paused_tree: bool = false
+
 @onready var menu_root: Control = $MenuRoot
 @onready var menu_button: Button = $MenuButton
 @onready var pause_panel: Panel = $MenuRoot/PausePanel
@@ -11,13 +15,11 @@ const MUSIC_BUS_NAME: StringName = &"Music"
 @onready var music_volume_slider: HSlider = $MenuRoot/OptionsPanel/MusicVolumeSlider
 @onready var music_percent_label: Label = $MenuRoot/OptionsPanel/MusicPercentLabel
 
-var has_paused_tree: bool = false
-
 
 # 初始化菜单页面，并从Music总线同步当前音量。
 func _ready() -> void:
 	menu_root.hide()
-	menu_button.show()
+	_update_menu_button_visibility()
 	_show_pause_panel()
 	_sync_music_volume_ui()
 
@@ -66,14 +68,14 @@ func pause_game() -> void:
 func resume_game() -> void:
 	if not has_paused_tree:
 		menu_root.hide()
-		menu_button.show()
+		_update_menu_button_visibility()
 		_show_pause_panel()
 		return
 
 	get_tree().paused = false
 	has_paused_tree = false
 	menu_root.hide()
-	menu_button.show()
+	_update_menu_button_visibility()
 	_show_pause_panel()
 
 
@@ -82,6 +84,11 @@ func _show_pause_panel() -> void:
 	pause_panel.show()
 	options_panel.hide()
 	restart_confirmation_panel.hide()
+
+
+# 根据场景配置决定运行中是否显示常驻MENU按钮；Esc暂停始终可用。
+func _update_menu_button_visibility() -> void:
+	menu_button.visible = show_menu_button_when_running
 
 
 # 显示音乐设置页面，游戏继续保持暂停。
