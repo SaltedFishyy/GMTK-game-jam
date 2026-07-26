@@ -1,0 +1,147 @@
+[gd_scene load_steps=9 format=3 uid="uid://bejsffbyp0prk"]
+
+[ext_resource type="Script" path="res://scripts/end_day.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/background.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_fill.png" id="3_fill"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_fill_right.png" id="4_fill_right"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_left.png" id="5_left"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/small_poop.png" id="6_poop"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/normal_button.png" id="7_button"]
+[ext_resource type="Texture2D" path="res://scenes/resources/endday/prssed_button.png" id="8_button_pressed"]
+
+[node name="EndDay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ResultPanel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DayCompleteLabel" type="Label" parent="ResultPanel"]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 126.0
+offset_right = 692.0
+offset_bottom = 174.0
+theme_override_font_sizes/font_size = 28
+text = "Day 1 complete"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LongestStreakValue" type="Label" parent="ResultPanel"]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 179.0
+offset_right = 692.0
+offset_bottom = 208.0
+theme_override_font_sizes/font_size = 22
+text = "0 FT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="DistanceValue" type="Label" parent="ResultPanel"]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 212.0
+offset_right = 692.0
+offset_bottom = 241.0
+theme_override_font_sizes/font_size = 22
+text = "0 FT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ClogDistanceBar" type="Control" parent="ResultPanel"]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 256.0
+offset_right = 689.0
+offset_bottom = 276.0
+mouse_filter = 2
+
+[node name="ClogFill" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+texture_filter = 1
+layout_mode = 0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("3_fill")
+expand_mode = 1
+stretch_mode = 0
+
+[node name="ClogFillRight" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("4_fill_right")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ClogLeft" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+texture_filter = 1
+layout_mode = 0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("5_left")
+expand_mode = 1
+stretch_mode = 0
+
+[node name="PayoutMoneyIcon" type="TextureRect" parent="ResultPanel"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 421.0
+offset_top = 294.0
+offset_right = 445.0
+offset_bottom = 318.0
+mouse_filter = 2
+texture = ExtResource("6_poop")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PayoutValue" type="Label" parent="ResultPanel"]
+layout_mode = 0
+offset_left = 451.0
+offset_top = 291.0
+offset_right = 594.0
+offset_bottom = 321.0
+theme_override_font_sizes/font_size = 22
+text = "0"
+vertical_alignment = 1
+
+[node name="WipeYourButton" type="TextureButton" parent="."]
+texture_filter = 1
+layout_mode = 0
+offset_left = 419.0
+offset_top = 378.0
+offset_right = 605.0
+offset_bottom = 434.0
+focus_mode = 0
+texture_normal = ExtResource("7_button")
+texture_pressed = ExtResource("8_button_pressed")
+ignore_texture_size = true
+stretch_mode = 5
+
+[connection signal="pressed" from="WipeYourButton" to="." method="_on_wipe_your_button_pressed"]

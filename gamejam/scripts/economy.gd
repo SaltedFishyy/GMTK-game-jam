@@ -1,6 +1,6 @@
 extends Node
 
-var money_per_cm: float = 0.5
+var money_per_cm: float = 2
 var total_money: int = 0
 
 

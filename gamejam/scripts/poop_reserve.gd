@@ -1,7 +1,7 @@
 class_name PoopReserve
 extends RefCounted
 
-const CM_PER_STORAGE_POINT: float = 10.0
+const CM_PER_STORAGE_POINT: float = 30.0
 
 var max_reserve_cm: float = 0.0
 var remaining_reserve_cm: float = 0.0

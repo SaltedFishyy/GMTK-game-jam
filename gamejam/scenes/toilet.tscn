@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://fwjvvnfheksn"]
 
 [ext_resource type="Script" uid="uid://b4nx4pyp6hjcl" path="res://scripts/toilet.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://bumh5if4xovdf" path="res://icon.svg" id="2_icon"]
 [ext_resource type="Texture2D" uid="uid://c6iqkyx6qcl0t" path="res://scenes/resources/ingame/top_body.png" id="2_vs5cn"]
 [ext_resource type="Texture2D" uid="uid://ccdpjs53sgwgj" path="res://scenes/resources/ingame/Scene_WallLeft.png" id="3_63pvo"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
@@ -11,14 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
 [ext_resource type="FontFile" uid="uid://ojnltx8auxvq" path="res://scenes/resources/UI/static/PixelifySans-Medium.ttf" id="6_vb6ry"]
 [ext_resource type="Texture2D" uid="uid://xxoqg1fgq2ds" path="res://scenes/resources/ingame/tube_animated.png" id="8_4b3qh"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a62ra"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(0, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_trc3a"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(1720, 0, 1720, 2000)
+[ext_resource type="Script" uid="uid://owsd818wivdd" path="res://scripts/components/tube_indicator.gd" id="9_tube"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vs5cn"]
 atlas = ExtResource("8_4b3qh")
@@ -60,15 +52,13 @@ region = Rect2(3440, 2000, 1720, 2000)
 atlas = ExtResource("8_4b3qh")
 region = Rect2(5160, 2000, 1720, 2000)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_a62ra"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(0, 0, 1720, 2000)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_3j2vm"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a62ra")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_trc3a")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_vs5cn")
 }, {
@@ -100,7 +90,15 @@ animations = [{
 "texture": SubResource("AtlasTexture_lakhi")
 }],
 "loop": 1,
-"name": &"default",
+"name": &"flowing",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a62ra")
+}],
+"loop": 0,
+"name": &"idle",
 "speed": 5.0
 }]
 
@@ -281,63 +279,34 @@ text = "NOT CLOGGED ENOUGH"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EnterShopButton" type="Button" parent="." unique_id=1862970975]
-visible = false
-self_modulate = Color(1, 1, 1, 0)
-offset_left = 955.0
-offset_top = 374.0
-offset_right = 1180.0
-offset_bottom = 439.0
-theme_override_font_sizes/font_size = 22
-text = "ENTER SHOP"
-metadata/_edit_use_anchors_ = true
-
-[node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1640241803]
-visible = false
-modulate = Color(0.95179313, 1, 0.69071525, 1)
-z_index = 1
-position = Vector2(601, 658)
-scale = Vector2(3.3828125, 1)
-texture = ExtResource("2_icon")
-
-[node name="RoundEndOverlay" type="CanvasLayer" parent="."]
-visible = false
-layer = 50
-
-[node name="ClickCatcher" type="Button" parent="RoundEndOverlay"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 0
-flat = true
-
-[node name="ContinueLabel" type="Label" parent="RoundEndOverlay"]
-mouse_filter = 2
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -64.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 24
-text = "Click anywhere to continue"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="PauseMenu" parent="." unique_id=837409740 instance=ExtResource("5_pause")]
+visible = false
 show_menu_button_when_running = false
 
-[node name="Tube" type="AnimatedSprite2D" parent="." unique_id=464689703]
-position = Vector2(-207, 649.99994)
+[node name="TubeIndicator" type="Node2D" parent="." unique_id=1845403873]
+z_index = 1
+position = Vector2(1043, 222)
+script = ExtResource("9_tube")
+
+[node name="Tube" type="AnimatedSprite2D" parent="TubeIndicator" unique_id=464689703]
+texture_filter = 1
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_3j2vm")
-frame_progress = 0.09461304
+animation = &"idle"
+
+[node name="DistanceToClogLabel" type="Label" parent="TubeIndicator" unique_id=1863911550]
+offset_left = -104.0
+offset_top = 74.0
+offset_right = 106.0
+offset_bottom = 109.0
+theme_override_colors/font_color = Color(1, 0.8156863, 0, 1)
+theme_override_fonts/font = ExtResource("6_vb6ry")
+theme_override_font_sizes/font_size = 20
+text = "0FT TO CLOG"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
 [connection signal="qte_failed" from="QTEBar" to="." method="_on_qte_bar_qte_failed"]
 [connection signal="qte_succeeded" from="QTEBar" to="." method="_on_qte_bar_qte_succeeded"]
 [connection signal="timeout" from="QTEWaitTimer" to="." method="_on_qte_wait_timer_timeout"]
-[connection signal="pressed" from="RoundEndOverlay/ClickCatcher" to="." method="_on_round_end_click_catcher_pressed"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bu48l0m6pcxcq"
-path="res://.godot/imported/WinBackground2.png-c5d87ef28bd214f69ead8ae06fd7209f.ctex"
+uid="uid://cablpv1hseipu"
+path="res://.godot/imported/banna_cover.png-3d2fdc74cdd6883ae9cdace2635bcb94.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Ending/WinBackground2.png"
-dest_files=["res://.godot/imported/WinBackground2.png-c5d87ef28bd214f69ead8ae06fd7209f.ctex"]
+source_file="res://scenes/resources/Shop/food/banna_cover.png"
+dest_files=["res://.godot/imported/banna_cover.png-3d2fdc74cdd6883ae9cdace2635bcb94.ctex"]
 
 [params]
 

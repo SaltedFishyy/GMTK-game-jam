@@ -19,26 +19,22 @@ var food_offer_ids: Array[int] = []
 @onready var abdominal_price_label: Label = %AbdominalPriceLabel
 @onready var sphincter_price_label: Label = %SphincterPriceLabel
 @onready var food_offer_controls: Array[Control] = [
-	%FoodOffer1,
-	%FoodOffer2,
-	%FoodOffer3,
+	%FoodSlot1,
+	%FoodSlot2,
+	%FoodSlot3,
 ]
 @onready var food_offer_buttons: Array[TextureButton] = [
-	%FoodOffer1Button,
-	%FoodOffer2Button,
-	%FoodOffer3Button,
+	%FoodSlot1Button,
+	%FoodSlot2Button,
+	%FoodSlot3Button,
 ]
 @onready var food_price_labels: Array[Label] = [
-	%FoodOffer1PriceLabel,
-	%FoodOffer2PriceLabel,
-	%FoodOffer3PriceLabel,
+	%FoodSlot1PriceLabel,
+	%FoodSlot2PriceLabel,
+	%FoodSlot3PriceLabel,
 ]
-@onready var food_status_labels: Array[Label] = [
-	%FoodOffer1StatusLabel,
-	%FoodOffer2StatusLabel,
-	%FoodOffer3StatusLabel,
-]
-@onready var food_tooltip: PanelContainer = %FoodTooltip
+@onready var food_hover_card: Control = %FoodHoverCard
+@onready var hover_texture: TextureRect = %HoverTexture
 @onready var food_name_label: Label = %FoodNameLabel
 @onready var food_effects_label: Label = %FoodEffectsLabel
 @onready var temporary_leave_shop_button: Button = %TemporaryLeaveShopButton
@@ -87,7 +83,6 @@ func _update_food_offer(index: int, food_id: int) -> void:
 	var normal_texture: Texture2D = definition["icon"] as Texture2D
 	var purchased_texture: Texture2D = definition.get("purchased_texture") as Texture2D
 	var is_purchased: bool = FoodSystem.has_pending_food(food_id)
-	var includes_labels: bool = bool(definition.get("purchased_texture_includes_labels", false))
 	var button: TextureButton = food_offer_buttons[index]
 
 	button.texture_normal = normal_texture
@@ -97,10 +92,7 @@ func _update_food_offer(index: int, food_id: int) -> void:
 		purchased_texture if is_purchased and purchased_texture != null else normal_texture
 	)
 	button.disabled = is_purchased or not FoodSystem.can_purchase_food(food_id)
-	food_price_labels[index].text = "$%d" % int(definition["price"])
-	food_price_labels[index].visible = not (is_purchased and includes_labels)
-	food_status_labels[index].text = "BOUGHT" if is_purchased else ""
-	food_status_labels[index].visible = is_purchased and not includes_labels
+	food_price_labels[index].text = str(int(definition["price"]))
 
 
 func _on_food_offer_pressed(index: int) -> void:
@@ -115,39 +107,50 @@ func _on_food_offer_mouse_entered(index: int) -> void:
 		return
 
 	var definition: Dictionary = FoodDefinitionsScript.get_food(food_offer_ids[index])
+	hover_texture.texture = definition["hover_texture"] as Texture2D
 	food_name_label.text = String(definition["display_name"])
-	food_effects_label.text = (
-		"Charge %+d | Storage %+d\nSmoothness %+d | Integrity %+d | Value x%.2f"
-		% [
-			int(definition["charge_bonus"]),
-			int(definition["storage_bonus"]),
-			int(definition["smoothness_bonus"]),
-			int(definition["integrity_bonus"]),
-			float(definition["value_multiplier"]),
-		]
-	)
-	food_tooltip.show()
-	_position_food_tooltip(food_offer_controls[index])
+	food_effects_label.text = _format_food_effects(definition)
+	food_hover_card.show()
+	_position_food_hover_card(food_offer_buttons[index])
 
 
 func _on_food_offer_mouse_exited() -> void:
-	food_tooltip.hide()
+	food_hover_card.hide()
 
 
-# 优先显示在商品右侧，并限制在当前视口范围内。
-func _position_food_tooltip(food_offer: Control) -> void:
+# 将Hover图左侧食物与普通图标对齐，并限制在当前视口范围内。
+func _position_food_hover_card(food_button: TextureButton) -> void:
 	var viewport_size: Vector2 = get_viewport_rect().size
-	var desired_position: Vector2 = (
-		food_offer.global_position + Vector2(food_offer.size.x + 8.0, 0.0)
-	)
+	var desired_position: Vector2 = food_button.global_position
 	var maximum_position: Vector2 = Vector2(
-		maxf(viewport_size.x - food_tooltip.size.x - 8.0, 8.0),
-		maxf(viewport_size.y - food_tooltip.size.y - 8.0, 8.0)
+		maxf(viewport_size.x - food_hover_card.size.x - 8.0, 8.0),
+		maxf(viewport_size.y - food_hover_card.size.y - 8.0, 8.0)
 	)
-	food_tooltip.global_position = Vector2(
+	food_hover_card.global_position = Vector2(
 		clampf(desired_position.x, 8.0, maximum_position.x),
 		clampf(desired_position.y, 8.0, maximum_position.y)
 	)
+
+
+# 使用定义中的非零效果生成简短Hover文字，不显示价格或复制食物数值。
+func _format_food_effects(definition: Dictionary) -> String:
+	var effects: PackedStringArray = []
+	var charge_bonus: int = int(definition["charge_bonus"])
+	var storage_bonus: int = int(definition["storage_bonus"])
+	var smoothness_bonus: int = int(definition["smoothness_bonus"])
+	var integrity_bonus: int = int(definition["integrity_bonus"])
+	var value_multiplier: float = float(definition["value_multiplier"])
+	if charge_bonus != 0:
+		effects.append("Charge %+d" % charge_bonus)
+	if storage_bonus != 0:
+		effects.append("Storage %+d" % storage_bonus)
+	if smoothness_bonus != 0:
+		effects.append("Smoothness %+d" % smoothness_bonus)
+	if integrity_bonus != 0:
+		effects.append("Integrity %+d" % integrity_bonus)
+	if not is_equal_approx(value_multiplier, 1.0):
+		effects.append("Value x%.2f" % value_multiplier)
+	return "\n".join(effects)
 
 
 # 刷新三个器官效果和购买按钮状态。

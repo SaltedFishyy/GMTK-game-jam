@@ -179,6 +179,11 @@ func get_excess_length_cm() -> float:
 	return excess_pixels / pixels_per_cm
 
 
+# 返回当前段的BottomMarker是否已到达初始化时保存的堵塞阈值。
+func has_reached_clog_threshold() -> bool:
+	return is_initialized and bottom_marker.global_position.y >= clog_threshold_y
+
+
 # 返回BottomMarker当前表示的非负像素长度。
 func _get_length_pixels() -> float:
 	return maxf(bottom_marker.position.y - top_marker.position.y, 0.0)

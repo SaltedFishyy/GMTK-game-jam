@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biky340xhksjc"
-path="res://.godot/imported/WinBackground1.png-a18d8c1849a5c4e2190ed814462b024c.ctex"
+uid="uid://du4aqjnbn2t4f"
+path="res://.godot/imported/avocado.png-b5987de7e1ee4cc9b46b54acce844e22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Ending/WinBackground1.png"
-dest_files=["res://.godot/imported/WinBackground1.png-a18d8c1849a5c4e2190ed814462b024c.ctex"]
+source_file="res://scenes/resources/Shop/food/avocado.png"
+dest_files=["res://.godot/imported/avocado.png-b5987de7e1ee4cc9b46b54acce844e22.ctex"]
 
 [params]
 

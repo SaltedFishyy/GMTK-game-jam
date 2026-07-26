@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://beift0wiqdkgo"
-path="res://.godot/imported/LoseBackground1.png-83012bcdd10e8fd5ff0aeaa49c3603a8.ctex"
+uid="uid://lhqqecfwgnbu"
+path="res://.godot/imported/HUD_PoopProgress_Frame.png-957a075d57df710cbe712ba54da7d0ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Ending/LoseBackground1.png"
-dest_files=["res://.godot/imported/LoseBackground1.png-83012bcdd10e8fd5ff0aeaa49c3603a8.ctex"]
+source_file="res://scenes/resources/ingame/HUD_PoopProgress_Frame.png"
+dest_files=["res://.godot/imported/HUD_PoopProgress_Frame.png-957a075d57df710cbe712ba54da7d0ec.ctex"]
 
 [params]
 

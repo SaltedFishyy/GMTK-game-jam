@@ -255,149 +255,204 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -45.0
-offset_top = 3.0
-offset_right = -45.0
-offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="FoodOffer1" type="Control" parent="NewShopUI/FoodOffers" unique_id=1393254460]
+[node name="FoodSlot1" type="Control" parent="NewShopUI/FoodOffers" unique_id=1393254460]
 unique_name_in_owner = true
 anchors_preset = 0
-offset_left = 120.0
+offset_left = 350.0
 offset_top = 382.0
-offset_right = 240.0
-offset_bottom = 502.0
+offset_right = 430.0
+offset_bottom = 472.0
 
-[node name="FoodOffer1Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1635921065]
+[node name="FoodSlot1Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodSlot1" unique_id=1635921065]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 284.0
-offset_top = -3.0
-offset_right = 356.0
-offset_bottom = 69.0
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 72.0
+offset_bottom = 65.0
+focus_mode = 0
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="FoodOffer1PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1137471902]
-unique_name_in_owner = true
+[node name="PriceRow" type="HBoxContainer" parent="NewShopUI/FoodOffers/FoodSlot1" unique_id=314321006]
 layout_mode = 0
-offset_left = 260.0
-offset_top = 71.0
-offset_right = 380.0
-offset_bottom = 94.0
-text = "$0"
-horizontal_alignment = 1
+offset_left = 10.0
+offset_top = 59.0
+offset_right = 70.0
+offset_bottom = 79.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
 
-[node name="FoodOffer1StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1840853728]
+[node name="SmallPoopMoneyIcon" type="TextureRect" parent="NewShopUI/FoodOffers/FoodSlot1/PriceRow" unique_id=1192772797]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_m4ofw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FoodSlot1PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodSlot1/PriceRow" unique_id=1137471902]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 260.0
-offset_top = 93.0
-offset_right = 380.0
-offset_bottom = 116.0
-horizontal_alignment = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_y6sft")
+text = "0"
 
-[node name="FoodOffer2" type="Control" parent="NewShopUI/FoodOffers" unique_id=1463658215]
+[node name="FoodSlot2" type="Control" parent="NewShopUI/FoodOffers" unique_id=1463658215]
 unique_name_in_owner = true
 anchors_preset = 0
-offset_left = 360.0
+offset_left = 470.0
 offset_top = 382.0
-offset_right = 480.0
-offset_bottom = 502.0
+offset_right = 550.0
+offset_bottom = 472.0
 
-[node name="FoodOffer2Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=1779532782]
+[node name="FoodSlot2Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodSlot2" unique_id=1779532782]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 154.0
-offset_top = -5.0
-offset_right = 226.0
-offset_bottom = 67.0
+offset_left = 10.0
+offset_top = 13.0
+offset_right = 70.0
+offset_bottom = 61.0
+focus_mode = 0
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="FoodOffer2PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=845783396]
-unique_name_in_owner = true
+[node name="PriceRow" type="HBoxContainer" parent="NewShopUI/FoodOffers/FoodSlot2" unique_id=1446669009]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 69.0
-offset_right = 250.0
-offset_bottom = 92.0
-text = "$0"
-horizontal_alignment = 1
+offset_left = 11.0
+offset_top = 61.0
+offset_right = 71.0
+offset_bottom = 81.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
 
-[node name="FoodOffer2StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=174518578]
+[node name="SmallPoopMoneyIcon" type="TextureRect" parent="NewShopUI/FoodOffers/FoodSlot2/PriceRow" unique_id=731360880]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_m4ofw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FoodSlot2PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodSlot2/PriceRow" unique_id=845783396]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 130.0
-offset_top = 91.0
-offset_right = 250.0
-offset_bottom = 114.0
-horizontal_alignment = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_y6sft")
+text = "0"
 
-[node name="FoodOffer3" type="Control" parent="NewShopUI/FoodOffers" unique_id=1461369898]
+[node name="FoodSlot3" type="Control" parent="NewShopUI/FoodOffers" unique_id=1461369898]
 unique_name_in_owner = true
 anchors_preset = 0
-offset_left = 600.0
+offset_left = 590.0
 offset_top = 382.0
-offset_right = 720.0
-offset_bottom = 502.0
+offset_right = 670.0
+offset_bottom = 472.0
 
-[node name="FoodOffer3Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=165134312]
+[node name="FoodSlot3Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodSlot3" unique_id=165134312]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 24.0
-offset_right = 96.0
-offset_bottom = 72.0
+offset_left = 8.0
+offset_top = -1.0
+offset_right = 68.0
+offset_bottom = 59.0
+focus_mode = 0
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="FoodOffer3PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=317198365]
-unique_name_in_owner = true
+[node name="PriceRow" type="HBoxContainer" parent="NewShopUI/FoodOffers/FoodSlot3" unique_id=1409674376]
 layout_mode = 0
-offset_top = 74.0
-offset_right = 120.0
-offset_bottom = 96.0
-text = "$0"
-horizontal_alignment = 1
+offset_left = 10.0
+offset_top = 58.0
+offset_right = 70.0
+offset_bottom = 81.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
 
-[node name="FoodOffer3StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=1099346095]
+[node name="SmallPoopMoneyIcon" type="TextureRect" parent="NewShopUI/FoodOffers/FoodSlot3/PriceRow" unique_id=1234842031]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_m4ofw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FoodSlot3PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodSlot3/PriceRow" unique_id=317198365]
 unique_name_in_owner = true
-layout_mode = 0
-offset_top = 96.0
-offset_right = 120.0
-offset_bottom = 118.0
-horizontal_alignment = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_y6sft")
+text = "0"
 
-[node name="FoodTooltip" type="PanelContainer" parent="NewShopUI" unique_id=2000548430]
+[node name="FoodHoverLayer" type="Control" parent="NewShopUI" unique_id=604120469]
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FoodHoverCard" type="Control" parent="NewShopUI/FoodHoverLayer" unique_id=2000548430]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 202.0
+offset_bottom = 85.0
+mouse_filter = 2
+
+[node name="HoverTexture" type="TextureRect" parent="NewShopUI/FoodHoverLayer/FoodHoverCard" unique_id=473821735]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HoverInfoArea" type="MarginContainer" parent="NewShopUI/FoodHoverLayer/FoodHoverCard" unique_id=2036930054]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 5.0
+offset_right = 198.0
+offset_bottom = 81.0
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 4
+
+[node name="InfoColumn" type="VBoxContainer" parent="NewShopUI/FoodHoverLayer/FoodHoverCard/HoverInfoArea" unique_id=1432910534]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="FoodNameLabel" type="Label" parent="NewShopUI/FoodHoverLayer/FoodHoverCard/HoverInfoArea/InfoColumn" unique_id=915713513]
 unique_name_in_owner = true
 visible = false
-z_index = 50
-custom_minimum_size = Vector2(260, 90)
-layout_mode = 0
-offset_right = 260.0
-offset_bottom = 90.0
-mouse_filter = 2
-
-[node name="TooltipContent" type="VBoxContainer" parent="NewShopUI/FoodTooltip" unique_id=575820096]
 layout_mode = 2
-mouse_filter = 2
-
-[node name="FoodNameLabel" type="Label" parent="NewShopUI/FoodTooltip/TooltipContent" unique_id=915713513]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 11
 text = "FOOD"
 horizontal_alignment = 1
 
-[node name="FoodEffectsLabel" type="Label" parent="NewShopUI/FoodTooltip/TooltipContent" unique_id=702686661]
+[node name="FoodEffectsLabel" type="Label" parent="NewShopUI/FoodHoverLayer/FoodHoverCard/HoverInfoArea/InfoColumn" unique_id=702686661]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Charge +0 | Storage +0
-Smoothness +0 | Integrity +0 | Value x1.00"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
+theme_override_font_sizes/font_size = 11
+text = "Value x 1.00"
 autowrap_mode = 2
 
 [node name="TemporaryLeaveShopButton" type="Button" parent="NewShopUI" unique_id=850574974]

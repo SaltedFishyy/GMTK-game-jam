@@ -6,16 +6,16 @@ enum Food {
 	COFFEE,
 	SWEET_POTATO,
 	AVOCADO,
-	CORN,
+	BANANA,
 }
 
 const FOODS: Dictionary = {
 	Food.PRUNE:
 	{
 		"display_name": "PRUNE",
-		"icon": preload("res://scenes/resources/UI/Icon_西梅.png"),
-		"purchased_texture": null,
-		"purchased_texture_includes_labels": false,
+		"icon": preload("res://scenes/resources/Shop/food/prune.png"),
+		"hover_texture": preload("res://scenes/resources/Shop/food/prune_hover.png"),
+		"purchased_texture": preload("res://scenes/resources/Shop/food/prune_purchased.png"),
 		"price": 5,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -26,9 +26,9 @@ const FOODS: Dictionary = {
 	Food.COFFEE:
 	{
 		"display_name": "COFFEE",
-		"icon": preload("res://scenes/resources/UI/Icon_咖啡.png"),
-		"purchased_texture": null,
-		"purchased_texture_includes_labels": false,
+		"icon": preload("res://scenes/resources/Shop/food/coffee.png"),
+		"hover_texture": preload("res://scenes/resources/Shop/food/coffee_hover.png"),
+		"purchased_texture": preload("res://scenes/resources/Shop/food/coffee_purchased.png"),
 		"price": 5,
 		"charge_bonus": 2,
 		"storage_bonus": 0,
@@ -39,9 +39,9 @@ const FOODS: Dictionary = {
 	Food.SWEET_POTATO:
 	{
 		"display_name": "SWEET POTATO",
-		"icon": preload("res://scenes/resources/UI/Icon_火龙果.png"),
-		"purchased_texture": null,
-		"purchased_texture_includes_labels": false,
+		"icon": preload("res://scenes/resources/Shop/food/sweet_potato.png"),
+		"hover_texture": preload("res://scenes/resources/Shop/food/sweet_potato_hover.png"),
+		"purchased_texture": preload("res://scenes/resources/Shop/food/sweet_potato_puchased.png"),
 		"price": 10,
 		"charge_bonus": 0,
 		"storage_bonus": 3,
@@ -52,9 +52,9 @@ const FOODS: Dictionary = {
 	Food.AVOCADO:
 	{
 		"display_name": "AVOCADO",
-		"icon": preload("res://scenes/resources/UI/Icon_牛油果.png"),
-		"purchased_texture": null,
-		"purchased_texture_includes_labels": false,
+		"icon": preload("res://scenes/resources/Shop/food/avocado.png"),
+		"hover_texture": preload("res://scenes/resources/Shop/food/avocado_hover.png"),
+		"purchased_texture": preload("res://scenes/resources/Shop/food/avocado_puchased.png"),
 		"price": 15,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -62,12 +62,12 @@ const FOODS: Dictionary = {
 		"integrity_bonus": 1,
 		"value_multiplier": 1.3,
 	},
-	Food.CORN:
+	Food.BANANA:
 	{
-		"display_name": "CORN",
-		"icon": preload("res://scenes/resources/UI/Icon_玉米.png"),
-		"purchased_texture": null,
-		"purchased_texture_includes_labels": false,
+		"display_name": "BANANA",
+		"icon": preload("res://scenes/resources/Shop/food/banna.png"),
+		"hover_texture": preload("res://scenes/resources/Shop/food/banna_cover.png"),
+		"purchased_texture": preload("res://scenes/resources/Shop/food/banna_purchased.png"),
 		"price": 15,
 		"charge_bonus": 0,
 		"storage_bonus": 0,
@@ -85,7 +85,7 @@ static func get_all_food_ids() -> Array[int]:
 		Food.COFFEE,
 		Food.SWEET_POTATO,
 		Food.AVOCADO,
-		Food.CORN,
+		Food.BANANA,
 	]
 
 

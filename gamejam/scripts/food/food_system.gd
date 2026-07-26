@@ -33,6 +33,8 @@ func ensure_shop_offers(current_day: int) -> void:
 			FoodDefinitionsScript.is_valid_food(food_id)
 			and not definition.is_empty()
 			and definition.get("icon") is Texture2D
+			and definition.get("hover_texture") is Texture2D
+			and definition.get("purchased_texture") is Texture2D
 			and int(definition.get("price", 0)) > 0
 		):
 			valid_food_ids.append(food_id)

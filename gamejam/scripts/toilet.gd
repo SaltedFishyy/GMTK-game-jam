@@ -4,7 +4,7 @@ const POOP_SCENE: PackedScene = preload("res://scenes/poop.tscn")
 const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
 const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
-const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
+const TubeIndicatorScript = preload("res://scripts/components/tube_indicator.gd")
 const STARTING_SECONDS: int = 10
 const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 
@@ -40,8 +40,7 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @onready var countdown_timer: Timer = $CountdownTimer
 @onready var poop_spawn_marker: Marker2D = $PoopSpawnMarker
 @onready var poop_end_marker: Marker2D = $PoopEndMarker
-@onready var round_end_overlay: CanvasLayer = $RoundEndOverlay
-@onready var round_end_click_catcher: Button = $RoundEndOverlay/ClickCatcher
+@onready var tube_indicator: TubeIndicatorScript = $TubeIndicator
 
 var seconds_remaining: int = STARTING_SECONDS
 var has_round_started: bool = false
@@ -60,6 +59,7 @@ var current_qte_is_double: bool = false
 var has_completed_double_qte: bool = false
 var qte_random_number_generator: RandomNumberGenerator = RandomNumberGenerator.new()
 var broken_length_cm: float = 0.0
+var longest_streak_cm: float = 0.0
 var broken_poops: Array[Poop] = []
 var active_poop: Poop
 var poop_reserve: PoopReserveScript = PoopReserveScript.new()
@@ -67,7 +67,7 @@ var is_qte_active: bool = false
 var qte_had_mouse_action: bool = false
 var qte_frozen_hold_duration: float = 0.0
 var qte_mouse_release_pending: bool = false
-var has_requested_shop_transition: bool = false
+var has_warned_invalid_clog_progress_rate: bool = false
 
 
 # 返回默认满蓄力距离加上当前腹肌升级后的厘米数，不包含食物临时加成。
@@ -82,8 +82,6 @@ static func get_max_charged_push_distance_cm_without_food() -> float:
 func _ready() -> void:
 	qte_random_number_generator.randomize()
 	poop_reserve.reset(PlayerStats.get_effective_storage_capacity_cm())
-	round_end_overlay.visible = false
-	round_end_click_catcher.disabled = true
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
@@ -210,6 +208,7 @@ func _break_active_poop() -> void:
 	_cancel_mouse_action_for_break()
 	var segment_length_cm: float = maxf(detached_poop.get_length_cm(), 0.0)
 	if segment_length_cm > 0.0:
+		longest_streak_cm = maxf(longest_streak_cm, segment_length_cm)
 		broken_length_cm += segment_length_cm
 		broken_poops.append(detached_poop)
 		detached_poop.start_falling(poop_end_marker.global_position)
@@ -402,6 +401,7 @@ func _begin_qte_gameplay_pause() -> void:
 	qte_frozen_hold_duration = hold_duration
 	qte_mouse_release_pending = false
 	countdown_timer.paused = true
+	tube_indicator.pause_animation()
 	for poop_segment: Poop in broken_poops:
 		if is_instance_valid(poop_segment):
 			poop_segment.pause_fall_motion()
@@ -420,6 +420,8 @@ func _end_qte_gameplay_pause(should_resume_round: bool) -> void:
 	for poop_segment: Poop in broken_poops:
 		if is_instance_valid(poop_segment):
 			poop_segment.resume_fall_motion()
+	_update_tube_indicator()
+	tube_indicator.resume_animation()
 
 	qte_had_mouse_action = false
 	qte_frozen_hold_duration = 0.0
@@ -543,6 +545,7 @@ func _update_clog_preview() -> void:
 	last_round_clog_contribution = current_round_contribution
 	GameState.apply_daily_clog_progress_delta(contribution_delta)
 	clog_progress_bar.value = GameState.clog_progress
+	_update_tube_indicator()
 
 	if (
 		GameState.is_clog_target_reached()
@@ -550,6 +553,42 @@ func _update_clog_preview() -> void:
 		and not is_round_ending
 	):
 		_begin_round_end()
+
+
+# 将现有Poop阈值状态和当天堵塞进度传给纯显示用TubeIndicator。
+func _update_tube_indicator() -> void:
+	tube_indicator.update_indicator(
+		_has_poop_in_tube(),
+		_get_total_length_cm(),
+		_get_clog_target_length_cm()
+	)
+
+
+# 从GameState唯一的堵塞目标与每厘米进度派生目标长度，不保存第二份平衡值。
+func _get_clog_target_length_cm() -> float:
+	if GameState.CLOG_PROGRESS_PER_CM <= 0.0:
+		if not has_warned_invalid_clog_progress_rate:
+			has_warned_invalid_clog_progress_rate = true
+			push_warning("Cannot convert clog target with a non-positive progress rate.")
+		return 0.0
+	return maxf(
+		GameState.TARGET_CLOG_PROGRESS / GameState.CLOG_PROGRESS_PER_CM,
+		0.0
+	)
+
+
+# 任一活动、下落或落定段到达堵塞阈值时，管道都视为有Poop流入。
+func _has_poop_in_tube() -> bool:
+	if is_instance_valid(active_poop) and active_poop.has_reached_clog_threshold():
+		return true
+
+	for poop_segment: Poop in broken_poops:
+		if (
+			is_instance_valid(poop_segment)
+			and poop_segment.has_reached_clog_threshold()
+		):
+			return true
+	return false
 
 
 # 返回已断固定长度与当前活动段长度之和。
@@ -625,38 +664,27 @@ func _settle_round() -> void:
 		has_completed_double_qte,
 		FoodSystem.get_active_value_multiplier()
 	)
+	var remaining_clog_progress: float = maxf(
+		GameState.TARGET_CLOG_PROGRESS - GameState.clog_progress,
+		0.0
+	)
+	var distance_remaining_cm: float = (
+		remaining_clog_progress / GameState.CLOG_PROGRESS_PER_CM
+	)
+	GameState.save_last_round_result(
+		GameState.current_day,
+		longest_streak_cm,
+		GameState.clog_progress,
+		distance_remaining_cm,
+		money_earned
+	)
 	_update_money_earned_label()
 	_update_clog_preview()
 	FoodSystem.clear_active_foods()
 
 
-# 前4天未达标结算后，由全屏点击层进入商店且只允许切换一次。
-func _on_round_end_click_catcher_pressed() -> void:
-	if (
-		has_requested_shop_transition
-		or is_round_active
-		or not has_settled_round
-		or GameState.is_final_day()
-		or GameState.is_clog_target_reached()
-		or not round_end_overlay.visible
-	):
-		return
-
-	has_requested_shop_transition = true
-	round_end_click_catcher.disabled = true
-	round_end_overlay.visible = false
-	var scene_change_error: Error = get_tree().change_scene_to_file(SHOP_SCENE_PATH)
-	if scene_change_error != OK:
-		has_requested_shop_transition = false
-		round_end_click_catcher.disabled = false
-		round_end_overlay.visible = true
-		push_error("Failed to enter shop: %s" % error_string(scene_change_error))
-
-
-# 达标立即显示成功；第5天未达标显示失败；其余天显示点击进入商店层。
+# 达标立即显示成功；第5天未达标显示失败；其余天进入当日结算页。
 func _show_round_destination() -> void:
-	round_end_overlay.visible = false
-	round_end_click_catcher.disabled = true
 	if GameState.is_clog_target_reached():
 		result_label.text = "TOILET CLOGGED!\nTARGET REACHED"
 		result_label.self_modulate.a = 1.0
@@ -669,8 +697,16 @@ func _show_round_destination() -> void:
 		result_label.show()
 		return
 
-	round_end_click_catcher.disabled = false
-	round_end_overlay.visible = true
+	var scene_change_error: Error = get_tree().change_scene_to_file(
+		GameState.END_DAY_SCENE_PATH
+	)
+	if scene_change_error != OK:
+		result_label.text = "DAY COMPLETE\nFAILED TO LOAD RESULTS"
+		result_label.self_modulate.a = 1.0
+		result_label.show()
+		push_error(
+			"Failed to enter End Day: %s" % error_string(scene_change_error)
+		)
 
 # 最后一次移动完成后统一结算，并显示商店入口或第5天结果。
 func _finish_round() -> void:
@@ -678,6 +714,11 @@ func _finish_round() -> void:
 		return
 
 	final_length_cm = _get_total_length_cm()
+	if is_instance_valid(active_poop):
+		longest_streak_cm = maxf(
+			longest_streak_cm,
+			maxf(active_poop.get_length_cm(), 0.0)
+		)
 	is_round_active = false
 	_update_length_label(true)
 	_settle_round()
