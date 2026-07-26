@@ -18,8 +18,8 @@ var in_game_bgm: AudioStreamWAV = preload("res://scenes/resources/music/bgm/In g
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	bus = &"Music"
-	lobby_bgm.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	in_game_bgm.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	_configure_looping_stream(lobby_bgm)
+	_configure_looping_stream(in_game_bgm)
 	get_tree().scene_changed.connect(_on_scene_changed)
 	call_deferred("_sync_with_current_scene")
 
@@ -37,7 +37,7 @@ func stop_music() -> void:
 		stop()
 
 
-func _on_scene_changed(_new_scene: Node) -> void:
+func _on_scene_changed() -> void:
 	_sync_with_current_scene()
 
 
@@ -56,3 +56,11 @@ func _ensure_music(desired_stream: AudioStreamWAV) -> void:
 		return
 	stream = desired_stream
 	play()
+
+
+func _configure_looping_stream(audio_stream: AudioStreamWAV) -> void:
+	audio_stream.loop_begin = 0
+	audio_stream.loop_end = maxi(
+		roundi(audio_stream.get_length() * float(audio_stream.mix_rate)), 1
+	)
+	audio_stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
