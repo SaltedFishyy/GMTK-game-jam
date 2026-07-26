@@ -24,7 +24,6 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var normal_qte_max_interval: float = 5.0
 @export_range(10.0, 1200.0, 10.0, "suffix:px/s") var normal_qte_pointer_speed: float = 400.0
 @export_range(1.0, 3.0, 0.1) var loose_qte_speed_multiplier: float = 1.5
-@export_range(1.0, 3.0, 0.1) var high_integrity_target_width_multiplier: float = 1.5
 
 @onready var countdown_label: Label = $CountdownLabel
 @onready var length_label: Label = $LengthLabel
@@ -145,13 +144,8 @@ func _on_qte_wait_timer_timeout() -> void:
 	var smoothness: int = PlayerStats.get_effective_smoothness()
 	var integrity: int = PlayerStats.get_effective_integrity()
 	var required_successes: int = QTERulesScript.get_required_successes(integrity)
-	var integrity_width_multiplier: float = QTERulesScript.get_target_width_multiplier(
-		integrity,
-		high_integrity_target_width_multiplier
-	)
-	var final_width_multiplier: float = (
-		integrity_width_multiplier
-		* OrganProgression.get_sphincter_qte_width_multiplier()
+	var target_center_count: int = QTERulesScript.get_target_center_count(
+		OrganProgression.get_level(OrganProgression.Organ.SPHINCTER)
 	)
 	current_qte_is_double = required_successes > 1
 	qte_bar.configure_qte(
@@ -160,7 +154,7 @@ func _on_qte_wait_timer_timeout() -> void:
 			normal_qte_pointer_speed,
 			loose_qte_speed_multiplier
 		),
-		final_width_multiplier,
+		target_center_count,
 		required_successes,
 		QTERulesScript.uses_faded_display(integrity)
 	)

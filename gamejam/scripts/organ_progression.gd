@@ -12,7 +12,6 @@ const UPGRADE_COST_STEP: int = 30
 const SPHINCTER_MAX_LEVEL: int = 2
 const LARGE_INTESTINE_STORAGE_BONUS_CM_PER_LEVEL: float = 91.44
 const ABDOMINAL_FULL_CHARGE_BONUS_CM_PER_LEVEL: float = 45.72
-const SPHINCTER_QTE_WIDTH_BONUS_PER_LEVEL: float = 0.1
 
 var large_intestine_level: int = 0
 var sphincter_level: int = 0
@@ -61,11 +60,6 @@ func get_abdominal_full_charge_bonus_cm() -> float:
 	)
 
 
-# 返回括约肌等级提供的QTE目标区域宽度倍率。
-func get_sphincter_qte_width_multiplier() -> float:
-	return 1.0 + float(sphincter_level) * SPHINCTER_QTE_WIDTH_BONUS_PER_LEVEL
-
-
 # 返回括约肌当前只用于界面显示的夹断风险状态。
 func get_sphincter_risk_state() -> String:
 	match sphincter_level:
@@ -75,6 +69,13 @@ func get_sphincter_risk_state() -> String:
 			return "MID"
 		_:
 			return "LOW"
+
+
+# 返回购买下一次括约肌升级后用于界面显示的风险状态。
+func get_next_sphincter_risk_state() -> String:
+	if sphincter_level <= 0:
+		return "MID"
+	return "LOW"
 
 
 # 返回指定器官是否已经达到自身上限。

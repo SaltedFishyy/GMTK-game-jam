@@ -4,21 +4,58 @@ signal food_state_changed
 
 const FoodDefinitionsScript = preload("res://scripts/food/food_definitions.gd")
 const MAX_VALUE_MULTIPLIER: float = 2.0
+const SHOP_OFFER_COUNT: int = 3
 
 var pending_food_ids: Array[int] = []
 var active_food_ids: Array[int] = []
+var shop_offer_day: int = -1
+var shop_offer_food_ids: Array[int] = []
 
 
 # 清空待生效和当前生效食物，并通知现有UI监听者。
 func reset_to_defaults() -> void:
 	pending_food_ids.clear()
 	active_food_ids.clear()
+	shop_offer_day = -1
+	shop_offer_food_ids.clear()
 	food_state_changed.emit()
+
+
+# 当前商店天数尚未生成商品时，无重复抽取最多三种有效食物。
+func ensure_shop_offers(current_day: int) -> void:
+	if shop_offer_day == current_day:
+		return
+
+	var valid_food_ids: Array[int] = []
+	for food_id: int in FoodDefinitionsScript.get_all_food_ids():
+		var definition: Dictionary = FoodDefinitionsScript.get_food(food_id)
+		if (
+			FoodDefinitionsScript.is_valid_food(food_id)
+			and not definition.is_empty()
+			and definition.get("icon") is Texture2D
+			and int(definition.get("price", 0)) > 0
+		):
+			valid_food_ids.append(food_id)
+
+	valid_food_ids.shuffle()
+	shop_offer_food_ids.clear()
+	var offer_count: int = mini(SHOP_OFFER_COUNT, valid_food_ids.size())
+	for index: int in range(offer_count):
+		shop_offer_food_ids.append(valid_food_ids[index])
+	shop_offer_day = current_day
+	food_state_changed.emit()
+
+
+# 返回当前商店固定商品编号的副本。
+func get_current_shop_offers() -> Array[int]:
+	return shop_offer_food_ids.duplicate()
 
 
 # 返回当前商店阶段是否可以购买指定食物。
 func can_purchase_food(food_id: int) -> bool:
 	if not FoodDefinitionsScript.is_valid_food(food_id):
+		return false
+	if not shop_offer_food_ids.has(food_id):
 		return false
 	if pending_food_ids.has(food_id):
 		return false

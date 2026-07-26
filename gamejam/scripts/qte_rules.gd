@@ -28,15 +28,15 @@ static func get_pointer_speed(
 	return normal_speed
 
 
-# 根据完整度返回目标区域宽度倍率。
-static func get_target_width_multiplier(
-	integrity: int,
-	high_integrity_multiplier: float
-) -> float:
-	if integrity >= 8:
-		return high_integrity_multiplier
-
-	return 1.0
+# 根据括约肌等级返回拼接目标区域需要显示的Center格数。
+static func get_target_center_count(sphincter_level: int) -> int:
+	match sphincter_level:
+		0:
+			return 3
+		1:
+			return 5
+		_:
+			return 7
 
 
 # 根据完整度返回本次QTE所需的连续成功次数。

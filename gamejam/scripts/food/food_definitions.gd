@@ -14,6 +14,8 @@ const FOODS: Dictionary = {
 	{
 		"display_name": "PRUNE",
 		"icon": preload("res://scenes/resources/UI/Icon_西梅.png"),
+		"purchased_texture": null,
+		"purchased_texture_includes_labels": false,
 		"price": 5,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -25,6 +27,8 @@ const FOODS: Dictionary = {
 	{
 		"display_name": "COFFEE",
 		"icon": preload("res://scenes/resources/UI/Icon_咖啡.png"),
+		"purchased_texture": null,
+		"purchased_texture_includes_labels": false,
 		"price": 5,
 		"charge_bonus": 2,
 		"storage_bonus": 0,
@@ -36,6 +40,8 @@ const FOODS: Dictionary = {
 	{
 		"display_name": "SWEET POTATO",
 		"icon": preload("res://scenes/resources/UI/Icon_火龙果.png"),
+		"purchased_texture": null,
+		"purchased_texture_includes_labels": false,
 		"price": 10,
 		"charge_bonus": 0,
 		"storage_bonus": 3,
@@ -47,6 +53,8 @@ const FOODS: Dictionary = {
 	{
 		"display_name": "AVOCADO",
 		"icon": preload("res://scenes/resources/UI/Icon_牛油果.png"),
+		"purchased_texture": null,
+		"purchased_texture_includes_labels": false,
 		"price": 15,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -58,6 +66,8 @@ const FOODS: Dictionary = {
 	{
 		"display_name": "CORN",
 		"icon": preload("res://scenes/resources/UI/Icon_玉米.png"),
+		"purchased_texture": null,
+		"purchased_texture_includes_labels": false,
 		"price": 15,
 		"charge_bonus": 0,
 		"storage_bonus": 0,

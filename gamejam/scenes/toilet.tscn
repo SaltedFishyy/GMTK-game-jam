@@ -7,9 +7,102 @@
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
 [ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
+[ext_resource type="Texture2D" uid="uid://xxoqg1fgq2ds" path="res://scenes/resources/ingame/tube_animated.png" id="8_4b3qh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a62ra"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(0, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_trc3a"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(1720, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vs5cn"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(3440, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63pvo"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(5160, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vpw5y"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(6880, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngyxh"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(8600, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vb6ry"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(10320, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nlwqp"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(12040, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qlld6"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(0, 2000, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_68x4d"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(1720, 2000, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6q62a"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(3440, 2000, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lakhi"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(5160, 2000, 1720, 2000)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3j2vm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a62ra")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_trc3a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vs5cn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_63pvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vpw5y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngyxh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vb6ry")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nlwqp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qlld6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_68x4d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6q62a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lakhi")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Toilet" type="Node2D" unique_id=1523779622]
-position = Vector2(1051, 11)
+position = Vector2(39, -130)
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=780536879]
@@ -167,6 +260,12 @@ scale = Vector2(3.3828125, 1)
 texture = ExtResource("2_icon")
 
 [node name="PauseMenu" parent="." unique_id=837409740 instance=ExtResource("5_pause")]
+
+[node name="Tube" type="AnimatedSprite2D" parent="." unique_id=464689703]
+position = Vector2(-207, 649.99994)
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_3j2vm")
+frame_progress = 0.09461304
 
 [connection signal="timeout" from="CountdownTimer" to="." method="_on_countdown_timer_timeout"]
 [connection signal="qte_failed" from="QTEBar" to="." method="_on_qte_bar_qte_failed"]

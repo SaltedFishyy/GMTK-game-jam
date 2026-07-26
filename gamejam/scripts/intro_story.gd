@@ -4,10 +4,7 @@ extends Node2D
 const STORY_PAPER_PAGE_SCENE: PackedScene = preload("res://scenes/components/story_paper_page.tscn")
 
 @export var story_pages: Array[String] = [
-	"Day 1.\nI have five days to clog this toilet.",
-	"Every day, I can produce poop and earn money.",
-	"I can spend that money on food and organ upgrades.",
-	"By the end of Day 5, the toilet must be clogged.",
+
 ]
 @export_range(0.1, 5.0, 0.1, "suffix:s") var paper_move_duration: float = 1.0
 

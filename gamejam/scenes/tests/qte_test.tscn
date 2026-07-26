@@ -24,9 +24,9 @@ color = Color(0.055, 0.065, 0.09, 1)
 
 [node name="TitleLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 390.0
+offset_left = 262.0
 offset_top = 80.0
-offset_right = 890.0
+offset_right = 762.0
 offset_bottom = 125.0
 theme_override_font_sizes/font_size = 30
 text = "QTE COMPONENT TEST"
@@ -34,36 +34,69 @@ horizontal_alignment = 1
 
 [node name="InstructionLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 340.0
+offset_left = 212.0
 offset_top = 145.0
-offset_right = 940.0
+offset_right = 812.0
 offset_bottom = 180.0
-text = "Press SPACE when the yellow pointer is inside the green area."
+text = "Press SPACE when the pointer center is inside the stitched target."
+horizontal_alignment = 1
+
+[node name="HighButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 337.0
+offset_top = 190.0
+offset_right = 437.0
+offset_bottom = 225.0
+text = "HIGH (3)"
+
+[node name="MidButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 462.0
+offset_top = 190.0
+offset_right = 562.0
+offset_bottom = 225.0
+text = "MID (5)"
+
+[node name="LowButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 587.0
+offset_top = 190.0
+offset_right = 687.0
+offset_bottom = 225.0
+text = "LOW (7)"
+
+[node name="ModeLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 362.0
+offset_top = 230.0
+offset_right = 662.0
+offset_bottom = 255.0
+text = "NEXT MODE: HIGH - 3 CENTER CELLS"
 horizontal_alignment = 1
 
 [node name="QTEBar" parent="." instance=ExtResource("2_qte")]
 layout_mode = 0
-offset_left = 340.0
-offset_top = 260.0
-offset_right = 940.0
-offset_bottom = 360.0
+offset_left = 327.0
+offset_top = 290.0
+offset_right = 927.0
+offset_bottom = 390.0
 
 [node name="ResultLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 390.0
-offset_top = 410.0
-offset_right = 890.0
-offset_bottom = 465.0
+offset_left = 262.0
+offset_top = 395.0
+offset_right = 762.0
+offset_bottom = 435.0
 theme_override_font_sizes/font_size = 26
 text = "Waiting for the first QTE..."
 horizontal_alignment = 1
 
 [node name="NextQTELabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 390.0
-offset_top = 490.0
-offset_right = 890.0
-offset_bottom = 525.0
+offset_left = 262.0
+offset_top = 450.0
+offset_right = 762.0
+offset_bottom = 485.0
 text = "Next QTE in 2.0 seconds"
 horizontal_alignment = 1
 
@@ -73,3 +106,6 @@ one_shot = true
 [connection signal="qte_failed" from="QTEBar" to="." method="_on_qte_bar_qte_failed"]
 [connection signal="qte_succeeded" from="QTEBar" to="." method="_on_qte_bar_qte_succeeded"]
 [connection signal="timeout" from="QTEWaitTimer" to="." method="_on_qte_wait_timer_timeout"]
+[connection signal="pressed" from="HighButton" to="." method="_on_high_button_pressed"]
+[connection signal="pressed" from="MidButton" to="." method="_on_mid_button_pressed"]
+[connection signal="pressed" from="LowButton" to="." method="_on_low_button_pressed"]

@@ -2,9 +2,15 @@
 
 [ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="2_pause"]
+[ext_resource type="FontFile" uid="uid://cby0rw7ws1kv6" path="res://scenes/resources/UI/static/PixelifySans-Regular.ttf" id="3_032fp"]
 [ext_resource type="Texture2D" uid="uid://u6lr2pq1424c" path="res://scenes/resources/Shop/Background.png" id="3_background"]
+[ext_resource type="FontFile" uid="uid://ojnltx8auxvq" path="res://scenes/resources/UI/static/PixelifySans-Medium.ttf" id="3_y6sft"]
+[ext_resource type="Texture2D" uid="uid://3i1lo68r5672" path="res://scenes/resources/Shop/BigpoopMoney.png" id="4_m4ofw"]
+[ext_resource type="Texture2D" uid="uid://cu6ml6pgv73vw" path="res://scenes/resources/Shop/NormalButton.png" id="6_heatd"]
+[ext_resource type="Texture2D" uid="uid://caab7g2bhxuiy" path="res://scenes/resources/Shop/PressedButton.png" id="7_1v8qu"]
+[ext_resource type="Texture2D" uid="uid://bc3hnx73quk2t" path="res://scenes/resources/Shop/SmallPoopMoney.png" id="8_m4ofw"]
 
-[node name="Shop" type="Control"]
+[node name="Shop" type="Control" unique_id=1550981092]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,9 +19,9 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="ShopBackground" type="TextureRect" parent="."]
-texture_filter = 1
+[node name="ShopBackground" type="TextureRect" parent="." unique_id=168328956]
 z_index = -10
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +33,7 @@ texture = ExtResource("3_background")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="NewShopUI" type="Control" parent="."]
+[node name="NewShopUI" type="Control" parent="." unique_id=1149297089]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,7 +42,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="MoneyDisplay" type="Control" parent="NewShopUI"]
+[node name="MoneyDisplay" type="Control" parent="NewShopUI" unique_id=107616171]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,20 +51,26 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TotalMoneyLabel" type="Label" parent="NewShopUI/MoneyDisplay"]
+[node name="TotalMoneyLabel" type="Label" parent="NewShopUI/MoneyDisplay" unique_id=1692201298]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 412.0
-offset_top = 18.0
-offset_right = 612.0
-offset_bottom = 50.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 20
-text = "TOTAL MONEY: $0"
+offset_left = 503.0
+offset_top = 147.0
+offset_right = 539.0
+offset_bottom = 184.0
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_y6sft")
+theme_override_font_sizes/font_size = 28
+text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="OrganDescriptions" type="Control" parent="NewShopUI"]
+[node name="Sprite2D" type="Sprite2D" parent="NewShopUI/MoneyDisplay" unique_id=159649867]
+position = Vector2(486, 165)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_m4ofw")
+
+[node name="OrganDescriptions" type="Control" parent="NewShopUI" unique_id=1465281966]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,106 +79,79 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="LargeIntestineInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
-layout_mode = 0
+[node name="LargeIntestineInfo" type="Control" parent="NewShopUI/OrganDescriptions" unique_id=173300722]
+anchors_preset = 0
 offset_left = 302.0
 offset_top = 240.0
 offset_right = 450.0
 offset_bottom = 310.0
 mouse_filter = 2
 
-[node name="LargeIntestineEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/LargeIntestineInfo"]
+[node name="LargeIntestineEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/LargeIntestineInfo" unique_id=1715219913]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 34.0
+offset_left = 4.0
+offset_top = 17.0
+offset_right = 4.0
+offset_bottom = 51.0
 grow_horizontal = 2
-mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
 theme_override_font_sizes/font_size = 22
 text = "1.6 FT"
 horizontal_alignment = 1
 
-[node name="LargeIntestineEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/LargeIntestineInfo"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-text = "OF POOP STORED"
-horizontal_alignment = 1
-
-[node name="AbdominalInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
-layout_mode = 0
+[node name="AbdominalInfo" type="Control" parent="NewShopUI/OrganDescriptions" unique_id=1385388083]
+anchors_preset = 0
 offset_left = 430.0
 offset_top = 240.0
 offset_right = 578.0
 offset_bottom = 310.0
 mouse_filter = 2
 
-[node name="AbdominalEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/AbdominalInfo"]
+[node name="AbdominalEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/AbdominalInfo" unique_id=1236813734]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 34.0
+offset_left = 1.0
+offset_top = 17.0
+offset_right = 1.0
+offset_bottom = 51.0
 grow_horizontal = 2
-mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
 theme_override_font_sizes/font_size = 22
 text = "0.4 FT"
 horizontal_alignment = 1
 
-[node name="AbdominalEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/AbdominalInfo"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-text = "PER FULL CHARGE"
-horizontal_alignment = 1
-
-[node name="SphincterInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
-layout_mode = 0
+[node name="SphincterInfo" type="Control" parent="NewShopUI/OrganDescriptions" unique_id=1750743115]
+anchors_preset = 0
 offset_left = 558.0
 offset_top = 240.0
 offset_right = 706.0
 offset_bottom = 310.0
 mouse_filter = 2
 
-[node name="SphincterEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/SphincterInfo"]
+[node name="SphincterEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/SphincterInfo" unique_id=1852006288]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 34.0
+offset_left = -6.0
+offset_top = 17.0
+offset_right = -6.0
+offset_bottom = 51.0
 grow_horizontal = 2
-mouse_filter = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
 theme_override_font_sizes/font_size = 22
 text = "HIGH"
 horizontal_alignment = 1
 
-[node name="SphincterEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/SphincterInfo"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -30.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-text = "BREAK RISK"
-horizontal_alignment = 1
-
-[node name="OrganPurchaseButtons" type="Control" parent="NewShopUI"]
+[node name="OrganPurchaseButtons" type="Control" parent="NewShopUI" unique_id=1789640532]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -175,43 +160,256 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="LargeIntestineBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+[node name="LargeIntestineBuyButton" type="TextureButton" parent="NewShopUI/OrganPurchaseButtons" unique_id=354523836]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 326.0
-offset_top = 324.0
-offset_right = 426.0
-offset_bottom = 366.0
-text = "BUY 30"
+offset_left = 323.0
+offset_top = 312.0
+offset_right = 755.0
+offset_bottom = 536.0
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("6_heatd")
+texture_pressed = ExtResource("7_1v8qu")
 
-[node name="AbdominalBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+[node name="LargeIntestinePriceLabel" type="Label" parent="NewShopUI/OrganPurchaseButtons" unique_id=1043627170]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 454.0
-offset_top = 324.0
-offset_right = 554.0
-offset_bottom = 366.0
-text = "BUY 30"
+offset_left = 335.0
+offset_top = 315.0
+offset_right = 435.0
+offset_bottom = 357.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
+theme_override_font_sizes/font_size = 12
+text = "<30> +3FT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="SphincterBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+[node name="Smallpoop1" type="Sprite2D" parent="NewShopUI/OrganPurchaseButtons" unique_id=781070277]
+position = Vector2(344, 335)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("8_m4ofw")
+
+[node name="AbdominalBuyButton" type="TextureButton" parent="NewShopUI/OrganPurchaseButtons" unique_id=50709875]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 582.0
-offset_top = 324.0
-offset_right = 682.0
-offset_bottom = 366.0
-text = "BUY 30"
+offset_left = 451.0
+offset_top = 312.0
+offset_right = 883.0
+offset_bottom = 536.0
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("6_heatd")
+texture_pressed = ExtResource("7_1v8qu")
 
-[node name="TemporaryLeaveShopButton" type="Button" parent="NewShopUI"]
+[node name="AbdominalPriceLabel" type="Label" parent="NewShopUI/OrganPurchaseButtons" unique_id=1062332854]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 463.0
+offset_top = 316.0
+offset_right = 563.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
+theme_override_font_sizes/font_size = 12
+text = "<30> +1.5FT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SphincterBuyButton" type="TextureButton" parent="NewShopUI/OrganPurchaseButtons" unique_id=1228560740]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 576.0
+offset_top = 312.0
+offset_right = 1008.0
+offset_bottom = 536.0
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("6_heatd")
+texture_pressed = ExtResource("7_1v8qu")
+
+[node name="SphincterPriceLabel" type="Label" parent="NewShopUI/OrganPurchaseButtons" unique_id=2111574232]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 589.0
+offset_top = 316.0
+offset_right = 689.0
+offset_bottom = 358.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_032fp")
+theme_override_font_sizes/font_size = 12
+text = "<30>  → MID"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Smallpoop2" type="Sprite2D" parent="NewShopUI/OrganPurchaseButtons" unique_id=924393689]
+position = Vector2(469, 337)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("8_m4ofw")
+
+[node name="Smallpoop3" type="Sprite2D" parent="NewShopUI/OrganPurchaseButtons" unique_id=210879568]
+position = Vector2(592, 336)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("8_m4ofw")
+
+[node name="FoodOffers" type="Control" parent="NewShopUI" unique_id=651733624]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = 3.0
+offset_right = -45.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="FoodOffer1" type="Control" parent="NewShopUI/FoodOffers" unique_id=1393254460]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 120.0
+offset_top = 382.0
+offset_right = 240.0
+offset_bottom = 502.0
+
+[node name="FoodOffer1Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1635921065]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 284.0
+offset_top = -3.0
+offset_right = 356.0
+offset_bottom = 69.0
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="FoodOffer1PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1137471902]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 71.0
+offset_right = 380.0
+offset_bottom = 94.0
+text = "$0"
+horizontal_alignment = 1
+
+[node name="FoodOffer1StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer1" unique_id=1840853728]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 93.0
+offset_right = 380.0
+offset_bottom = 116.0
+horizontal_alignment = 1
+
+[node name="FoodOffer2" type="Control" parent="NewShopUI/FoodOffers" unique_id=1463658215]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 360.0
+offset_top = 382.0
+offset_right = 480.0
+offset_bottom = 502.0
+
+[node name="FoodOffer2Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=1779532782]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 154.0
+offset_top = -5.0
+offset_right = 226.0
+offset_bottom = 67.0
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="FoodOffer2PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=845783396]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 130.0
+offset_top = 69.0
+offset_right = 250.0
+offset_bottom = 92.0
+text = "$0"
+horizontal_alignment = 1
+
+[node name="FoodOffer2StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer2" unique_id=174518578]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 130.0
+offset_top = 91.0
+offset_right = 250.0
+offset_bottom = 114.0
+horizontal_alignment = 1
+
+[node name="FoodOffer3" type="Control" parent="NewShopUI/FoodOffers" unique_id=1461369898]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 600.0
+offset_top = 382.0
+offset_right = 720.0
+offset_bottom = 502.0
+
+[node name="FoodOffer3Button" type="TextureButton" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=165134312]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 24.0
+offset_right = 96.0
+offset_bottom = 72.0
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="FoodOffer3PriceLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=317198365]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 74.0
+offset_right = 120.0
+offset_bottom = 96.0
+text = "$0"
+horizontal_alignment = 1
+
+[node name="FoodOffer3StatusLabel" type="Label" parent="NewShopUI/FoodOffers/FoodOffer3" unique_id=1099346095]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 118.0
+horizontal_alignment = 1
+
+[node name="FoodTooltip" type="PanelContainer" parent="NewShopUI" unique_id=2000548430]
+unique_name_in_owner = true
+visible = false
+z_index = 50
+custom_minimum_size = Vector2(260, 90)
+layout_mode = 0
+offset_right = 260.0
+offset_bottom = 90.0
+mouse_filter = 2
+
+[node name="TooltipContent" type="VBoxContainer" parent="NewShopUI/FoodTooltip" unique_id=575820096]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FoodNameLabel" type="Label" parent="NewShopUI/FoodTooltip/TooltipContent" unique_id=915713513]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "FOOD"
+horizontal_alignment = 1
+
+[node name="FoodEffectsLabel" type="Label" parent="NewShopUI/FoodTooltip/TooltipContent" unique_id=702686661]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Charge +0 | Storage +0
+Smoothness +0 | Integrity +0 | Value x1.00"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="TemporaryLeaveShopButton" type="Button" parent="NewShopUI" unique_id=850574974]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 820.0
 offset_top = 438.0
 offset_right = 990.0
 offset_bottom = 486.0
-text = "NEXT DAY"
+text = "Leave the Stall"
 
-[node name="PauseMenu" parent="." instance=ExtResource("2_pause")]
+[node name="PauseMenu" parent="." unique_id=1649960651 instance=ExtResource("2_pause")]
 
 [connection signal="pressed" from="NewShopUI/OrganPurchaseButtons/LargeIntestineBuyButton" to="." method="_on_large_intestine_buy_button_pressed"]
 [connection signal="pressed" from="NewShopUI/OrganPurchaseButtons/AbdominalBuyButton" to="." method="_on_abdominal_buy_button_pressed"]
