@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ck5moct0j8d3n"
-path="res://.godot/imported/Scene_Shop.png-e16e76662777100e8d98ec219e56ee9e.ctex"
+uid="uid://cu6ml6pgv73vw"
+path="res://.godot/imported/NormalButton.png-e7f43628e352fd686b92d053f75c3acd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Shop/Scene_Shop.png"
-dest_files=["res://.godot/imported/Scene_Shop.png-e16e76662777100e8d98ec219e56ee9e.ctex"]
+source_file="res://scenes/resources/Shop/NormalButton.png"
+dest_files=["res://.godot/imported/NormalButton.png-e7f43628e352fd686b92d053f75c3acd.ctex"]
 
 [params]
 

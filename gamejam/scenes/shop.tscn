@@ -2,23 +2,20 @@
 
 [ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="2_pause"]
-[ext_resource type="Texture2D" uid="uid://ck5moct0j8d3n" path="res://scenes/resources/Shop/Scene_Shop.png" id="3_1l46r"]
+[ext_resource type="Texture2D" uid="uid://u6lr2pq1424c" path="res://scenes/resources/Shop/Background.png" id="3_background"]
 
-[node name="Shop" type="Control" unique_id=1457033994]
+[node name="Shop" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 59.0
-offset_top = 599.0
-offset_right = 59.0
-offset_bottom = 599.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background11" type="ColorRect" parent="." unique_id=1629324872]
-visible = false
+[node name="ShopBackground" type="TextureRect" parent="."]
+texture_filter = 1
+z_index = -10
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,507 +23,197 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.105, 0.14, 0.09, 1)
+texture = ExtResource("3_background")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="MainMargin" type="MarginContainer" parent="." unique_id=200564471]
+[node name="NewShopUI" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 24.0
-offset_top = 16.0
-offset_right = -24.0
-offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="MainColumn" type="VBoxContainer" parent="MainMargin" unique_id=364460338]
-layout_mode = 2
-theme_override_constants/separation = 12
+[node name="MoneyDisplay" type="Control" parent="NewShopUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="HeaderContainer" type="HBoxContainer" parent="MainMargin/MainColumn" unique_id=986340684]
-custom_minimum_size = Vector2(0, 66)
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="ShopTitleLabel" type="Label" parent="MainMargin/MainColumn/HeaderContainer" unique_id=2105040460]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.96, 0.78, 0.28, 1)
-theme_override_font_sizes/font_size = 30
-text = "BIG GUT LARRY'S GUT GOODS"
-vertical_alignment = 1
-
-[node name="TotalMoneyLabel" type="Label" parent="MainMargin/MainColumn/HeaderContainer" unique_id=1070954424]
-custom_minimum_size = Vector2(230, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
+[node name="TotalMoneyLabel" type="Label" parent="NewShopUI/MoneyDisplay"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 412.0
+offset_top = 18.0
+offset_right = 612.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 20
 text = "TOTAL MONEY: $0"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MenuButtonClearance" type="Control" parent="MainMargin/MainColumn/HeaderContainer" unique_id=1840167969]
-custom_minimum_size = Vector2(205, 0)
-layout_mode = 2
+[node name="OrganDescriptions" type="Control" parent="NewShopUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="ContentColumns" type="HBoxContainer" parent="MainMargin/MainColumn" unique_id=1105016378]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 14
+[node name="LargeIntestineInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
+layout_mode = 0
+offset_left = 302.0
+offset_top = 240.0
+offset_right = 450.0
+offset_bottom = 310.0
+mouse_filter = 2
 
-[node name="OrganUpgradesPanel" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns" unique_id=1790013554]
-custom_minimum_size = Vector2(470, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PanelMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel" unique_id=80883702]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 12
-
-[node name="OrganColumn" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin" unique_id=300776363]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="OrganTitleLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn" unique_id=182044116]
-layout_mode = 2
-theme_override_font_sizes/font_size = 23
-text = "ORGAN UPGRADES"
-horizontal_alignment = 1
-
-[node name="OrganScroll" type="ScrollContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn" unique_id=650126794]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="OrganList" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll" unique_id=1278894184]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 8
-
-[node name="StomachRow" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList" unique_id=306140451]
-custom_minimum_size = Vector2(0, 94)
-layout_mode = 2
-
-[node name="RowMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow" unique_id=462203078]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
-
-[node name="Row" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin" unique_id=633089401]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row" unique_id=1381662973]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/Info" unique_id=814500134]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "STOMACH"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/Info" unique_id=1423944744]
-layout_mode = 2
-text = "FOOD SLOTS: 1"
-
-[node name="Status" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row" unique_id=1697931167]
-custom_minimum_size = Vector2(105, 0)
-layout_mode = 2
-
-[node name="LevelLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/Status" unique_id=1264979732]
-layout_mode = 2
-text = "Lv. 0 / 5"
-horizontal_alignment = 1
-
-[node name="PriceLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/Status" unique_id=745895621]
-layout_mode = 2
-text = "NEXT: $30"
-horizontal_alignment = 1
-
-[node name="UpgradeButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row" unique_id=1870948604]
-custom_minimum_size = Vector2(100, 48)
-layout_mode = 2
-text = "UPGRADE"
-
-[node name="LargeIntestineRow" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList" unique_id=99350195]
-custom_minimum_size = Vector2(0, 94)
-layout_mode = 2
-
-[node name="RowMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow" unique_id=439342038]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
-
-[node name="Row" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin" unique_id=1589288954]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row" unique_id=1752352871]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/Info" unique_id=152973739]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "LARGE INTESTINE"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/Info" unique_id=583011570]
-layout_mode = 2
-text = "RESERVE SIZE: 50 cm"
-
-[node name="Status" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row" unique_id=31154948]
-custom_minimum_size = Vector2(105, 0)
-layout_mode = 2
-
-[node name="LevelLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/Status" unique_id=313446916]
-layout_mode = 2
-text = "Lv. 0 / 5"
-horizontal_alignment = 1
-
-[node name="PriceLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/Status" unique_id=502765985]
-layout_mode = 2
-text = "NEXT: $30"
-horizontal_alignment = 1
-
-[node name="UpgradeButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row" unique_id=190253876]
-custom_minimum_size = Vector2(100, 48)
-layout_mode = 2
-text = "UPGRADE"
-
-[node name="SphincterRow" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList" unique_id=819811102]
-custom_minimum_size = Vector2(0, 94)
-layout_mode = 2
-
-[node name="RowMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow" unique_id=854647155]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
-
-[node name="Row" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin" unique_id=396830447]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row" unique_id=1509198061]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row/Info" unique_id=1915812822]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "SPHINCTER"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row/Info" unique_id=1854213219]
-layout_mode = 2
-text = "QTE ZONE WIDTH: +0%"
-
-[node name="Status" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row" unique_id=864424117]
-custom_minimum_size = Vector2(105, 0)
-layout_mode = 2
-
-[node name="LevelLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row/Status" unique_id=945151703]
-layout_mode = 2
-text = "Lv. 0 / 5"
-horizontal_alignment = 1
-
-[node name="PriceLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row/Status" unique_id=1055454793]
-layout_mode = 2
-text = "NEXT: $30"
-horizontal_alignment = 1
-
-[node name="UpgradeButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row" unique_id=377266358]
-custom_minimum_size = Vector2(100, 48)
-layout_mode = 2
-text = "UPGRADE"
-
-[node name="AbsRow" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList" unique_id=2041830451]
-custom_minimum_size = Vector2(0, 94)
-layout_mode = 2
-
-[node name="RowMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow" unique_id=1095007653]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 8
-
-[node name="Row" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin" unique_id=1595571890]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row" unique_id=739064090]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row/Info" unique_id=38513248]
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "ABS"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row/Info" unique_id=1062924609]
-layout_mode = 2
-text = "CHARGED PUSH DISTANCE: +0%"
-
-[node name="Status" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row" unique_id=2103660536]
-custom_minimum_size = Vector2(105, 0)
-layout_mode = 2
-
-[node name="LevelLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row/Status" unique_id=1944478274]
-layout_mode = 2
-text = "Lv. 0 / 5"
-horizontal_alignment = 1
-
-[node name="PriceLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row/Status" unique_id=2044753772]
-layout_mode = 2
-text = "NEXT: $30"
-horizontal_alignment = 1
-
-[node name="UpgradeButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row" unique_id=265083248]
-custom_minimum_size = Vector2(100, 48)
-layout_mode = 2
-text = "UPGRADE"
-
-[node name="RightColumn" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns" unique_id=518312442]
-custom_minimum_size = Vector2(550, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 12
-
-[node name="FoodShopPanel" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn" unique_id=1790506277]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PanelMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel" unique_id=362759321]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 10
-
-[node name="FoodColumn" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin" unique_id=90565781]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="FoodTitleLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn" unique_id=2044846421]
-layout_mode = 2
+[node name="LargeIntestineEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/LargeIntestineInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+mouse_filter = 2
 theme_override_font_sizes/font_size = 22
-text = "FOOD (TOMORROW'S BUFFS)"
+text = "1.6 FT"
 horizontal_alignment = 1
 
-[node name="FoodSlotsLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn" unique_id=262580102]
-layout_mode = 2
-text = "FOOD SLOTS: 0 / 1"
+[node name="LargeIntestineEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/LargeIntestineInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "OF POOP STORED"
 horizontal_alignment = 1
 
-[node name="FoodScroll" type="ScrollContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn" unique_id=878179185]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="FoodList" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll" unique_id=52612352]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
-
-[node name="PruneRow" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList" unique_id=1328597347]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/PruneRow" unique_id=1857167082]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/PruneRow/Info" unique_id=2080334500]
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "PRUNE — $5"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/PruneRow/Info" unique_id=36252717]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Charge +1 | Storage +2 | Smoothness +3 | Integrity -1 | Value x1.00"
-autowrap_mode = 2
-
-[node name="BuyButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/PruneRow" unique_id=1392931832]
-custom_minimum_size = Vector2(105, 44)
-layout_mode = 2
-text = "BUY"
-
-[node name="CoffeeRow" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList" unique_id=2025143]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CoffeeRow" unique_id=743962698]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CoffeeRow/Info" unique_id=190351908]
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "COFFEE — $5"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CoffeeRow/Info" unique_id=11788568]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Charge +2 | Storage +0 | Smoothness +2 | Integrity -2 | Value x1.00"
-autowrap_mode = 2
-
-[node name="BuyButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CoffeeRow" unique_id=1427772152]
-custom_minimum_size = Vector2(105, 44)
-layout_mode = 2
-text = "BUY"
-
-[node name="SweetPotatoRow" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList" unique_id=1038692040]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/SweetPotatoRow" unique_id=494976588]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/SweetPotatoRow/Info" unique_id=441878771]
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "SWEET POTATO — $10"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/SweetPotatoRow/Info" unique_id=578336725]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Charge +0 | Storage +3 | Smoothness -2 | Integrity +2 | Value x1.20"
-autowrap_mode = 2
-
-[node name="BuyButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/SweetPotatoRow" unique_id=2026507367]
-custom_minimum_size = Vector2(105, 44)
-layout_mode = 2
-text = "BUY"
-
-[node name="AvocadoRow" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList" unique_id=1302870799]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/AvocadoRow" unique_id=372051567]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/AvocadoRow/Info" unique_id=1259153264]
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "AVOCADO — $15"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/AvocadoRow/Info" unique_id=1748972762]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Charge +1 | Storage +2 | Smoothness +2 | Integrity +1 | Value x1.30"
-autowrap_mode = 2
-
-[node name="BuyButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/AvocadoRow" unique_id=2037865433]
-custom_minimum_size = Vector2(105, 44)
-layout_mode = 2
-text = "BUY"
-
-[node name="CornRow" type="HBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList" unique_id=508036077]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="Info" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CornRow" unique_id=273300060]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="NameLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CornRow/Info" unique_id=878872002]
-layout_mode = 2
-theme_override_font_sizes/font_size = 17
-text = "CORN — $15"
-
-[node name="EffectLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CornRow/Info" unique_id=1356509783]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Charge +0 | Storage +0 | Smoothness +0 | Integrity +0 | Value x1.35"
-autowrap_mode = 2
-
-[node name="BuyButton" type="Button" parent="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CornRow" unique_id=446309059]
-custom_minimum_size = Vector2(105, 44)
-layout_mode = 2
-text = "BUY"
-
-[node name="QueuedFoodPanel" type="PanelContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn" unique_id=1000854528]
-custom_minimum_size = Vector2(0, 158)
-layout_mode = 2
-
-[node name="PanelMargin" type="MarginContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/QueuedFoodPanel" unique_id=20120558]
-layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 8
-
-[node name="QueueColumn" type="VBoxContainer" parent="MainMargin/MainColumn/ContentColumns/RightColumn/QueuedFoodPanel/PanelMargin" unique_id=823741521]
-layout_mode = 2
-theme_override_constants/separation = 4
-
-[node name="QueuedTitleLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/QueuedFoodPanel/PanelMargin/QueueColumn" unique_id=1697618688]
-layout_mode = 2
-theme_override_font_sizes/font_size = 19
-text = "QUEUED FOR DAY 2"
-horizontal_alignment = 1
-
-[node name="QueuedFoodNamesLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/QueuedFoodPanel/PanelMargin/QueueColumn" unique_id=1857311685]
-layout_mode = 2
-text = "EMPTY STOMACH"
-horizontal_alignment = 1
-autowrap_mode = 2
-
-[node name="QueuedEffectsLabel" type="Label" parent="MainMargin/MainColumn/ContentColumns/RightColumn/QueuedFoodPanel/PanelMargin/QueueColumn" unique_id=2112759685]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 13
-text = "Charge +0 | Storage +0 | Smoothness +0 | Integrity +0 | Value x1.00"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="FooterContainer" type="HBoxContainer" parent="MainMargin/MainColumn" unique_id=854150835]
-custom_minimum_size = Vector2(0, 54)
-layout_mode = 2
-
-[node name="FooterSpacer" type="Control" parent="MainMargin/MainColumn/FooterContainer" unique_id=542795392]
-layout_mode = 2
-size_flags_horizontal = 3
+[node name="AbdominalInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 240.0
+offset_right = 578.0
+offset_bottom = 310.0
 mouse_filter = 2
 
-[node name="NextDayButton" type="Button" parent="MainMargin/MainColumn/FooterContainer" unique_id=233008447]
-custom_minimum_size = Vector2(230, 54)
-layout_mode = 2
-theme_override_font_sizes/font_size = 21
+[node name="AbdominalEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/AbdominalInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+text = "0.4 FT"
+horizontal_alignment = 1
+
+[node name="AbdominalEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/AbdominalInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "PER FULL CHARGE"
+horizontal_alignment = 1
+
+[node name="SphincterInfo" type="Control" parent="NewShopUI/OrganDescriptions"]
+layout_mode = 0
+offset_left = 558.0
+offset_top = 240.0
+offset_right = 706.0
+offset_bottom = 310.0
+mouse_filter = 2
+
+[node name="SphincterEffectValueLabel" type="Label" parent="NewShopUI/OrganDescriptions/SphincterInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 34.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 22
+text = "HIGH"
+horizontal_alignment = 1
+
+[node name="SphincterEffectDescriptionLabel" type="Label" parent="NewShopUI/OrganDescriptions/SphincterInfo"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "BREAK RISK"
+horizontal_alignment = 1
+
+[node name="OrganPurchaseButtons" type="Control" parent="NewShopUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LargeIntestineBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 326.0
+offset_top = 324.0
+offset_right = 426.0
+offset_bottom = 366.0
+text = "BUY 30"
+
+[node name="AbdominalBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 454.0
+offset_top = 324.0
+offset_right = 554.0
+offset_bottom = 366.0
+text = "BUY 30"
+
+[node name="SphincterBuyButton" type="Button" parent="NewShopUI/OrganPurchaseButtons"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 582.0
+offset_top = 324.0
+offset_right = 682.0
+offset_bottom = 366.0
+text = "BUY 30"
+
+[node name="TemporaryLeaveShopButton" type="Button" parent="NewShopUI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 820.0
+offset_top = 438.0
+offset_right = 990.0
+offset_bottom = 486.0
 text = "NEXT DAY"
 
-[node name="PauseMenu" parent="." unique_id=1597856791 instance=ExtResource("2_pause")]
+[node name="PauseMenu" parent="." instance=ExtResource("2_pause")]
 
-[node name="Background2" type="Sprite2D" parent="." unique_id=1440162028]
-position = Vector2(453.5, -342.5)
-scale = Vector2(0.39804688, 0.39921874)
-texture = ExtResource("3_1l46r")
-
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/UpgradeButton" to="." method="_on_stomach_upgrade_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/UpgradeButton" to="." method="_on_large_intestine_upgrade_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/SphincterRow/RowMargin/Row/UpgradeButton" to="." method="_on_sphincter_upgrade_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/AbsRow/RowMargin/Row/UpgradeButton" to="." method="_on_abdominal_muscles_upgrade_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/PruneRow/BuyButton" to="." method="_on_prune_food_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CoffeeRow/BuyButton" to="." method="_on_coffee_food_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/SweetPotatoRow/BuyButton" to="." method="_on_sweet_potato_food_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/AvocadoRow/BuyButton" to="." method="_on_avocado_food_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/RightColumn/FoodShopPanel/PanelMargin/FoodColumn/FoodScroll/FoodList/CornRow/BuyButton" to="." method="_on_corn_food_button_pressed"]
-[connection signal="pressed" from="MainMargin/MainColumn/FooterContainer/NextDayButton" to="." method="_on_next_day_button_pressed"]
+[connection signal="pressed" from="NewShopUI/OrganPurchaseButtons/LargeIntestineBuyButton" to="." method="_on_large_intestine_buy_button_pressed"]
+[connection signal="pressed" from="NewShopUI/OrganPurchaseButtons/AbdominalBuyButton" to="." method="_on_abdominal_buy_button_pressed"]
+[connection signal="pressed" from="NewShopUI/OrganPurchaseButtons/SphincterBuyButton" to="." method="_on_sphincter_buy_button_pressed"]
+[connection signal="pressed" from="NewShopUI/TemporaryLeaveShopButton" to="." method="_on_temporary_leave_shop_button_pressed"]

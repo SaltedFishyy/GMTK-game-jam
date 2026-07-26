@@ -7,7 +7,9 @@ enum SegmentState {
 	SETTLED,
 }
 
-@export_range(0.1, 100.0, 0.1, "suffix:px/cm") var pixels_per_cm: float = 10.0
+const DEFAULT_PIXELS_PER_CM: float = 10.0
+
+@export_range(0.1, 100.0, 0.1, "suffix:px/cm") var pixels_per_cm: float = DEFAULT_PIXELS_PER_CM
 @export_range(0.0, 3.0, 0.05, "suffix:s") var fall_duration: float = 0.5
 
 @onready var poop_visual: Sprite2D = $Poopholder

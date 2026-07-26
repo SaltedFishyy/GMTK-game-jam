@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbqh8at0v228j"
-path="res://.godot/imported/Scene_DealerHand.png-4f7268982b1882fa818a755ff9875207.ctex"
+uid="uid://dsmn4exrh3roc"
+path="res://.godot/imported/5days.png-cf80d4a437cf1ccec3130682f2c7075e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Shop/Scene_DealerHand.png"
-dest_files=["res://.godot/imported/Scene_DealerHand.png-4f7268982b1882fa818a755ff9875207.ctex"]
+source_file="res://scenes/resources/StartingPage/Days/5days.png"
+dest_files=["res://.godot/imported/5days.png-cf80d4a437cf1ccec3130682f2c7075e.ctex"]
 
 [params]
 

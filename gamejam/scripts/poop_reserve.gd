@@ -7,10 +7,15 @@ var max_reserve_cm: float = 0.0
 var remaining_reserve_cm: float = 0.0
 
 
-# 根据本轮开始时的储存量重新计算并装满Poop储备。
-func reset(storage_capacity: int) -> void:
-	max_reserve_cm = float(maxi(storage_capacity, 0)) * CM_PER_STORAGE_POINT
+# 使用本轮开始时已经计算完成的最大厘米数重新装满Poop储备。
+func reset(maximum_reserve_cm: float) -> void:
+	max_reserve_cm = maxf(maximum_reserve_cm, 0.0)
 	remaining_reserve_cm = max_reserve_cm
+
+
+# 根据储存量返回一轮满储备的厘米数，不创建或修改本轮储备状态。
+static func get_max_reserve_cm_for_capacity(storage_capacity: int) -> float:
+	return float(maxi(storage_capacity, 0)) * CM_PER_STORAGE_POINT
 
 
 # 消耗请求的厘米数，并返回本次实际允许推出的厘米数。

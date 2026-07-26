@@ -1,74 +1,79 @@
 class_name DayStart
-extends Node2D
+extends Control
 
 const FoodDefinitionsScript = preload("res://scripts/food/food_definitions.gd")
+const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
+const ToiletScript = preload("res://scripts/toilet.gd")
+const CENTIMETERS_PER_FOOT: float = 30.48
+const DAY_BACKGROUND_TEXTURES: Array[Texture2D] = [
+	preload("res://scenes/resources/StartingPage/Days/5days.png"),
+	preload("res://scenes/resources/StartingPage/Days/4days.png"),
+	preload("res://scenes/resources/StartingPage/Days/3days.png"),
+	preload("res://scenes/resources/StartingPage/Days/2days.png"),
+	preload("res://scenes/resources/StartingPage/Days/1days.png"),
+]
 
-@onready var days_remaining_label: Label = %DaysRemainingLabel
-@onready var large_intestine_level_label: Label = %LargeIntestineLevelLabel
-@onready var large_intestine_value_label: Label = %LargeIntestineValueLabel
-@onready var sphincter_level_label: Label = %SphincterLevelLabel
-@onready var sphincter_value_label: Label = %SphincterValueLabel
-@onready var abdominal_level_label: Label = %AbdominalLevelLabel
-@onready var abdominal_value_label: Label = %AbdominalValueLabel
+@onready var day_background: TextureRect = %DayBackground
+@onready var large_intestine_effect_value_label: Label = %LargeIntestineEffectValueLabel
+@onready var large_intestine_effect_description_label: Label = (
+	%LargeIntestineEffectDescriptionLabel
+)
+@onready var sphincter_effect_value_label: Label = %SphincterEffectValueLabel
+@onready var sphincter_effect_description_label: Label = %SphincterEffectDescriptionLabel
+@onready var abdominal_effect_value_label: Label = %AbdominalEffectValueLabel
+@onready var abdominal_effect_description_label: Label = %AbdominalEffectDescriptionLabel
 @onready var food_container: HBoxContainer = %FoodContainer
 @onready var continue_button: Button = %ContinueButton
 
 
 # 进入每日开始页面时，从现有跨场景数据刷新一次全部显示。
 func _ready() -> void:
-	_update_day_label()
+	_update_day_background()
 	_update_organ_panels()
 	_update_active_foods()
 	continue_button.disabled = false
 
 
-# 根据当前天数显示剩余天数，并正确处理单复数。
-func _update_day_label() -> void:
-	var remaining_days: int = maxi(GameState.MAX_DAYS - GameState.current_day + 1, 1)
-	var day_word: String = "DAY" if remaining_days == 1 else "DAYS"
-	days_remaining_label.text = "%d %s" % [remaining_days, day_word]
+# 根据当前天数切换唯一的整页背景，并安全处理意外的越界值。
+func _update_day_background() -> void:
+	var safe_day: int = clampi(GameState.current_day, 1, GameState.MAX_DAYS)
+	day_background.texture = DAY_BACKGROUND_TEXTURES[safe_day - 1]
 
 
 # 读取现有器官与玩家属性接口，更新三个厕所玩法器官面板。
 func _update_organ_panels() -> void:
-	large_intestine_level_label.text = (
-		"LV. %d / %d"
-		% [
-			OrganProgression.get_level(OrganProgression.Organ.LARGE_INTESTINE),
-			OrganProgression.MAX_LEVEL,
-		]
+	var base_storage_cm: float = PoopReserveScript.get_max_reserve_cm_for_capacity(
+		PlayerStats.get_storage_capacity()
+	) + OrganProgression.get_large_intestine_storage_bonus_cm()
+	large_intestine_effect_value_label.text = _format_length_with_food_bonus(
+		base_storage_cm,
+		FoodSystem.get_active_storage_bonus()
 	)
-	large_intestine_value_label.text = (
-		"STORAGE: %d / %d"
-		% [
-			PlayerStats.get_effective_storage_capacity(),
-			PlayerStats.MAX_STAT_VALUE,
-		]
-	)
+	large_intestine_effect_description_label.text = "OF POOP STORED"
 
-	sphincter_level_label.text = (
-		"LV. %d / %d"
-		% [
-			OrganProgression.get_level(OrganProgression.Organ.SPHINCTER),
-			OrganProgression.MAX_LEVEL,
-		]
-	)
-	var sphincter_bonus_percent: int = roundi(
-		(OrganProgression.get_sphincter_qte_width_multiplier() - 1.0) * 100.0
-	)
-	sphincter_value_label.text = "QTE WIDTH: +%d%%" % sphincter_bonus_percent
+	sphincter_effect_value_label.text = OrganProgression.get_sphincter_risk_state()
+	sphincter_effect_description_label.text = "BREAK RISK"
 
-	abdominal_level_label.text = (
-		"LV. %d / %d"
-		% [
-			OrganProgression.get_level(OrganProgression.Organ.ABDOMINAL_MUSCLES),
-			OrganProgression.MAX_LEVEL,
-		]
+	abdominal_effect_value_label.text = _format_length_with_food_bonus(
+		ToiletScript.get_max_charged_push_distance_cm_without_food(),
+		FoodSystem.get_active_charge_bonus()
 	)
-	var abdominal_bonus_percent: int = roundi(
-		(OrganProgression.get_abdominal_push_multiplier() - 1.0) * 100.0
-	)
-	abdominal_value_label.text = "CHARGED PUSH: +%d%%" % abdominal_bonus_percent
+	abdominal_effect_description_label.text = "PER FULL CHARGE"
+
+
+# 将厘米向下截断到一位小数的英尺显示，并附加食物原始加成点数。
+func _format_length_with_food_bonus(length_cm: float, food_bonus: int) -> String:
+	var feet_tenths: int = floori(maxf(length_cm, 0.0) / CENTIMETERS_PER_FOOT * 10.0)
+	var feet_text: String
+	if feet_tenths % 10 == 0:
+		feet_text = str(feet_tenths / 10)
+	else:
+		feet_text = "%.1f" % (float(feet_tenths) / 10.0)
+
+	var result: String = "%s FT" % feet_text
+	if food_bonus != 0:
+		result += " (%+d)" % food_bonus
+	return result
 
 
 # 按当前生效食物数组顺序创建图标；没有食物时保持容器为空。

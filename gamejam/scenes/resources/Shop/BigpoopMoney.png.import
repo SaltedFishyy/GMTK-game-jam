@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxw6k7w3rlfhm"
-path="res://.godot/imported/Scene_DealerHead.png-e76ff263ff1fe57cfca031d7745c9b88.ctex"
+uid="uid://3i1lo68r5672"
+path="res://.godot/imported/BigpoopMoney.png-8e08990be613dabbfc90cd650d271589.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/resources/Shop/Scene_DealerHead.png"
-dest_files=["res://.godot/imported/Scene_DealerHead.png-e76ff263ff1fe57cfca031d7745c9b88.ctex"]
+source_file="res://scenes/resources/Shop/BigpoopMoney.png"
+dest_files=["res://.godot/imported/BigpoopMoney.png-8e08990be613dabbfc90cd650d271589.ctex"]
 
 [params]
 

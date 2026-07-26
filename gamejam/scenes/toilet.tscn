@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
 
 [node name="Toilet" type="Node2D" unique_id=1523779622]
+position = Vector2(1051, 11)
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=780536879]
@@ -33,6 +34,7 @@ theme_override_font_sizes/font_size = 80
 text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="PoopSpawnMarker" type="Marker2D" parent="." unique_id=956465810]
 position = Vector2(630, 297)
@@ -59,6 +61,7 @@ offset_right = 600.0
 offset_bottom = 690.0
 theme_override_font_sizes/font_size = 24
 text = "RESERVE: 50.0 / 50.0 cm"
+metadata/_edit_use_anchors_ = true
 
 [node name="MoneyEarnedLabel" type="Label" parent="." unique_id=1677846008]
 offset_left = 22.0
@@ -67,6 +70,7 @@ offset_right = 255.0
 offset_bottom = 649.0
 theme_override_font_sizes/font_size = 26
 text = "Money Earned: $0"
+metadata/_edit_use_anchors_ = true
 
 [node name="DayLabel" type="Label" parent="." unique_id=549327707]
 offset_left = -33.0
@@ -76,6 +80,7 @@ offset_bottom = 130.0
 theme_override_font_sizes/font_size = 60
 text = "DAY 1 / 5"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="ClogTargetLabel" type="Label" parent="." unique_id=307464968]
 offset_left = 855.0
@@ -85,6 +90,7 @@ offset_bottom = 499.0
 theme_override_font_sizes/font_size = 40
 text = "CLOG TARGET BAR"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="ClogProgressBar" type="ProgressBar" parent="." unique_id=286305510]
 offset_left = 855.0
@@ -92,6 +98,7 @@ offset_top = 509.0
 offset_right = 1183.0
 offset_bottom = 549.0
 theme_override_font_sizes/font_size = 26
+metadata/_edit_use_anchors_ = true
 
 [node name="BreakCountLabel" type="Label" parent="." unique_id=1093367737]
 offset_left = -72.0
@@ -101,6 +108,7 @@ offset_bottom = 614.0
 theme_override_font_sizes/font_size = 26
 text = "BREAKS: 0"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="ChargeBar" type="ProgressBar" parent="." unique_id=1679274371]
 offset_left = 80.0
@@ -108,12 +116,14 @@ offset_top = 175.0
 offset_right = 139.0
 offset_bottom = 468.0
 fill_mode = 3
+metadata/_edit_use_anchors_ = true
 
 [node name="StatsHUD" parent="." unique_id=1651731315 instance=ExtResource("4_stats")]
 offset_left = 875.0
 offset_top = 567.0
 offset_right = 1275.0
 offset_bottom = 717.0
+metadata/_edit_use_anchors_ = true
 
 [node name="QTEBar" parent="." unique_id=307051169 instance=ExtResource("3_qte")]
 z_index = 2
@@ -122,6 +132,7 @@ offset_top = 482.0
 offset_right = 642.0
 offset_bottom = 582.0
 scale = Vector2(0.8, 0.8)
+metadata/_edit_use_anchors_ = true
 
 [node name="QTEWaitTimer" type="Timer" parent="." unique_id=70344431]
 one_shot = true
@@ -145,6 +156,7 @@ offset_right = 1180.0
 offset_bottom = 439.0
 theme_override_font_sizes/font_size = 22
 text = "ENTER SHOP"
+metadata/_edit_use_anchors_ = true
 
 [node name="ToiletPlaceholder" type="Sprite2D" parent="." unique_id=1640241803]
 visible = false

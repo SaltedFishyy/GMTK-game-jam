@@ -6,13 +6,16 @@ const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
 const STARTING_SECONDS: int = 10
+const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 
 @export_range(1.0, 1000.0, 1.0, "suffix:px/s") var poop_move_speed: float = 400.0
 @export_range(0.05, 1.0, 0.05, "suffix:s") var click_max_duration: float = 0.3
 @export_range(1.0, 200.0, 1.0, "suffix:px") var click_push_distance: float = 20.0
 @export_range(0.1, 5.0, 0.1, "suffix:s") var max_charge_duration: float = 3.0
 @export_range(1.0, 300.0, 1.0, "suffix:px") var min_charge_push_distance: float = 40.0
-@export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = 150.0
+@export_range(1.0, 300.0, 1.0, "suffix:px") var max_charge_push_distance: float = (
+	DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS
+)
 @export_range(0.0, 2.0, 0.05, "suffix:s") var idle_retract_delay: float = 0.3
 @export_range(0.0, 200.0, 1.0, "suffix:px/s") var poop_retract_speed: float = 20.0
 @export_range(0.1, 10.0, 0.1, "suffix:s") var hard_qte_min_interval: float = 1.0
@@ -63,12 +66,20 @@ var active_poop: Poop
 var poop_reserve: PoopReserveScript = PoopReserveScript.new()
 
 
+# 返回默认满蓄力距离加上当前腹肌升级后的厘米数，不包含食物临时加成。
+static func get_max_charged_push_distance_cm_without_food() -> float:
+	return (
+		DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS / Poop.DEFAULT_PIXELS_PER_CM
+		+ OrganProgression.get_abdominal_full_charge_bonus_cm()
+	)
+
+
 # 初始化倒计时、长度、金钱显示、Poop 和本轮计时。
 func _ready() -> void:
 	enter_shop_button.hide()
 	qte_random_number_generator.randomize()
 	session_start_clog = GameState.clog_progress
-	poop_reserve.reset(PlayerStats.get_effective_storage_capacity())
+	poop_reserve.reset(PlayerStats.get_effective_storage_capacity_cm())
 	_update_countdown_label()
 	_spawn_poop()
 	_update_length_label()
@@ -250,21 +261,23 @@ func _release_mouse_action() -> void:
 	_reset_charge_state()
 
 
-# 先计算基础长按距离，再应用腹肌与当前食物蓄力倍率。
+# 先计算基础长按距离，再按蓄力比例加入腹肌满蓄力奖励并应用食物倍率。
 func _get_charged_push_distance() -> float:
+	var charge_ratio: float = _get_charge_ratio()
 	var base_push_distance: float = lerpf(
 		min_charge_push_distance,
 		max_charge_push_distance,
-		_get_charge_ratio()
+		charge_ratio
+	)
+	var abdominal_bonus_pixels: float = (
+		OrganProgression.get_abdominal_full_charge_bonus_cm()
+		* active_poop.get_pixels_per_cm()
+		* charge_ratio
 	)
 	var food_charge_multiplier: float = (
 		1.0 + float(FoodSystem.get_active_charge_bonus()) * 0.1
 	)
-	return (
-		base_push_distance
-		* OrganProgression.get_abdominal_push_multiplier()
-		* food_charge_multiplier
-	)
+	return (base_push_distance + abdominal_bonus_pixels) * food_charge_multiplier
 
 
 # 累计当前鼠标操作的按住时间，并在最大蓄力时间封顶。

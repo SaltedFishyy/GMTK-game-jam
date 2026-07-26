@@ -58,11 +58,16 @@ z_index = 2
 position = Vector2(-1640, 0)
 texture = ExtResource("3_wsfs0")
 
+[node name="SmallBackground" type="Sprite2D" parent="Background/SmallBackground" unique_id=1641898208]
+z_index = 2
+position = Vector2(644, 0)
+texture = ExtResource("3_wsfs0")
+
 [node name="PaperStartMarker" type="Marker2D" parent="." unique_id=1464895680]
-position = Vector2(191, 221)
+position = Vector2(190, 221)
 
 [node name="PaperCenterMarker" type="Marker2D" parent="." unique_id=289773086]
-position = Vector2(567, 221)
+position = Vector2(566, 221)
 
 [node name="PaperChain" type="Node2D" parent="." unique_id=2138490308]
 z_index = 1
@@ -82,7 +87,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="AnimatedToiletPaper" type="AnimatedSprite2D" parent="." unique_id=833077975]
 z_index = 5
-position = Vector2(483, 221)
+position = Vector2(481, 221)
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_3j2vm")
 animation = &"rolling"

@@ -33,6 +33,7 @@ mouse_filter = 2
 color = Color(1, 0.85, 0.15, 1)
 
 [node name="ProgressLabel" type="Label" parent="." unique_id=407431482]
+visible = false
 layout_mode = 0
 offset_left = 250.0
 offset_right = 350.0

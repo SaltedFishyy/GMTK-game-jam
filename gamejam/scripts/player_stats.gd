@@ -55,6 +55,16 @@ func get_effective_storage_capacity() -> int:
 	)
 
 
+# 返回基础/食物储存点与大肠升级共同提供的本轮实际储备厘米数。
+func get_effective_storage_capacity_cm() -> float:
+	return (
+		PoopReserve.get_max_reserve_cm_for_capacity(
+			get_effective_storage_capacity()
+		)
+		+ OrganProgression.get_large_intestine_storage_bonus_cm()
+	)
+
+
 # 设置储存量，并限制在0到10。
 func set_storage_capacity(value: int) -> void:
 	storage_capacity = value
