@@ -5,6 +5,7 @@ const QTEBarScript = preload("res://scripts/components/qte_bar.gd")
 const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 const TubeIndicatorScript = preload("res://scripts/components/tube_indicator.gd")
+const PoopReserveHUDScript = preload("res://scripts/components/poop_reserve_hud.gd")
 const STARTING_SECONDS: int = 10
 const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 
@@ -41,6 +42,8 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @onready var poop_spawn_marker: Marker2D = $PoopSpawnMarker
 @onready var poop_end_marker: Marker2D = $PoopEndMarker
 @onready var tube_indicator: TubeIndicatorScript = $TubeIndicator
+@onready var poop_reserve_hud: PoopReserveHUDScript = $PoopReserveHUD
+@onready var detached_poop_drop_sfx: AudioStreamPlayer = $DetachedPoopDropSFX
 
 var seconds_remaining: int = STARTING_SECONDS
 var has_round_started: bool = false
@@ -49,11 +52,11 @@ var final_length_cm: float = 0.0
 var money_earned: int = 0
 var has_settled_round: bool = false
 var is_round_ending: bool = false
+var has_won_round: bool = false
 var is_mouse_button_down: bool = false
 var has_active_mouse_action: bool = false
 var hold_duration: float = 0.0
 var poop_idle_duration: float = 0.0
-var last_round_clog_contribution: float = 0.0
 var break_count: int = 0
 var current_qte_is_double: bool = false
 var has_completed_double_qte: bool = false
@@ -67,13 +70,13 @@ var is_qte_active: bool = false
 var qte_had_mouse_action: bool = false
 var qte_frozen_hold_duration: float = 0.0
 var qte_mouse_release_pending: bool = false
-var has_warned_invalid_clog_progress_rate: bool = false
+var drop_sound_segment_ids: Dictionary[int, bool] = {}
 
 
 # 返回默认满蓄力距离加上当前腹肌升级后的厘米数，不包含食物临时加成。
 static func get_max_charged_push_distance_cm_without_food() -> float:
 	return (
-		DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS / Poop.DEFAULT_PIXELS_PER_CM
+		LengthUnits.pixels_to_cm(DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS)
 		+ OrganProgression.get_abdominal_full_charge_bonus_cm()
 	)
 
@@ -84,6 +87,11 @@ func _ready() -> void:
 	poop_reserve.reset(PlayerStats.get_effective_storage_capacity_cm())
 	_update_countdown_label()
 	_spawn_poop()
+	poop_reserve_hud.initialize_reserve(
+		poop_reserve.get_max_reserve_cm(),
+		poop_reserve.get_remaining_reserve_cm(),
+		LengthUnits.pixels_to_cm(poop_move_speed)
+	)
 	_update_length_label()
 	_update_reserve_label()
 	_update_money_earned_label()
@@ -211,6 +219,9 @@ func _break_active_poop() -> void:
 		longest_streak_cm = maxf(longest_streak_cm, segment_length_cm)
 		broken_length_cm += segment_length_cm
 		broken_poops.append(detached_poop)
+		detached_poop.fall_completed.connect(
+			_on_detached_poop_reached_end_marker.bind(detached_poop), CONNECT_ONE_SHOT
+		)
 		detached_poop.start_falling(poop_end_marker.global_position)
 		if is_qte_active:
 			detached_poop.pause_fall_motion()
@@ -221,6 +232,16 @@ func _break_active_poop() -> void:
 	_resume_mouse_action_after_break()
 	_update_length_label()
 	_update_clog_preview()
+
+
+func _on_detached_poop_reached_end_marker(detached_poop: Poop) -> void:
+	if not is_instance_valid(detached_poop):
+		return
+	var segment_id: int = detached_poop.get_instance_id()
+	if drop_sound_segment_ids.has(segment_id):
+		return
+	drop_sound_segment_ids[segment_id] = true
+	detached_poop_drop_sfx.play()
 
 
 # 夹断时取消旧段的当前蓄力，同时保留真实按键状态供新段继续输入。
@@ -274,10 +295,9 @@ func _release_mouse_action() -> void:
 	if hold_duration >= click_max_duration:
 		push_pixels = _get_charged_push_distance()
 
-	var pixels_per_cm: float = active_poop.get_pixels_per_cm()
-	var requested_cm: float = push_pixels / pixels_per_cm
+	var requested_cm: float = LengthUnits.pixels_to_cm(push_pixels)
 	var consumed_cm: float = poop_reserve.consume(requested_cm)
-	var allowed_push_pixels: float = consumed_cm * pixels_per_cm
+	var allowed_push_pixels: float = LengthUnits.cm_to_pixels(consumed_cm)
 	if allowed_push_pixels > 0.0:
 		active_poop.push_distance(allowed_push_pixels)
 	_update_reserve_label()
@@ -293,8 +313,9 @@ func _get_charged_push_distance() -> float:
 		charge_ratio
 	)
 	var abdominal_bonus_pixels: float = (
-		OrganProgression.get_abdominal_full_charge_bonus_cm()
-		* active_poop.get_pixels_per_cm()
+		LengthUnits.cm_to_pixels(
+			OrganProgression.get_abdominal_full_charge_bonus_cm()
+		)
 		* charge_ratio
 	)
 	var food_charge_multiplier: float = (
@@ -402,6 +423,7 @@ func _begin_qte_gameplay_pause() -> void:
 	qte_mouse_release_pending = false
 	countdown_timer.paused = true
 	tube_indicator.pause_animation()
+	poop_reserve_hud.pause_transition()
 	for poop_segment: Poop in broken_poops:
 		if is_instance_valid(poop_segment):
 			poop_segment.pause_fall_motion()
@@ -422,6 +444,7 @@ func _end_qte_gameplay_pause(should_resume_round: bool) -> void:
 			poop_segment.resume_fall_motion()
 	_update_tube_indicator()
 	tube_indicator.resume_animation()
+	poop_reserve_hud.resume_transition()
 
 	qte_had_mouse_action = false
 	qte_frozen_hold_duration = 0.0
@@ -515,6 +538,9 @@ func _update_reserve_label() -> void:
 		poop_reserve.get_remaining_reserve_cm(),
 		poop_reserve.get_max_reserve_cm()
 	]
+	poop_reserve_hud.set_remaining_target(
+		poop_reserve.get_remaining_reserve_cm()
+	)
 
 
 # 更新当前天数、堵塞目标和堵塞条范围。
@@ -523,57 +549,38 @@ func _update_game_progress_ui() -> void:
 		GameState.current_day,
 		GameState.MAX_DAYS
 	]
-	var target_percent: int = roundi(
-		GameState.TARGET_CLOG_PROGRESS
-		/ GameState.MAX_CLOG_PROGRESS
-		* 100.0
-	)
-	clog_target_label.text = "CLOG TARGET: %d%%" % target_percent
-	clog_progress_bar.max_value = GameState.MAX_CLOG_PROGRESS
+	clog_target_label.text = "CLOG TARGET: %d FT" % roundi(GameState.CLOG_TARGET_FEET)
+	clog_progress_bar.min_value = 0.0
+	clog_progress_bar.max_value = 1.0
 	_update_clog_preview()
 
 
-# 将本轮实时堵塞贡献的变化同步到当天唯一进度，并检查是否立即达标。
+# 使用本轮实际总长度刷新堵塞比例，并检查是否立即达标。
 func _update_clog_preview() -> void:
-	var current_round_contribution: float = maxf(
-		_get_current_clog_length_cm() * GameState.CLOG_PROGRESS_PER_CM,
-		0.0
+	var total_length_cm: float = _get_total_length_cm()
+	var target_length_cm: float = GameState.get_clog_target_length_cm()
+	clog_progress_bar.value = (
+		clampf(total_length_cm / target_length_cm, 0.0, 1.0)
+		if target_length_cm > 0.0
+		else 0.0
 	)
-	var contribution_delta: float = (
-		current_round_contribution - last_round_clog_contribution
-	)
-	last_round_clog_contribution = current_round_contribution
-	GameState.apply_daily_clog_progress_delta(contribution_delta)
-	clog_progress_bar.value = GameState.clog_progress
 	_update_tube_indicator()
 
 	if (
-		GameState.is_clog_target_reached()
+		GameState.is_clog_target_length_reached(total_length_cm)
 		and is_round_active
-		and not is_round_ending
+		and not has_won_round
 	):
-		_begin_round_end()
+		_begin_victory()
 
 
-# 将现有Poop阈值状态和当天堵塞进度传给纯显示用TubeIndicator。
+# 将现有Poop阈值状态、总长度和统一目标传给纯显示用TubeIndicator。
 func _update_tube_indicator() -> void:
 	tube_indicator.update_indicator(
 		_has_poop_in_tube(),
+		_get_max_clog_penetration_cm(),
 		_get_total_length_cm(),
-		_get_clog_target_length_cm()
-	)
-
-
-# 从GameState唯一的堵塞目标与每厘米进度派生目标长度，不保存第二份平衡值。
-func _get_clog_target_length_cm() -> float:
-	if GameState.CLOG_PROGRESS_PER_CM <= 0.0:
-		if not has_warned_invalid_clog_progress_rate:
-			has_warned_invalid_clog_progress_rate = true
-			push_warning("Cannot convert clog target with a non-positive progress rate.")
-		return 0.0
-	return maxf(
-		GameState.TARGET_CLOG_PROGRESS / GameState.CLOG_PROGRESS_PER_CM,
-		0.0
+		GameState.get_clog_target_length_cm()
 	)
 
 
@@ -591,32 +598,27 @@ func _has_poop_in_tube() -> bool:
 	return false
 
 
+# 多段同时进入管道时只显示最深的一段，避免把同一管道视觉重复累加。
+func _get_max_clog_penetration_cm() -> float:
+	var maximum_penetration_cm: float = 0.0
+	if is_instance_valid(active_poop):
+		maximum_penetration_cm = active_poop.get_clog_penetration_cm()
+
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment):
+			maximum_penetration_cm = maxf(
+				maximum_penetration_cm,
+				poop_segment.get_clog_penetration_cm()
+			)
+	return maximum_penetration_cm
+
+
 # 返回已断固定长度与当前活动段长度之和。
 func _get_total_length_cm() -> float:
 	var active_length_cm: float = 0.0
 	if is_instance_valid(active_poop):
 		active_length_cm = maxf(active_poop.get_length_cm(), 0.0)
 	return maxf(broken_length_cm + active_length_cm, 0.0)
-
-
-# 返回所有已经落定断段的完整长度。
-func _get_settled_broken_length_cm() -> float:
-	var settled_length_cm: float = 0.0
-	for poop_segment: Poop in broken_poops:
-		if is_instance_valid(poop_segment) and poop_segment.is_settled():
-			settled_length_cm += maxf(poop_segment.get_length_cm(), 0.0)
-	return settled_length_cm
-
-
-# 返回当前用于堵塞预览和结算的长度。
-func _get_current_clog_length_cm() -> float:
-	var active_excess_length_cm: float = 0.0
-	if is_instance_valid(active_poop):
-		active_excess_length_cm = maxf(
-			active_poop.get_excess_length_cm(),
-			0.0
-		)
-	return _get_settled_broken_length_cm() + active_excess_length_cm
 
 
 # 返回是否仍有已断段正在执行掉落Tween。
@@ -651,7 +653,7 @@ func _update_money_earned_label() -> void:
 	money_earned_label.text = "Money Earned: $%d" % money_earned
 
 
-# 使用最终原始数据完成一次且仅一次的堵塞与金钱结算。
+# 使用最终原始长度完成一次且仅一次的快照与金钱结算。
 func _settle_round() -> void:
 	if has_settled_round:
 		return
@@ -664,17 +666,14 @@ func _settle_round() -> void:
 		has_completed_double_qte,
 		FoodSystem.get_active_value_multiplier()
 	)
-	var remaining_clog_progress: float = maxf(
-		GameState.TARGET_CLOG_PROGRESS - GameState.clog_progress,
+	var distance_remaining_cm: float = maxf(
+		GameState.get_clog_target_length_cm() - final_length_cm,
 		0.0
-	)
-	var distance_remaining_cm: float = (
-		remaining_clog_progress / GameState.CLOG_PROGRESS_PER_CM
 	)
 	GameState.save_last_round_result(
 		GameState.current_day,
 		longest_streak_cm,
-		GameState.clog_progress,
+		final_length_cm,
 		distance_remaining_cm,
 		money_earned
 	)
@@ -683,18 +682,34 @@ func _settle_round() -> void:
 	FoodSystem.clear_active_foods()
 
 
-# 达标立即显示成功；第5天未达标显示失败；其余天进入当日结算页。
+# 胜利进入独立Win Scene；第5天未达标进入Lose Scene；其余天进入当日结算页。
 func _show_round_destination() -> void:
-	if GameState.is_clog_target_reached():
-		result_label.text = "TOILET CLOGGED!\nTARGET REACHED"
-		result_label.self_modulate.a = 1.0
-		result_label.show()
+	if has_won_round:
+		get_tree().paused = false
+		var win_scene_error: Error = get_tree().change_scene_to_file(
+			GameState.WIN_SCENE_PATH
+		)
+		if win_scene_error != OK:
+			result_label.text = "TARGET REACHED\nFAILED TO LOAD WIN SCENE"
+			result_label.self_modulate.a = 1.0
+			result_label.show()
+			push_error(
+				"Failed to enter Win Scene: %s" % error_string(win_scene_error)
+			)
 		return
 
 	if GameState.is_final_day():
-		result_label.text = "NOT CLOGGED ENOUGH"
-		result_label.self_modulate.a = 1.0
-		result_label.show()
+		get_tree().paused = false
+		var lose_scene_error: Error = get_tree().change_scene_to_file(
+			GameState.LOSE_SCENE_PATH
+		)
+		if lose_scene_error != OK:
+			result_label.text = "NOT CLOGGED ENOUGH\nFAILED TO LOAD LOSE SCENE"
+			result_label.self_modulate.a = 1.0
+			result_label.show()
+			push_error(
+				"Failed to enter Lose Scene: %s" % error_string(lose_scene_error)
+			)
 		return
 
 	var scene_change_error: Error = get_tree().change_scene_to_file(
@@ -708,12 +723,39 @@ func _show_round_destination() -> void:
 			"Failed to enter End Day: %s" % error_string(scene_change_error)
 		)
 
+
+# 首次达到总长度目标时冻结玩法，并立即复用统一回合结算与场景分流。
+func _begin_victory() -> void:
+	if has_won_round or not is_round_active:
+		return
+
+	has_won_round = true
+	is_round_ending = true
+	countdown_timer.stop()
+	_stop_qte_cycle()
+	tube_indicator.pause_animation()
+	poop_reserve_hud.pause_transition()
+	is_mouse_button_down = false
+	has_active_mouse_action = false
+	poop_idle_duration = 0.0
+	_reset_charge_state()
+	if is_instance_valid(active_poop):
+		active_poop.freeze_at_current_length()
+	for poop_segment: Poop in broken_poops:
+		if is_instance_valid(poop_segment):
+			poop_segment.pause_fall_motion()
+	_finish_round()
+
+
 # 最后一次移动完成后统一结算，并显示商店入口或第5天结果。
 func _finish_round() -> void:
 	if not is_round_active or not is_round_ending:
 		return
 
 	final_length_cm = _get_total_length_cm()
+	poop_reserve_hud.sync_immediately(
+		poop_reserve.get_remaining_reserve_cm()
+	)
 	if is_instance_valid(active_poop):
 		longest_streak_cm = maxf(
 			longest_streak_cm,

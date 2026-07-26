@@ -1,7 +1,6 @@
 extends Control
 
 const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
-const CENTIMETERS_PER_FOOT: float = 30.48
 
 var has_requested_shop_transition: bool = false
 
@@ -39,16 +38,17 @@ func _refresh_result_ui() -> void:
 		GameState.last_round_distance_remaining_cm
 	)
 	payout_value.text = str(maxi(GameState.last_round_payout, 0))
-	_update_clog_distance_bar(GameState.last_round_clog_progress)
+	_update_clog_distance_bar(GameState.last_round_total_length_cm)
 
 
 func _centimeters_to_whole_feet(centimeters: float) -> int:
-	return maxi(floori(maxf(centimeters, 0.0) / CENTIMETERS_PER_FOOT), 0)
+	return maxi(floori(LengthUnits.cm_to_feet(maxf(centimeters, 0.0))), 0)
 
 
-func _update_clog_distance_bar(clog_progress: float) -> void:
+func _update_clog_distance_bar(total_length_cm: float) -> void:
+	var target_length_cm: float = GameState.get_clog_target_length_cm()
 	var progress_ratio: float = clampf(
-		clog_progress / GameState.TARGET_CLOG_PROGRESS,
+		total_length_cm / target_length_cm if target_length_cm > 0.0 else 0.0,
 		0.0,
 		1.0
 	)

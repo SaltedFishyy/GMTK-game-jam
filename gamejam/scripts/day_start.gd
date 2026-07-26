@@ -4,7 +4,6 @@ extends Control
 const FoodDefinitionsScript = preload("res://scripts/food/food_definitions.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 const ToiletScript = preload("res://scripts/toilet.gd")
-const CENTIMETERS_PER_FOOT: float = 30.48
 const DAY_BACKGROUND_TEXTURES: Array[Texture2D] = [
 	preload("res://scenes/resources/StartingPage/Days/5days.png"),
 	preload("res://scenes/resources/StartingPage/Days/4days.png"),
@@ -63,7 +62,9 @@ func _update_organ_panels() -> void:
 
 # 将厘米向下截断到一位小数的英尺显示，并附加食物原始加成点数。
 func _format_length_with_food_bonus(length_cm: float, food_bonus: int) -> String:
-	var feet_tenths: int = floori(maxf(length_cm, 0.0) / CENTIMETERS_PER_FOOT * 10.0)
+	var feet_tenths: int = floori(
+		LengthUnits.cm_to_feet(maxf(length_cm, 0.0)) * 10.0
+	)
 	var feet_text: String
 	if feet_tenths % 10 == 0:
 		feet_text = str(feet_tenths / 10)

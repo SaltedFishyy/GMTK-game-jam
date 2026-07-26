@@ -4,7 +4,13 @@ extends Node2D
 const STORY_PAPER_PAGE_SCENE: PackedScene = preload("res://scenes/components/story_paper_page.tscn")
 
 @export var story_pages: Array[String] = [
-
+	"Dee Shitzmore. \nOverworked, underpaid, and for the record, deeply, historically constipated.",
+	"Today HR let it slip: in 5 days, you're getting 'optimized.\n'FIRED! FLUSHED!",
+	"Fine. \nIf they want you gone, you'll leave something behind.",
+	"Five days to turn every late night, every pointless meeting, every ounce of stress into one legendary, plumbing-destroying revenge.",
+	"Legends say only a ten-foot shit, IN ONE UNBROKEN PIECE, can clog this toilet for good.",
+	"So here's the plan: eat everything, upgrade your organs, and give the pipes a monster they'll never forget.",
+	"Go clog this f**king toilet!!!",
 ]
 @export_range(0.1, 5.0, 0.1, "suffix:s") var paper_move_duration: float = 1.0
 

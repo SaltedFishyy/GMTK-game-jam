@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dfevqom4rhjww"
+path="res://.godot/imported/Fart _ mouse click.wav-a2c1cca07a20a3726182d82f0597c130.sample"
+
+[deps]
+
+source_file="res://scenes/resources/music/Interaction/Fart _ mouse click.wav"
+dest_files=["res://.godot/imported/Fart _ mouse click.wav-a2c1cca07a20a3726182d82f0597c130.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -10,8 +10,8 @@ enum Organ {
 
 const UPGRADE_COST_STEP: int = 30
 const SPHINCTER_MAX_LEVEL: int = 2
-const LARGE_INTESTINE_STORAGE_BONUS_CM_PER_LEVEL: float = 91.44
-const ABDOMINAL_FULL_CHARGE_BONUS_CM_PER_LEVEL: float = 45.72
+const LARGE_INTESTINE_STORAGE_BONUS_FEET_PER_LEVEL: float = 3.0
+const ABDOMINAL_FULL_CHARGE_BONUS_FEET_PER_LEVEL: float = 1.5
 
 var large_intestine_level: int = 0
 var sphincter_level: int = 0
@@ -46,17 +46,17 @@ func get_next_upgrade_price(organ: int) -> int:
 
 # 返回大肠等级提供的额外每轮储备厘米数。
 func get_large_intestine_storage_bonus_cm() -> float:
-	return (
+	return LengthUnits.feet_to_cm(
 		float(large_intestine_level)
-		* LARGE_INTESTINE_STORAGE_BONUS_CM_PER_LEVEL
+		* LARGE_INTESTINE_STORAGE_BONUS_FEET_PER_LEVEL
 	)
 
 
 # 返回腹肌等级在满蓄力时提供的额外推出厘米数。
 func get_abdominal_full_charge_bonus_cm() -> float:
-	return (
+	return LengthUnits.feet_to_cm(
 		float(abdominal_muscles_level)
-		* ABDOMINAL_FULL_CHARGE_BONUS_CM_PER_LEVEL
+		* ABDOMINAL_FULL_CHARGE_BONUS_FEET_PER_LEVEL
 	)
 
 

@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://c8shusv1ibkc2" path="res://scenes/resources/qte/qte_target_area_left.png" id="5_left"]
 [ext_resource type="Texture2D" uid="uid://bk4m2oyjocoh7" path="res://scenes/resources/qte/qte_target_area_center.png" id="6_center"]
 [ext_resource type="Texture2D" uid="uid://cjr1o88qgpg6x" path="res://scenes/resources/qte/qte_target_area_right.png" id="7_right"]
+[ext_resource type="AudioStream" path="res://scenes/resources/music/Interaction/QTE Success.wav" id="8_success_sfx"]
+[ext_resource type="AudioStream" path="res://scenes/resources/music/Interaction/QTE Fail.wav" id="9_failure_sfx"]
 
 [node name="QTEBar" type="Control" unique_id=60865455]
 layout_mode = 3
@@ -14,6 +16,8 @@ anchors_preset = 0
 offset_right = 600.0
 offset_bottom = 100.0
 script = ExtResource("1_script")
+success_sfx = ExtResource("8_success_sfx")
+failure_sfx = ExtResource("9_failure_sfx")
 
 [node name="VisualRoot" type="Control" parent="." unique_id=443811264]
 anchors_preset = 0
@@ -180,3 +184,5 @@ theme_override_colors/font_color = Color(0.29, 0.19, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "1 / 2"
 horizontal_alignment = 1
+
+[node name="ResultSFX" type="AudioStreamPlayer" parent="."]

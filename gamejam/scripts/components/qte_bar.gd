@@ -17,6 +17,8 @@ const MIN_MISS_CELL_COUNT: int = 9
 @export_range(10.0, 1200.0, 10.0, "suffix:px/s") var track_speed: float = 400.0
 @export_range(0.1, 1.0, 0.05) var faded_min_alpha: float = 0.4
 @export_range(0.1, 10.0, 0.1, "suffix:/s") var faded_pulse_speed: float = 3.0
+@export var success_sfx: AudioStream
+@export var failure_sfx: AudioStream
 
 var random_number_generator: RandomNumberGenerator = RandomNumberGenerator.new()
 var is_active: bool = false
@@ -30,6 +32,7 @@ var active_required_successes: int = 1
 var active_faded_display: bool = false
 var completed_successes: int = 0
 var fade_elapsed: float = 0.0
+var has_emitted_result: bool = false
 
 @onready var moving_track: Control = $VisualRoot/VisibleWindow/MovingTrack
 @onready var miss_before: TextureRect = $VisualRoot/VisibleWindow/MovingTrack/MissBefore
@@ -46,6 +49,7 @@ var fade_elapsed: float = 0.0
 @onready var miss_after: TextureRect = $VisualRoot/VisibleWindow/MovingTrack/MissAfter
 @onready var pointer: TextureRect = $VisualRoot/Pointer
 @onready var progress_label: Label = $ProgressLabel
+@onready var result_sfx: AudioStreamPlayer = $ResultSFX
 
 
 # 初始化随机数生成器，并让未激活的组件保持隐藏。
@@ -84,6 +88,7 @@ func start_qte() -> void:
 	active_faded_display = configured_faded_display
 	completed_successes = 0
 	fade_elapsed = 0.0
+	has_emitted_result = false
 	modulate.a = 1.0
 	_prepare_track_pass()
 	_update_progress_label()
@@ -178,17 +183,29 @@ func _judge_pointer_position() -> void:
 		_update_progress_label()
 		return
 
-	_end_qte()
-	qte_succeeded.emit()
+	_complete_qte_result(true)
 
 
 # 结束当前QTE并确保失败信号只发出一次。
 func _fail_qte() -> void:
-	if not is_active:
+	_complete_qte_result(false)
+
+
+# 最终结果统一在此结束QTE、播放一次对应音效并发出一次结果信号。
+func _complete_qte_result(did_succeed: bool) -> void:
+	if not is_active or has_emitted_result:
 		return
 
+	has_emitted_result = true
 	_end_qte()
-	qte_failed.emit()
+	result_sfx.stream = success_sfx if did_succeed else failure_sfx
+	if result_sfx.stream != null:
+		result_sfx.play()
+
+	if did_succeed:
+		qte_succeeded.emit()
+	else:
+		qte_failed.emit()
 
 
 # 控制七个Center格的可见数量；隐藏格不会参与HBoxContainer布局。

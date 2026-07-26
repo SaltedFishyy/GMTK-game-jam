@@ -1,15 +1,17 @@
-[gd_scene load_steps=9 format=3 uid="uid://bejsffbyp0prk"]
+[gd_scene format=3 uid="uid://dy57oijkmnm1v"]
 
-[ext_resource type="Script" path="res://scripts/end_day.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/background.png" id="2_background"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_fill.png" id="3_fill"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_fill_right.png" id="4_fill_right"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/clog_left.png" id="5_left"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/small_poop.png" id="6_poop"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/normal_button.png" id="7_button"]
-[ext_resource type="Texture2D" path="res://scenes/resources/endday/prssed_button.png" id="8_button_pressed"]
+[ext_resource type="Script" uid="uid://cp02hx36ltlhn" path="res://scripts/end_day.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cgf1jk5g582o1" path="res://scenes/resources/endday/background.png" id="2_background"]
+[ext_resource type="FontFile" uid="uid://ojnltx8auxvq" path="res://scenes/resources/UI/static/PixelifySans-Medium.ttf" id="3_6828o"]
+[ext_resource type="Texture2D" uid="uid://dhx6ooosmfdvw" path="res://scenes/resources/endday/clog_fill.png" id="3_fill"]
+[ext_resource type="Texture2D" uid="uid://bv4qljltmtn1" path="res://scenes/resources/endday/clog_fill_right.png" id="4_fill_right"]
+[ext_resource type="Texture2D" uid="uid://bptldfu55ckv2" path="res://scenes/resources/endday/clog_left.png" id="5_left"]
+[ext_resource type="Texture2D" uid="uid://cuowk7wk2vu10" path="res://scenes/resources/endday/small_poop.png" id="6_poop"]
+[ext_resource type="Texture2D" uid="uid://ctgvs3fv6ueqo" path="res://scenes/resources/endday/normal_button.png" id="7_button"]
+[ext_resource type="Texture2D" uid="uid://cxyvko1ydhkh0" path="res://scenes/resources/endday/prssed_button.png" id="8_button_pressed"]
+[ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="9_pause"]
 
-[node name="EndDay" type="Control"]
+[node name="EndDay" type="Control" unique_id=1350248132]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=445777192]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -31,7 +33,7 @@ texture = ExtResource("2_background")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ResultPanel" type="Control" parent="."]
+[node name="ResultPanel" type="Control" parent="." unique_id=1295970615]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,57 +42,63 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="DayCompleteLabel" type="Label" parent="ResultPanel"]
+[node name="DayCompleteLabel" type="Label" parent="ResultPanel" unique_id=1868338523]
 layout_mode = 0
-offset_left = 332.0
-offset_top = 126.0
-offset_right = 692.0
-offset_bottom = 174.0
-theme_override_font_sizes/font_size = 28
+offset_left = 339.0
+offset_top = 119.0
+offset_right = 699.0
+offset_bottom = 167.0
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_colors/font_outline_color = Color(1, 0.77066666, 0.13999999, 1)
+theme_override_fonts/font = ExtResource("3_6828o")
+theme_override_font_sizes/font_size = 36
 text = "Day 1 complete"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="LongestStreakValue" type="Label" parent="ResultPanel"]
+[node name="LongestStreakValue" type="Label" parent="ResultPanel" unique_id=1273034315]
 layout_mode = 0
 offset_left = 650.0
 offset_top = 179.0
 offset_right = 692.0
 offset_bottom = 208.0
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_6828o")
 theme_override_font_sizes/font_size = 22
 text = "0 FT"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="DistanceValue" type="Label" parent="ResultPanel"]
+[node name="DistanceValue" type="Label" parent="ResultPanel" unique_id=520922149]
 layout_mode = 0
 offset_left = 650.0
 offset_top = 212.0
 offset_right = 692.0
 offset_bottom = 241.0
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_6828o")
 theme_override_font_sizes/font_size = 22
 text = "0 FT"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ClogDistanceBar" type="Control" parent="ResultPanel"]
-layout_mode = 0
+[node name="ClogDistanceBar" type="Control" parent="ResultPanel" unique_id=520608466]
+anchors_preset = 0
 offset_left = 333.0
 offset_top = 256.0
 offset_right = 689.0
 offset_bottom = 276.0
 mouse_filter = 2
 
-[node name="ClogFill" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+[node name="ClogFill" type="TextureRect" parent="ResultPanel/ClogDistanceBar" unique_id=221959605]
 texture_filter = 1
 layout_mode = 0
 offset_bottom = 20.0
 mouse_filter = 2
 texture = ExtResource("3_fill")
 expand_mode = 1
-stretch_mode = 0
 
-[node name="ClogFillRight" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+[node name="ClogFillRight" type="TextureRect" parent="ResultPanel/ClogDistanceBar" unique_id=236784952]
 texture_filter = 1
 layout_mode = 0
 offset_right = 16.0
@@ -100,38 +108,39 @@ texture = ExtResource("4_fill_right")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ClogLeft" type="TextureRect" parent="ResultPanel/ClogDistanceBar"]
+[node name="ClogLeft" type="TextureRect" parent="ResultPanel/ClogDistanceBar" unique_id=885887866]
 texture_filter = 1
 layout_mode = 0
 offset_bottom = 20.0
 mouse_filter = 2
 texture = ExtResource("5_left")
 expand_mode = 1
-stretch_mode = 0
 
-[node name="PayoutMoneyIcon" type="TextureRect" parent="ResultPanel"]
+[node name="PayoutMoneyIcon" type="TextureRect" parent="ResultPanel" unique_id=11610096]
 texture_filter = 1
 layout_mode = 0
-offset_left = 421.0
-offset_top = 294.0
-offset_right = 445.0
-offset_bottom = 318.0
+offset_left = 631.0
+offset_top = 291.0
+offset_right = 655.0
+offset_bottom = 315.0
 mouse_filter = 2
 texture = ExtResource("6_poop")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="PayoutValue" type="Label" parent="ResultPanel"]
+[node name="PayoutValue" type="Label" parent="ResultPanel" unique_id=1734130755]
 layout_mode = 0
-offset_left = 451.0
-offset_top = 291.0
-offset_right = 594.0
+offset_left = 661.0
+offset_top = 290.0
+offset_right = 692.0
 offset_bottom = 321.0
-theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_6828o")
+theme_override_font_sizes/font_size = 24
 text = "0"
 vertical_alignment = 1
 
-[node name="WipeYourButton" type="TextureButton" parent="."]
+[node name="WipeYourButton" type="TextureButton" parent="." unique_id=2049969331]
 texture_filter = 1
 layout_mode = 0
 offset_left = 419.0
@@ -143,5 +152,7 @@ texture_normal = ExtResource("7_button")
 texture_pressed = ExtResource("8_button_pressed")
 ignore_texture_size = true
 stretch_mode = 5
+
+[node name="PauseMenu" parent="." unique_id=1747859248 instance=ExtResource("9_pause")]
 
 [connection signal="pressed" from="WipeYourButton" to="." method="_on_wipe_your_button_pressed"]

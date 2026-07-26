@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bh42fatf1e4c"
+path="res://.godot/imported/Flush _ button press.wav-7a770f3156af2744d6e975f77107cdbb.sample"
+
+[deps]
+
+source_file="res://scenes/resources/music/Interaction/Flush _ button press.wav"
+dest_files=["res://.godot/imported/Flush _ button press.wav-7a770f3156af2744d6e975f77107cdbb.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

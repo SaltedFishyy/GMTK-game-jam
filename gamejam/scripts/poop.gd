@@ -1,15 +1,14 @@
 class_name Poop
 extends Node2D
 
+signal fall_completed
+
 enum SegmentState {
 	ACTIVE,
 	FALLING,
 	SETTLED,
 }
 
-const DEFAULT_PIXELS_PER_CM: float = 10.0
-
-@export_range(0.1, 100.0, 0.1, "suffix:px/cm") var pixels_per_cm: float = DEFAULT_PIXELS_PER_CM
 @export_range(0.0, 3.0, 0.05, "suffix:s") var fall_duration: float = 0.5
 
 var clog_threshold_y: float = 0.0
@@ -61,6 +60,13 @@ func update_movement(delta: float, move_speed: float) -> void:
 	_set_length_pixels(next_length)
 
 
+# 将活动段的推出目标锁定为当前实际长度，供回合立即结束时停止后续运动。
+func freeze_at_current_length() -> void:
+	if not is_initialized or segment_state != SegmentState.ACTIVE:
+		return
+	movement_target_length_pixels = _get_length_pixels()
+
+
 # 让活动段平滑缩短，并同步唯一的长度目标。
 func retract(delta: float, retract_speed: float) -> void:
 	if (
@@ -100,6 +106,7 @@ func start_falling(end_position: Vector2) -> void:
 	if is_zero_approx(fall_duration):
 		global_position = target_root_position
 		segment_state = SegmentState.SETTLED
+		fall_completed.emit()
 		return
 
 	fall_tween = create_tween()
@@ -148,40 +155,36 @@ func is_settled() -> bool:
 
 # 根据顶部与BottomMarker的实际距离计算当前段长度。
 func get_length_cm() -> float:
-	if not is_initialized or is_zero_approx(pixels_per_cm):
+	if not is_initialized:
 		return 0.0
 
 	var length_pixels: float = maxf(
 		bottom_marker.global_position.y - top_marker.global_position.y,
 		0.0
 	)
-	return length_pixels / pixels_per_cm
+	return LengthUnits.pixels_to_cm(length_pixels)
 
 
 # 返回当前Poop使用的安全像素到厘米换算率。
 func get_pixels_per_cm() -> float:
-	return maxf(pixels_per_cm, 0.001)
-
-
-# 根据活动段BottomMarker超过堵塞阈值的距离计算超出长度。
-func get_excess_length_cm() -> float:
-	if (
-		not is_initialized
-		or segment_state != SegmentState.ACTIVE
-		or is_zero_approx(pixels_per_cm)
-	):
-		return 0.0
-
-	var excess_pixels: float = maxf(
-		bottom_marker.global_position.y - clog_threshold_y,
-		0.0
-	)
-	return excess_pixels / pixels_per_cm
+	return LengthUnits.PIXELS_PER_CM
 
 
 # 返回当前段的BottomMarker是否已到达初始化时保存的堵塞阈值。
 func has_reached_clog_threshold() -> bool:
 	return is_initialized and bottom_marker.global_position.y >= clog_threshold_y
+
+
+# 返回当前段底端进入管道阈值后的实际深度，仅供Tube视觉预览读取。
+func get_clog_penetration_cm() -> float:
+	if not is_initialized:
+		return 0.0
+
+	var penetration_pixels: float = maxf(
+		bottom_marker.global_position.y - clog_threshold_y,
+		0.0
+	)
+	return LengthUnits.pixels_to_cm(penetration_pixels)
 
 
 # 返回BottomMarker当前表示的非负像素长度。
@@ -214,3 +217,4 @@ func _set_length_pixels(length_pixels: float) -> void:
 func _on_fall_tween_finished() -> void:
 	segment_state = SegmentState.SETTLED
 	fall_tween = null
+	fall_completed.emit()

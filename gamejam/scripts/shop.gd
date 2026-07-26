@@ -2,7 +2,6 @@ extends Control
 
 const FoodDefinitionsScript = preload("res://scripts/food/food_definitions.gd")
 const ToiletScript = preload("res://scripts/toilet.gd")
-const CENTIMETERS_PER_FOOT: float = 30.48
 
 var has_advanced_day: bool = false
 var is_processing_organ_purchase: bool = false
@@ -37,7 +36,8 @@ var food_offer_ids: Array[int] = []
 @onready var hover_texture: TextureRect = %HoverTexture
 @onready var food_name_label: Label = %FoodNameLabel
 @onready var food_effects_label: Label = %FoodEffectsLabel
-@onready var temporary_leave_shop_button: Button = %TemporaryLeaveShopButton
+@onready var temporary_leave_shop_button: TextureButton = %TemporaryLeaveShopButton
+@onready var food_purchase_sfx: AudioStreamPlayer = $FoodPurchaseSFX
 
 
 # 进入商店时连接器官状态并同步新商店UI。
@@ -61,8 +61,10 @@ func _update_shop_ui() -> void:
 func _connect_food_offer_controls() -> void:
 	for index: int in range(food_offer_controls.size()):
 		food_offer_buttons[index].pressed.connect(_on_food_offer_pressed.bind(index))
-		food_offer_controls[index].mouse_entered.connect(_on_food_offer_mouse_entered.bind(index))
-		food_offer_controls[index].mouse_exited.connect(_on_food_offer_mouse_exited)
+		food_offer_buttons[index].mouse_entered.connect(
+			_on_food_offer_mouse_entered.bind(index)
+		)
+		food_offer_buttons[index].mouse_exited.connect(_on_food_offer_mouse_exited)
 
 
 # 只读取FoodSystem保存的固定商品，不在刷新时重新随机。
@@ -86,7 +88,7 @@ func _update_food_offer(index: int, food_id: int) -> void:
 	var button: TextureButton = food_offer_buttons[index]
 
 	button.texture_normal = normal_texture
-	button.texture_hover = normal_texture
+	button.texture_hover = null
 	button.texture_pressed = normal_texture
 	button.texture_disabled = (
 		purchased_texture if is_purchased and purchased_texture != null else normal_texture
@@ -98,7 +100,9 @@ func _update_food_offer(index: int, food_id: int) -> void:
 func _on_food_offer_pressed(index: int) -> void:
 	if index < 0 or index >= food_offer_ids.size():
 		return
-	FoodSystem.try_purchase_food(food_offer_ids[index])
+	var did_purchase: bool = FoodSystem.try_purchase_food(food_offer_ids[index])
+	if did_purchase:
+		food_purchase_sfx.play()
 
 
 # Tooltip由商品格处理，因此购买后按钮禁用仍可查看效果。
@@ -191,13 +195,17 @@ func _get_organ_purchase_text(organ: int, upgrade_price: int) -> String:
 	match organ:
 		OrganProgression.Organ.LARGE_INTESTINE:
 			var storage_bonus: String = _format_centimeters_as_feet(
-				OrganProgression.LARGE_INTESTINE_STORAGE_BONUS_CM_PER_LEVEL
+				LengthUnits.feet_to_cm(
+					OrganProgression.LARGE_INTESTINE_STORAGE_BONUS_FEET_PER_LEVEL
+				)
 			)
 			storage_bonus = storage_bonus.replace(" ", "")
 			return "<%d> +%s" % [upgrade_price, storage_bonus]
 		OrganProgression.Organ.ABDOMINAL_MUSCLES:
 			var charge_bonus: String = _format_centimeters_as_feet(
-				OrganProgression.ABDOMINAL_FULL_CHARGE_BONUS_CM_PER_LEVEL
+				LengthUnits.feet_to_cm(
+					OrganProgression.ABDOMINAL_FULL_CHARGE_BONUS_FEET_PER_LEVEL
+				)
 			)
 			charge_bonus = charge_bonus.replace(" ", "")
 			return "<%d> +%s" % [upgrade_price, charge_bonus]
@@ -211,7 +219,9 @@ func _get_organ_purchase_text(organ: int, upgrade_price: int) -> String:
 
 # 将厘米向下截断到一位小数后显示为英尺。
 func _format_centimeters_as_feet(length_cm: float) -> String:
-	var feet_tenths: int = floori(maxf(length_cm, 0.0) / CENTIMETERS_PER_FOOT * 10.0)
+	var feet_tenths: int = floori(
+		LengthUnits.cm_to_feet(maxf(length_cm, 0.0)) * 10.0
+	)
 	if feet_tenths % 10 == 0:
 		return "%d FT" % (feet_tenths / 10)
 	return "%.1f FT" % (float(feet_tenths) / 10.0)

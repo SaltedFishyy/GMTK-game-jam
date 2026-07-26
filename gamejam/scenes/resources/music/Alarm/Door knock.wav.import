@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bsj8llkmpx1pt"
+path="res://.godot/imported/Door knock.wav-57071e0db0db92ffff068d28359c5b47.sample"
+
+[deps]
+
+source_file="res://scenes/resources/music/Alarm/Door knock.wav"
+dest_files=["res://.godot/imported/Door knock.wav-57071e0db0db92ffff068d28359c5b47.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

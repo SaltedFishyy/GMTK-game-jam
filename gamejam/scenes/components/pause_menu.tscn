@@ -1,21 +1,47 @@
 [gd_scene format=3 uid="uid://lve02cka6pvo"]
 
 [ext_resource type="Script" uid="uid://da1hmjaupdw78" path="res://scripts/components/pause_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://btfnlf3w2gn46" path="res://scenes/resources/Menu/menu_button_normal.png" id="2_menu_normal"]
+[ext_resource type="Texture2D" uid="uid://ba43vna8d6hyq" path="res://scenes/resources/Menu/menu_button_pressed.png" id="3_menu_pressed"]
+[ext_resource type="Texture2D" uid="uid://crfc3c6ch5f8m" path="res://scenes/resources/Menu/menu_background.png" id="4_background"]
+[ext_resource type="Texture2D" uid="uid://bhy3iuhclul07" path="res://scenes/resources/Menu/home_button_normal.png" id="5_home_normal"]
+[ext_resource type="Texture2D" uid="uid://dkiy7d0i81evr" path="res://scenes/resources/Menu/home_button_pressed.png" id="6_home_pressed"]
+[ext_resource type="Texture2D" uid="uid://dkkmm7nsr5e21" path="res://scenes/resources/Menu/resume_restart.png" id="7_resume_restart"]
+[ext_resource type="Texture2D" uid="uid://cd1p8u1uaegql" path="res://scenes/resources/Menu/music_volume_off.png" id="8_volume_off"]
+[ext_resource type="Texture2D" uid="uid://ds1o5myh3ru1j" path="res://scenes/resources/Menu/music_volume_on.png" id="9_volume_on"]
+[ext_resource type="Texture2D" uid="uid://dqls3leysfd3y" path="res://scenes/resources/Menu/music_volume_right.png" id="10_volume_right"]
+[ext_resource type="Texture2D" uid="uid://c26y6n1y5tx7h" path="res://scenes/resources/Menu/music_bar.png" id="11_music_bar"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hitbox"]
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=207067854]
 process_mode = 3
 layer = 100
 script = ExtResource("1_script")
 
-[node name="MenuButton" type="Button" parent="." unique_id=1037408774]
-offset_left = 825.0
-offset_top = 19.0
-offset_right = 983.0
-offset_bottom = 96.0
-theme_override_font_sizes/font_size = 50
-text = "MENU"
+[node name="MenuButton" type="TextureButton" parent="." unique_id=1037408774]
+texture_filter = 1
+offset_left = 38.0
+offset_top = 27.0
+offset_right = 106.0
+offset_bottom = 99.0
+focus_mode = 0
+texture_normal = ExtResource("2_menu_normal")
+texture_pressed = ExtResource("3_menu_pressed")
+ignore_texture_size = true
+stretch_mode = 5
 
-[node name="MenuRoot" type="Control" parent="." unique_id=1027966312]
+[node name="InputBlocker" type="ColorRect" parent="." unique_id=1949099248]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.25)
+
+[node name="MenuOverlay" type="Control" parent="." unique_id=1997722]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -23,192 +49,152 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="Overlay" type="ColorRect" parent="MenuRoot" unique_id=1243167601]
+[node name="MenuBackground" type="TextureRect" parent="MenuOverlay" unique_id=1685120188]
+texture_filter = 1
+layout_mode = 0
+offset_left = 264.75
+offset_top = 58.0
+offset_right = 759.25
+offset_bottom = 454.0
+mouse_filter = 2
+texture = ExtResource("4_background")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HomeButton" type="TextureButton" parent="MenuOverlay" unique_id=1281105537]
+texture_filter = 1
+layout_mode = 0
+offset_left = 292.0
+offset_top = 229.0
+offset_right = 429.5
+offset_bottom = 301.0
+focus_mode = 0
+texture_normal = ExtResource("5_home_normal")
+texture_pressed = ExtResource("6_home_pressed")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="ResumeRestartControl" type="Control" parent="MenuOverlay" unique_id=1639729401]
+anchors_preset = 0
+offset_left = 434.0
+offset_top = 231.0
+offset_right = 752.0
+offset_bottom = 295.0
+mouse_filter = 2
+
+[node name="StateTexture" type="TextureRect" parent="MenuOverlay/ResumeRestartControl" unique_id=1937003019]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.65)
+mouse_filter = 2
+texture = ExtResource("7_resume_restart")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="PausePanel" type="Panel" parent="MenuRoot" unique_id=1230325731]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -190.0
-offset_right = 180.0
-offset_bottom = 190.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PausedLabel" type="Label" parent="MenuRoot/PausePanel" unique_id=126876289]
+[node name="ResumeHitbox" type="Button" parent="MenuOverlay/ResumeRestartControl" unique_id=1195574966]
 layout_mode = 0
-offset_left = 40.0
-offset_top = 25.0
-offset_right = 320.0
-offset_bottom = 85.0
-theme_override_font_sizes/font_size = 36
-text = "PAUSED"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_right = 170.75
+offset_bottom = 72.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hitbox")
+flat = true
 
-[node name="ResumeButton" type="Button" parent="MenuRoot/PausePanel" unique_id=749174291]
+[node name="RestartHitbox" type="Button" parent="MenuOverlay/ResumeRestartControl" unique_id=426981138]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 100.0
-offset_right = 280.0
-offset_bottom = 155.0
-theme_override_font_sizes/font_size = 22
-text = "RESUME"
+offset_left = 170.75
+offset_right = 341.5
+offset_bottom = 72.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hitbox")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hitbox")
+flat = true
 
-[node name="OptionsButton" type="Button" parent="MenuRoot/PausePanel" unique_id=204895462]
+[node name="MusicSlider" type="Control" parent="MenuOverlay" unique_id=1513933799]
+anchors_preset = 0
+offset_left = 410.0
+offset_top = 335.0
+offset_right = 595.0
+offset_bottom = 439.0
+mouse_default_cursor_shape = 2
+
+[node name="OffTrack" type="TextureRect" parent="MenuOverlay/MusicSlider" unique_id=182303071]
+texture_filter = 1
+texture_repeat = 2
 layout_mode = 0
-offset_left = 80.0
-offset_top = 180.0
-offset_right = 280.0
-offset_bottom = 235.0
-theme_override_font_sizes/font_size = 22
-text = "OPTIONS"
+offset_left = 20.0
+offset_top = 42.0
+offset_right = 164.0
+offset_bottom = 62.0
+mouse_filter = 2
+texture = ExtResource("8_volume_off")
+expand_mode = 1
+stretch_mode = 1
 
-[node name="RestartRunButton" type="Button" parent="MenuRoot/PausePanel" unique_id=1158543995]
+[node name="OnFillClip" type="Control" parent="MenuOverlay/MusicSlider" unique_id=1187094801]
+clip_contents = true
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 42.0
+offset_right = 164.0
+offset_bottom = 62.0
+mouse_filter = 2
+
+[node name="OnFill" type="TextureRect" parent="MenuOverlay/MusicSlider/OnFillClip" unique_id=122537269]
+texture_filter = 1
 layout_mode = 0
-offset_left = 80.0
-offset_top = 260.0
-offset_right = 280.0
-offset_bottom = 315.0
-theme_override_font_sizes/font_size = 22
-text = "RESTART RUN"
+offset_right = 144.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("9_volume_on")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="OptionsPanel" type="Panel" parent="MenuRoot" unique_id=440087083]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -160.0
-offset_right = 250.0
-offset_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="OptionsLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=414908109]
+[node name="FillRightCap" type="TextureRect" parent="MenuOverlay/MusicSlider" unique_id=1370315095]
+texture_filter = 1
 layout_mode = 0
-offset_left = 60.0
-offset_top = 25.0
-offset_right = 440.0
-offset_bottom = 80.0
-theme_override_font_sizes/font_size = 32
-text = "OPTIONS"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 156.0
+offset_top = 42.0
+offset_right = 172.0
+offset_bottom = 62.0
+mouse_filter = 2
+texture = ExtResource("10_volume_right")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="MusicVolumeLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=1549871623]
+[node name="Handle" type="TextureRect" parent="MenuOverlay/MusicSlider" unique_id=237583138]
+texture_filter = 1
 layout_mode = 0
-offset_left = 60.0
-offset_top = 95.0
-offset_right = 440.0
-offset_bottom = 130.0
-theme_override_font_sizes/font_size = 20
-text = "MUSIC VOLUME"
-horizontal_alignment = 1
-
-[node name="MusicVolumeSlider" type="HSlider" parent="MenuRoot/OptionsPanel" unique_id=348541080]
-layout_mode = 0
-offset_left = 65.0
-offset_top = 145.0
-offset_right = 375.0
-offset_bottom = 185.0
-value = 100.0
-
-[node name="MusicPercentLabel" type="Label" parent="MenuRoot/OptionsPanel" unique_id=1244974544]
-layout_mode = 0
-offset_left = 385.0
-offset_top = 145.0
-offset_right = 460.0
-offset_bottom = 185.0
-theme_override_font_sizes/font_size = 18
-text = "100%"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BackButton" type="Button" parent="MenuRoot/OptionsPanel" unique_id=1287387344]
-layout_mode = 0
-offset_left = 150.0
-offset_top = 225.0
-offset_right = 350.0
-offset_bottom = 280.0
-theme_override_font_sizes/font_size = 22
-text = "BACK"
-
-[node name="RestartConfirmationPanel" type="Panel" parent="MenuRoot" unique_id=615695406]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -150.0
-offset_right = 260.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="RestartTitleLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel" unique_id=960435731]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 35.0
-offset_right = 475.0
-offset_bottom = 85.0
-theme_override_font_sizes/font_size = 28
-text = "Restart from Day 1?"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="RestartWarningLabel" type="Label" parent="MenuRoot/RestartConfirmationPanel" unique_id=1108976771]
-layout_mode = 0
-offset_left = 45.0
-offset_top = 100.0
-offset_right = 475.0
-offset_bottom = 145.0
-theme_override_font_sizes/font_size = 18
-text = "All current progress will be lost."
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CancelButton" type="Button" parent="MenuRoot/RestartConfirmationPanel" unique_id=1071051438]
-layout_mode = 0
-offset_left = 65.0
-offset_top = 195.0
-offset_right = 235.0
-offset_bottom = 250.0
-theme_override_font_sizes/font_size = 20
-text = "CANCEL"
-
-[node name="RestartButton" type="Button" parent="MenuRoot/RestartConfirmationPanel" unique_id=188863786]
-layout_mode = 0
-offset_left = 285.0
-offset_top = 195.0
-offset_right = 455.0
-offset_bottom = 250.0
-theme_override_font_sizes/font_size = 20
-text = "RESTART"
+offset_left = 143.5
+offset_right = 184.5
+offset_bottom = 104.0
+mouse_filter = 2
+texture = ExtResource("11_music_bar")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="pressed" from="MenuButton" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="MenuRoot/PausePanel/ResumeButton" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="MenuRoot/PausePanel/OptionsButton" to="." method="_on_options_button_pressed"]
-[connection signal="pressed" from="MenuRoot/PausePanel/RestartRunButton" to="." method="_on_restart_run_button_pressed"]
-[connection signal="value_changed" from="MenuRoot/OptionsPanel/MusicVolumeSlider" to="." method="_on_music_volume_slider_value_changed"]
-[connection signal="pressed" from="MenuRoot/OptionsPanel/BackButton" to="." method="_on_back_button_pressed"]
-[connection signal="pressed" from="MenuRoot/RestartConfirmationPanel/CancelButton" to="." method="_on_restart_cancel_button_pressed"]
-[connection signal="pressed" from="MenuRoot/RestartConfirmationPanel/RestartButton" to="." method="_on_restart_confirm_button_pressed"]
+[connection signal="pressed" from="MenuOverlay/HomeButton" to="." method="_on_home_button_pressed"]
+[connection signal="button_down" from="MenuOverlay/ResumeRestartControl/ResumeHitbox" to="." method="_on_resume_hitbox_button_down"]
+[connection signal="button_up" from="MenuOverlay/ResumeRestartControl/ResumeHitbox" to="." method="_on_resume_hitbox_button_up"]
+[connection signal="mouse_exited" from="MenuOverlay/ResumeRestartControl/ResumeHitbox" to="." method="_on_resume_hitbox_mouse_exited"]
+[connection signal="pressed" from="MenuOverlay/ResumeRestartControl/ResumeHitbox" to="." method="_on_resume_hitbox_pressed"]
+[connection signal="button_down" from="MenuOverlay/ResumeRestartControl/RestartHitbox" to="." method="_on_restart_hitbox_button_down"]
+[connection signal="button_up" from="MenuOverlay/ResumeRestartControl/RestartHitbox" to="." method="_on_restart_hitbox_button_up"]
+[connection signal="mouse_exited" from="MenuOverlay/ResumeRestartControl/RestartHitbox" to="." method="_on_restart_hitbox_mouse_exited"]
+[connection signal="pressed" from="MenuOverlay/ResumeRestartControl/RestartHitbox" to="." method="_on_restart_hitbox_pressed"]
+[connection signal="gui_input" from="MenuOverlay/MusicSlider" to="." method="_on_music_slider_gui_input"]

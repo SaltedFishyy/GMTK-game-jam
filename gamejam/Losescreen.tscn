@@ -1,3 +1,100 @@
 [gd_scene format=3 uid="uid://dbeb8pnoocban"]
 
-[node name="Node2D" type="Node2D" unique_id=767374917]
+[ext_resource type="Script" path="res://scripts/lose.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://civk70olinxji" path="res://scenes/resources/Ending/lose_first_scene.png" id="2_first"]
+[ext_resource type="Texture2D" uid="uid://dsfk83qagfscd" path="res://scenes/resources/Ending/lose_second_scene.png" id="3_second"]
+[ext_resource type="Texture2D" uid="uid://co4x8g7b7nhel" path="res://scenes/resources/Ending/lose_button_normal.png" id="4_button_normal"]
+[ext_resource type="Texture2D" uid="uid://drsygu14tppbn" path="res://scenes/resources/Ending/lose_button_pressed.png" id="5_button_pressed"]
+[ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="6_pause"]
+[ext_resource type="AudioStream" uid="uid://cvs4dw1r1gog3" path="res://scenes/resources/music/Ending/Lose ending.wav" id="7_uc6n6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_click"]
+
+[node name="Lose" type="Control" unique_id=296464917]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="FirstPage" type="Control" parent="." unique_id=551109273]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FirstPageTexture" type="TextureRect" parent="FirstPage" unique_id=932107561]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_first")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FirstPageClickCatcher" type="Button" parent="FirstPage" unique_id=135301638]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_click")
+flat = true
+
+[node name="SecondPage" type="Control" parent="." unique_id=602208395]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SecondPageTexture" type="TextureRect" parent="SecondPage" unique_id=922346416]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_second")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StinkAwayButton" type="TextureButton" parent="SecondPage" unique_id=7666641]
+texture_filter = 1
+layout_mode = 0
+offset_left = 419.0
+offset_top = 424.0
+offset_right = 605.25
+offset_bottom = 480.0
+focus_mode = 0
+texture_normal = ExtResource("4_button_normal")
+texture_pressed = ExtResource("5_button_pressed")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="PauseMenu" parent="." unique_id=344988097 instance=ExtResource("6_pause")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1503344358]
+stream = ExtResource("7_uc6n6")
+autoplay = true
+
+[connection signal="pressed" from="FirstPage/FirstPageClickCatcher" to="." method="_on_first_page_click_catcher_pressed"]
+[connection signal="pressed" from="SecondPage/StinkAwayButton" to="." method="_on_stink_away_button_pressed"]

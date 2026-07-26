@@ -22,6 +22,8 @@ GameState="*res://scripts/game_state.gd"
 PlayerStats="*res://scripts/player_stats.gd"
 OrganProgression="*res://scripts/organ_progression.gd"
 FoodSystem="*res://scripts/food/food_system.gd"
+UISFX="*res://scripts/ui_sfx.gd"
+MusicPlayer="*res://scripts/music_player.gd"
 
 [display]
 

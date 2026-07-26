@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://tb8th216tyr" path="res://scripts/day_start.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dsmn4exrh3roc" path="res://scenes/resources/StartingPage/Days/5days.png" id="2_day_background"]
 [ext_resource type="FontFile" uid="uid://cby0rw7ws1kv6" path="res://scenes/resources/UI/static/PixelifySans-Regular.ttf" id="3_font"]
+[ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="4_pause"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_continue"]
 
@@ -173,6 +174,7 @@ offset_bottom = 486.0
 mouse_filter = 2
 
 [node name="FoodTitle" type="Label" parent="DynamicOverlay/FoodSection" unique_id=1132403437]
+visible = false
 layout_mode = 0
 offset_left = 1.0
 offset_top = 35.0
@@ -209,5 +211,7 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_continue")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_continue")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_continue")
 flat = true
+
+[node name="PauseMenu" parent="." unique_id=576821600 instance=ExtResource("4_pause")]
 
 [connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]

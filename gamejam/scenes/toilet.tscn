@@ -5,52 +5,67 @@
 [ext_resource type="Texture2D" uid="uid://ccdpjs53sgwgj" path="res://scenes/resources/ingame/Scene_WallLeft.png" id="3_63pvo"]
 [ext_resource type="PackedScene" uid="uid://cnsex2x0g0mh8" path="res://scenes/components/qte_bar.tscn" id="3_qte"]
 [ext_resource type="PackedScene" path="res://scenes/components/stats_hud.tscn" id="4_stats"]
+[ext_resource type="Texture2D" uid="uid://bb8oij48sa7wf" path="res://scenes/resources/ingame/Scene_ToiletPaper.png" id="4_vb6ry"]
 [ext_resource type="Texture2D" uid="uid://0737h4u00sis" path="res://scenes/resources/ingame/Scene_Toilet_Narrow.png" id="4_vpw5y"]
 [ext_resource type="Texture2D" uid="uid://buau5hev8c7wf" path="res://scenes/resources/ingame/butt.png" id="5_ngyxh"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="5_pause"]
 [ext_resource type="FontFile" uid="uid://ojnltx8auxvq" path="res://scenes/resources/UI/static/PixelifySans-Medium.ttf" id="6_vb6ry"]
 [ext_resource type="Texture2D" uid="uid://xxoqg1fgq2ds" path="res://scenes/resources/ingame/tube_animated.png" id="8_4b3qh"]
 [ext_resource type="Script" uid="uid://owsd818wivdd" path="res://scripts/components/tube_indicator.gd" id="9_tube"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vs5cn"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(3440, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_63pvo"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(5160, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vpw5y"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(6880, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ngyxh"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(8600, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vb6ry"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(10320, 0, 1720, 2000)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nlwqp"]
-atlas = ExtResource("8_4b3qh")
-region = Rect2(12040, 0, 1720, 2000)
+[ext_resource type="Texture2D" uid="uid://lhqqecfwgnbu" path="res://scenes/resources/ingame/HUD_PoopProgress_Frame.png" id="10_reserve_frame"]
+[ext_resource type="Texture2D" uid="uid://ba8in277xfynu" path="res://scenes/resources/ingame/HUD_PoopProgress_Poop.png" id="11_reserve_fill"]
+[ext_resource type="Script" uid="uid://do66x7ll8cd4c" path="res://scripts/components/poop_reserve_hud.gd" id="12_reserve_hud"]
+[ext_resource type="Texture2D" uid="uid://b5fg10gjpacmx" path="res://scenes/resources/ingame/poop/poop_body.png" id="13_mini_body"]
+[ext_resource type="Texture2D" uid="uid://gfvi4ol1cpx" path="res://scenes/resources/ingame/poop/poop_bottom.png" id="14_mini_bottom"]
+[ext_resource type="AudioStream" path="res://scenes/resources/music/Interaction/Shit Drop.wav" id="15_shit_drop"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlld6"]
 atlas = ExtResource("8_4b3qh")
-region = Rect2(0, 2000, 1720, 2000)
+region = Rect2(5160, 2000, 1720, 2000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_68x4d"]
 atlas = ExtResource("8_4b3qh")
-region = Rect2(1720, 2000, 1720, 2000)
+region = Rect2(3440, 2000, 1720, 2000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6q62a"]
 atlas = ExtResource("8_4b3qh")
-region = Rect2(3440, 2000, 1720, 2000)
+region = Rect2(1720, 2000, 1720, 2000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lakhi"]
 atlas = ExtResource("8_4b3qh")
-region = Rect2(5160, 2000, 1720, 2000)
+region = Rect2(0, 2000, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrvql"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(12040, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mtxkc"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(10320, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7omob"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(8600, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_avvqk"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(6880, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s2vth"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(5160, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2smms"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(3440, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wovh3"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(1720, 0, 1720, 2000)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0m2nw"]
+atlas = ExtResource("8_4b3qh")
+region = Rect2(0, 0, 1720, 2000)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a62ra"]
 atlas = ExtResource("8_4b3qh")
@@ -59,24 +74,6 @@ region = Rect2(0, 0, 1720, 2000)
 [sub_resource type="SpriteFrames" id="SpriteFrames_3j2vm"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vs5cn")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_63pvo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vpw5y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ngyxh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vb6ry")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nlwqp")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qlld6")
 }, {
@@ -88,6 +85,30 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lakhi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrvql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mtxkc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7omob")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_avvqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s2vth")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2smms")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wovh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0m2nw")
 }],
 "loop": 1,
 "name": &"flowing",
@@ -117,6 +138,13 @@ position = Vector2(649.00006, 639)
 scale = Vector2(0.41547856, 0.4123037)
 texture = ExtResource("3_63pvo")
 
+[node name="toilet_paper" type="Sprite2D" parent="left_door" unique_id=92120675]
+z_index = 1
+position = Vector2(-14.441406, -160.07617)
+scale = Vector2(0.9627452, 0.9701586)
+texture = ExtResource("4_vb6ry")
+flip_h = true
+
 [node name="background" type="Sprite2D" parent="." unique_id=780536879]
 z_index = -2
 texture_filter = 1
@@ -132,10 +160,10 @@ texture = ExtResource("5_ngyxh")
 
 [node name="CountdownLabel" type="Label" parent="." unique_id=1786922944]
 z_index = 1
-offset_left = 235.0
-offset_top = 130.0
-offset_right = 327.0
-offset_bottom = 240.0
+offset_left = 272.0
+offset_top = 107.0
+offset_right = 364.0
+offset_bottom = 217.0
 theme_override_colors/font_color = Color(1, 0.8156863, 0, 1)
 theme_override_fonts/font = ExtResource("6_vb6ry")
 theme_override_font_sizes/font_size = 60
@@ -163,6 +191,9 @@ position = Vector2(625, 607)
 gizmo_extents = 0.0
 
 [node name="CountdownTimer" type="Timer" parent="." unique_id=866625543]
+
+[node name="DetachedPoopDropSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_shit_drop")
 
 [node name="LengthLabel" type="Label" parent="." unique_id=1623993704]
 visible = false
@@ -280,8 +311,61 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PauseMenu" parent="." unique_id=837409740 instance=ExtResource("5_pause")]
-visible = false
-show_menu_button_when_running = false
+
+[node name="PoopReserveHUD" type="Control" parent="." unique_id=1120127462]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 889.0
+offset_top = 123.0
+offset_right = 1029.0
+offset_bottom = 623.0
+scale = Vector2(0.4, 0.4)
+mouse_filter = 2
+script = ExtResource("12_reserve_hud")
+
+[node name="Frame" type="TextureRect" parent="PoopReserveHUD" unique_id=114397875]
+texture_filter = 1
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 500.0
+mouse_filter = 2
+texture = ExtResource("10_reserve_frame")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FillClip" type="Control" parent="PoopReserveHUD" unique_id=2126975149]
+clip_contents = true
+anchors_preset = 0
+offset_left = 40.0
+offset_top = 10.0
+offset_right = 100.0
+offset_bottom = 400.0
+offset_transform_scale = Vector2(0.25, 0.25)
+mouse_filter = 2
+
+[node name="PoopFill" type="TextureRect" parent="PoopReserveHUD/FillClip" unique_id=234920595]
+texture_filter = 1
+layout_mode = 0
+offset_right = 60.0
+offset_bottom = 390.0
+mouse_filter = 2
+texture = ExtResource("11_reserve_fill")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RemainingLabel" type="Label" parent="PoopReserveHUD" unique_id=2061879971]
+layout_mode = 0
+offset_left = 8.888889
+offset_top = 437.77777
+offset_right = 128.88889
+offset_bottom = 492.77777
+theme_override_colors/font_color = Color(1, 0.8156863, 0, 1)
+theme_override_fonts/font = ExtResource("6_vb6ry")
+theme_override_font_sizes/font_size = 40
+text = "0FT"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TubeIndicator" type="Node2D" parent="." unique_id=1845403873]
 z_index = 1
@@ -292,9 +376,37 @@ script = ExtResource("9_tube")
 texture_filter = 1
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_3j2vm")
-animation = &"idle"
+animation = &"flowing"
+frame_progress = 0.61243415
+
+[node name="MiniPoopWindow" type="Control" parent="TubeIndicator" unique_id=5401532]
+z_index = 1
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = -35.0
+offset_top = -95.0
+offset_right = 35.0
+offset_bottom = 70.0
+mouse_filter = 2
+
+[node name="MiniPoopVisual" type="Node2D" parent="TubeIndicator/MiniPoopWindow" unique_id=1022059988]
+position = Vector2(35, -16)
+
+[node name="Body" type="Sprite2D" parent="TubeIndicator/MiniPoopWindow/MiniPoopVisual" unique_id=229984342]
+texture_filter = 1
+texture_repeat = 2
+texture = ExtResource("13_mini_body")
+region_enabled = true
+region_rect = Rect2(0, 0, 288, 1)
+
+[node name="BottomCap" type="Sprite2D" parent="TubeIndicator/MiniPoopWindow/MiniPoopVisual" unique_id=1828373043]
+texture_filter = 1
+position = Vector2(1, -17)
+texture = ExtResource("14_mini_bottom")
 
 [node name="DistanceToClogLabel" type="Label" parent="TubeIndicator" unique_id=1863911550]
+z_index = 2
 offset_left = -104.0
 offset_top = 74.0
 offset_right = 106.0

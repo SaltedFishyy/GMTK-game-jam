@@ -1,7 +1,7 @@
 class_name PoopReserve
 extends RefCounted
 
-const CM_PER_STORAGE_POINT: float = 30.0
+const FEET_PER_STORAGE_POINT: float = 3.0
 
 var max_reserve_cm: float = 0.0
 var remaining_reserve_cm: float = 0.0
@@ -15,7 +15,9 @@ func reset(maximum_reserve_cm: float) -> void:
 
 # 根据储存量返回一轮满储备的厘米数，不创建或修改本轮储备状态。
 static func get_max_reserve_cm_for_capacity(storage_capacity: int) -> float:
-	return float(maxi(storage_capacity, 0)) * CM_PER_STORAGE_POINT
+	return LengthUnits.feet_to_cm(
+		float(maxi(storage_capacity, 0)) * FEET_PER_STORAGE_POINT
+	)
 
 
 # 消耗请求的厘米数，并返回本次实际允许推出的厘米数。

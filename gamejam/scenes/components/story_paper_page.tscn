@@ -1,20 +1,23 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://42ncx3wen7k4"]
 
 [ext_resource type="Texture2D" uid="uid://b686rmwprp5a3" path="res://scenes/resources/IntroStory/BigToiletPaper.png" id="1_paper"]
-[ext_resource type="Script" path="res://scripts/components/story_paper_page.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://cjh3vvd38rgv0" path="res://scripts/components/story_paper_page.gd" id="2_script"]
+[ext_resource type="FontFile" uid="uid://cby0rw7ws1kv6" path="res://scenes/resources/UI/static/PixelifySans-Regular.ttf" id="3_17xnb"]
 
-[node name="StoryPaperPage" type="Node2D"]
+[node name="StoryPaperPage" type="Node2D" unique_id=316714112]
 script = ExtResource("2_script")
 
-[node name="PaperVisual" type="Sprite2D" parent="."]
+[node name="PaperVisual" type="Sprite2D" parent="." unique_id=621678062]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_paper")
 
-[node name="StoryLabel" type="Label" parent="."]
+[node name="StoryLabel" type="Label" parent="." unique_id=553044397]
 offset_left = -145.0
 offset_top = -90.0
 offset_right = 145.0
 offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.32941177, 0.23921569, 0.105882354, 1)
+theme_override_fonts/font = ExtResource("3_17xnb")
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 vertical_alignment = 1

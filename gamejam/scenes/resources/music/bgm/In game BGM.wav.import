@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://me6tg54r5ktl"
+path="res://.godot/imported/In game BGM.wav-573214edf2a15c77fbf58b61d57c8601.sample"
+
+[deps]
+
+source_file="res://scenes/resources/music/bgm/In game BGM.wav"
+dest_files=["res://.godot/imported/In game BGM.wav-573214edf2a15c77fbf58b61d57c8601.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

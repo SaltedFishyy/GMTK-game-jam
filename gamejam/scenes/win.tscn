@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://bsm8ll8pp66d1"]
+
+[ext_resource type="Script" uid="uid://cur7x2dvq77y0" path="res://scripts/win.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bh35ipmqwdkbj" path="res://scenes/resources/Ending/win_first_scene.png" id="2_first"]
+[ext_resource type="Texture2D" uid="uid://dclwegecut3nq" path="res://scenes/resources/Ending/win_second_scene.png" id="3_second"]
+[ext_resource type="Texture2D" uid="uid://b17cp7mua6kvu" path="res://scenes/resources/Ending/win_button_normal.png" id="4_button_normal"]
+[ext_resource type="Texture2D" uid="uid://dph8331stn83h" path="res://scenes/resources/Ending/win_button_pressed.png" id="5_button_pressed"]
+[ext_resource type="AudioStream" uid="uid://cpm7emowxafcc" path="res://scenes/resources/music/Ending/Win ending.wav" id="6_5vxan"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_click"]
+
+[node name="Win" type="Control" unique_id=827365744]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="FirstPage" type="Control" parent="." unique_id=1188095324]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FirstPageTexture" type="TextureRect" parent="FirstPage" unique_id=1123584665]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_first")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FirstPageClickCatcher" type="Button" parent="FirstPage" unique_id=1448796111]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_click")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_click")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_click")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_click")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_click")
+flat = true
+
+[node name="SecondPage" type="Control" parent="." unique_id=615431247]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SecondPageTexture" type="TextureRect" parent="SecondPage" unique_id=568459724]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_second")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ReturnInGloryButton" type="TextureButton" parent="SecondPage" unique_id=1641307314]
+texture_filter = 1
+layout_mode = 0
+offset_left = 419.0
+offset_top = 424.0
+offset_right = 605.25
+offset_bottom = 480.0
+focus_mode = 0
+texture_normal = ExtResource("4_button_normal")
+texture_pressed = ExtResource("5_button_pressed")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=223995141]
+stream = ExtResource("6_5vxan")
+autoplay = true
+
+[connection signal="pressed" from="FirstPage/FirstPageClickCatcher" to="." method="_on_first_page_click_catcher_pressed"]
+[connection signal="pressed" from="SecondPage/ReturnInGloryButton" to="." method="_on_return_in_glory_button_pressed"]
