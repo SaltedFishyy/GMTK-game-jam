@@ -1,0 +1,291 @@
+[gd_scene format=3 uid="uid://dhmnnwss2c6o7"]
+
+[ext_resource type="Texture2D" uid="uid://cm8jdpcgvffxq" path="res://scenes/resources/UI/Background.png" id="1_fr54q"]
+[ext_resource type="Script" uid="uid://tb8th216tyr" path="res://scripts/day_start.gd" id="2_script"]
+[ext_resource type="FontFile" uid="uid://cby0rw7ws1kv6" path="res://scenes/resources/UI/static/PixelifySans-Regular.ttf" id="3_0hlcq"]
+[ext_resource type="Texture2D" uid="uid://bg28f6y6lfo60" path="res://scenes/resources/UI/Icon_肠.png" id="3_intestine"]
+[ext_resource type="FontFile" uid="uid://bhf6spvabr6nd" path="res://scenes/resources/UI/Quokka Font/Quokka-Regular.woff" id="4_icktw"]
+[ext_resource type="Texture2D" uid="uid://d4m5ll8ggudxx" path="res://scenes/resources/UI/BigUI.png" id="4_mc3dw"]
+[ext_resource type="Texture2D" uid="uid://des3x6330qvmm" path="res://scenes/resources/UI/Icon_括约肌.png" id="4_sphincter"]
+[ext_resource type="Texture2D" uid="uid://npbt6l8oabch" path="res://scenes/resources/UI/Icon_腹肌.png" id="5_abdominal"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3j2vm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ngdpe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o1t8b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bk50r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wmxtm"]
+
+[node name="DayStart" type="Node2D" unique_id=1619874834]
+script = ExtResource("2_script")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1538671180]
+z_index = -2
+position = Vector2(512, 256)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_fr54q")
+
+[node name="Clicktocontinue" type="Label" parent="Background" unique_id=2139676876]
+offset_left = 980.0
+offset_top = 852.0
+offset_right = 1987.0
+offset_bottom = 1060.0
+theme_override_fonts/font = ExtResource("3_0hlcq")
+theme_override_font_sizes/font_size = 100
+text = "Click to continue >>>"
+
+[node name="DaysRemainingLabel" type="Label" parent="." unique_id=75471977]
+unique_name_in_owner = true
+offset_left = 37.0
+offset_top = 55.0
+offset_right = 1014.0
+offset_bottom = 158.0
+theme_override_fonts/font = ExtResource("4_icktw")
+theme_override_font_sizes/font_size = 36
+text = "5 DAYS
+Before getting fired"
+horizontal_alignment = 1
+
+[node name="PageUI" type="Control" parent="." unique_id=1006069351]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMargin" type="MarginContainer" parent="PageUI" unique_id=30885148]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 1.0
+offset_right = 1030.0
+offset_bottom = 513.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="MainColumn" type="VBoxContainer" parent="PageUI/MainMargin" unique_id=1854245337]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="OrganPanels" type="HBoxContainer" parent="PageUI/MainMargin/MainColumn" unique_id=793037718]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="LargeIntestinePanel" type="PanelContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels" unique_id=377439555]
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3j2vm")
+
+[node name="Content" type="VBoxContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel" unique_id=1503918232]
+layout_mode = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel/Content" unique_id=1153289808]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel/Content/Control" unique_id=785817384]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+offset_left = 57.0
+offset_top = 40.0
+offset_right = 140.0
+offset_bottom = 112.0
+scale = Vector2(0.8, 0.8)
+mouse_filter = 2
+texture = ExtResource("3_intestine")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LargeIntestineValueLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel/Content/Control" unique_id=385339097]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 45.0
+offset_top = 50.0
+offset_right = 362.0
+offset_bottom = 73.0
+text = "STORAGE: 5 / 10"
+horizontal_alignment = 1
+
+[node name="LargeIntestineLevelLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel/Content/Control" unique_id=1507216526]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 37.0
+offset_top = 76.0
+offset_right = 354.0
+offset_bottom = 99.0
+text = "LV. 0 / 5"
+horizontal_alignment = 1
+
+[node name="BigUI" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/LargeIntestinePanel/Content/Control" unique_id=1105602321]
+z_index = -1
+layout_mode = 0
+offset_left = 29.0
+offset_top = 21.0
+offset_right = 1109.0
+offset_bottom = 421.0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_mc3dw")
+
+[node name="SphincterPanel" type="PanelContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels" unique_id=1065899679]
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ngdpe")
+
+[node name="Content" type="VBoxContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel" unique_id=479753096]
+layout_mode = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel/Content" unique_id=212446844]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel/Content/Control" unique_id=1054321337]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+offset_left = 289.0
+offset_top = 37.0
+offset_right = 607.0
+offset_bottom = 109.0
+scale = Vector2(0.8, 0.8)
+mouse_filter = 2
+texture = ExtResource("4_sphincter")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="SphincterLevelLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel/Content/Control" unique_id=1852476805]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 362.0
+offset_top = 74.0
+offset_right = 680.0
+offset_bottom = 97.0
+text = "LV. 0 / 5"
+horizontal_alignment = 1
+
+[node name="SphincterValueLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel/Content/Control" unique_id=1733035057]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 375.0
+offset_top = 44.0
+offset_right = 693.0
+offset_bottom = 67.0
+text = "QTE WIDTH: +0%"
+horizontal_alignment = 1
+
+[node name="BigUI" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/SphincterPanel/Content/Control" unique_id=1812019975]
+z_index = -1
+layout_mode = 0
+offset_left = 355.0
+offset_top = 20.0
+offset_right = 1435.0
+offset_bottom = 420.0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_mc3dw")
+
+[node name="AbdominalPanel" type="PanelContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels" unique_id=106790988]
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_o1t8b")
+
+[node name="Content" type="VBoxContainer" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel" unique_id=482965982]
+layout_mode = 2
+alignment = 1
+
+[node name="Control" type="Control" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel/Content" unique_id=1289432340]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel/Content/Control" unique_id=1888576411]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+offset_left = -374.00003
+offset_top = 38.0
+offset_right = -56.00003
+offset_bottom = 110.0
+scale = Vector2(0.8, 0.8)
+mouse_filter = 2
+texture = ExtResource("5_abdominal")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="AbdominalLevelLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel/Content/Control" unique_id=1669058657]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -301.0
+offset_top = 76.0
+offset_right = 17.0
+offset_bottom = 99.0
+text = "LV. 0 / 5"
+horizontal_alignment = 1
+
+[node name="AbdominalValueLabel" type="Label" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel/Content/Control" unique_id=1849796219]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -294.0
+offset_top = 49.0
+offset_right = 24.0
+offset_bottom = 72.0
+text = "CHARGED: +0%"
+horizontal_alignment = 1
+
+[node name="BigUI" type="TextureRect" parent="PageUI/MainMargin/MainColumn/OrganPanels/AbdominalPanel/Content/Control" unique_id=56710255]
+z_index = -1
+layout_mode = 0
+offset_left = -312.0
+offset_top = 21.0
+offset_right = 768.0
+offset_bottom = 421.0
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("4_mc3dw")
+
+[node name="FoodSection" type="PanelContainer" parent="PageUI/MainMargin/MainColumn" unique_id=322713630]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bk50r")
+
+[node name="FoodContent" type="VBoxContainer" parent="PageUI/MainMargin/MainColumn/FoodSection" unique_id=481933518]
+layout_mode = 2
+
+[node name="FoodTitle" type="Label" parent="." unique_id=1132403437]
+offset_left = 31.0
+offset_top = 365.0
+offset_right = 1008.0
+offset_bottom = 391.0
+theme_override_fonts/font = ExtResource("3_0hlcq")
+theme_override_font_sizes/font_size = 18
+text = "TODAY'S FOOD"
+horizontal_alignment = 1
+
+[node name="FoodContainer" type="HBoxContainer" parent="FoodTitle" unique_id=608084439]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -3.0
+offset_top = -8.0
+offset_right = 974.0
+offset_bottom = 104.0
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ContinueButton" type="Button" parent="." unique_id=647450004]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 40)
+offset_left = -1.0
+offset_right = 1026.0
+offset_bottom = 513.0
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_wmxtm")
+
+[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_button_pressed"]

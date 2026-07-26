@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://b686rmwprp5a3" path="res://scenes/resources/IntroStory/BigToiletPaper.png" id="1_paper"]
+[ext_resource type="Script" path="res://scripts/components/story_paper_page.gd" id="2_script"]
+
+[node name="StoryPaperPage" type="Node2D"]
+script = ExtResource("2_script")
+
+[node name="PaperVisual" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_paper")
+
+[node name="StoryLabel" type="Label" parent="."]
+offset_left = -145.0
+offset_top = -90.0
+offset_right = 145.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

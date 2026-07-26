@@ -2,21 +2,22 @@
 
 [ext_resource type="Script" uid="uid://pt8lg13rh1c3" path="res://scripts/shop.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://lve02cka6pvo" path="res://scenes/components/pause_menu.tscn" id="2_pause"]
+[ext_resource type="Texture2D" uid="uid://ck5moct0j8d3n" path="res://scenes/resources/Shop/Scene_Shop.png" id="3_1l46r"]
 
 [node name="Shop" type="Control" unique_id=1457033994]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 1.0
-offset_top = 8.0
-offset_right = 1.0
-offset_bottom = 8.0
+offset_left = 59.0
+offset_top = 599.0
+offset_right = 59.0
+offset_bottom = 599.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1629324872]
+[node name="Background11" type="ColorRect" parent="." unique_id=1629324872]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -513,6 +514,11 @@ theme_override_font_sizes/font_size = 21
 text = "NEXT DAY"
 
 [node name="PauseMenu" parent="." unique_id=1597856791 instance=ExtResource("2_pause")]
+
+[node name="Background2" type="Sprite2D" parent="." unique_id=1440162028]
+position = Vector2(453.5, -342.5)
+scale = Vector2(0.39804688, 0.39921874)
+texture = ExtResource("3_1l46r")
 
 [connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/StomachRow/RowMargin/Row/UpgradeButton" to="." method="_on_stomach_upgrade_button_pressed"]
 [connection signal="pressed" from="MainMargin/MainColumn/ContentColumns/OrganUpgradesPanel/PanelMargin/OrganColumn/OrganScroll/OrganList/LargeIntestineRow/RowMargin/Row/UpgradeButton" to="." method="_on_large_intestine_upgrade_button_pressed"]

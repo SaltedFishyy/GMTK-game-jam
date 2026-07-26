@@ -2,8 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://cm8jdpcgvffxq" path="res://scenes/resources/UI/Background.png" id="1_ufiat"]
 [ext_resource type="Texture2D" uid="uid://v8808cgt8mdg" path="res://scenes/resources/IntroStory/NormalNextButton.png" id="2_cgrw5"]
+[ext_resource type="Texture2D" uid="uid://daxby23rfawjs" path="res://scenes/resources/IntroStory/OneForthBackground.png" id="3_wsfs0"]
 [ext_resource type="Texture2D" uid="uid://cnok35y1qry76" path="res://scenes/resources/IntroStory/PressedNextButton.png" id="3_xa1nr"]
 [ext_resource type="Texture2D" uid="uid://duu11x24145m6" path="res://scenes/resources/IntroStory/ToiletPaperAnimation.png" id="4_wsfs0"]
+[ext_resource type="Script" uid="uid://by0gaap81les0" path="res://scripts/intro_story.gd" id="6_intro_story"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7qguh"]
 atlas = ExtResource("4_wsfs0")
@@ -38,29 +40,52 @@ animations = [{
 }],
 "loop": 1,
 "name": &"rolling",
-"speed": 2.0
+"speed": 4.0
 }]
 
-[node name="Node2D" type="Node2D" unique_id=1861789061]
+[node name="IntroStory" type="Node2D" unique_id=1861789061]
+position = Vector2(-12, 0)
+script = ExtResource("6_intro_story")
+paper_move_duration = 2.0
 
 [node name="Background" type="Sprite2D" parent="." unique_id=489160653]
-position = Vector2(512, 256)
+position = Vector2(524, 256)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_ufiat")
 
-[node name="TextureButton" type="TextureButton" parent="." unique_id=420359087]
-offset_left = 415.0
+[node name="SmallBackground" type="Sprite2D" parent="Background" unique_id=198711131]
+z_index = 2
+position = Vector2(-1640, 0)
+texture = ExtResource("3_wsfs0")
+
+[node name="PaperStartMarker" type="Marker2D" parent="." unique_id=1464895680]
+position = Vector2(191, 221)
+
+[node name="PaperCenterMarker" type="Marker2D" parent="." unique_id=289773086]
+position = Vector2(567, 221)
+
+[node name="PaperChain" type="Node2D" parent="." unique_id=2138490308]
+z_index = 1
+position = Vector2(12, 0)
+
+[node name="NextButton" type="TextureButton" parent="." unique_id=420359087]
+z_index = 3
+offset_left = 459.0
 offset_top = 414.0
-offset_right = 1031.0
+offset_right = 1075.0
 offset_bottom = 669.0
 scale = Vector2(0.25, 0.25)
 texture_normal = ExtResource("2_cgrw5")
 texture_pressed = ExtResource("3_xa1nr")
 stretch_mode = 0
+metadata/_edit_use_anchors_ = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=833077975]
+[node name="AnimatedToiletPaper" type="AnimatedSprite2D" parent="." unique_id=833077975]
+z_index = 5
 position = Vector2(483, 221)
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_3j2vm")
 animation = &"rolling"
 frame_progress = 0.0078289015
+
+[connection signal="pressed" from="NextButton" to="." method="_on_next_button_pressed"]

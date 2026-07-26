@@ -5,6 +5,7 @@ const MAX_CLOG_PROGRESS: float = 100.0
 const TARGET_CLOG_PROGRESS: float = 80.0
 const CLOG_PROGRESS_PER_CM: float = 2.0
 const TOILET_SCENE_PATH: String = "res://scenes/toilet.tscn"
+const DAY_START_SCENE_PATH: String = "res://day_start.tscn"
 
 var current_day: int = 1
 var clog_progress: float = 0.0
@@ -16,7 +17,7 @@ func reset_to_defaults() -> void:
 	clog_progress = 0.0
 
 
-# 协调全部跨场景系统重置，并从第1天厕所重新开始。
+# 协调全部跨场景系统重置，并从第1天每日状态页重新开始。
 func restart_run() -> void:
 	reset_to_defaults()
 	Economy.reset_to_defaults()
@@ -25,13 +26,13 @@ func restart_run() -> void:
 	FoodSystem.reset_to_defaults()
 	get_tree().paused = false
 
-	var scene_change_error: Error = get_tree().change_scene_to_file(
-		TOILET_SCENE_PATH
-	)
+	var scene_change_error: Error = get_tree().change_scene_to_file(DAY_START_SCENE_PATH)
 	if scene_change_error != OK:
 		push_error(
-			"Failed to restart run: could not load %s (error %d)."
-			% [TOILET_SCENE_PATH, scene_change_error]
+			(
+				"Failed to restart run: could not load %s (error %d)."
+				% [DAY_START_SCENE_PATH, scene_change_error]
+			)
 		)
 
 

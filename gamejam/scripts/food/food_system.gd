@@ -75,6 +75,11 @@ func get_pending_food_ids() -> Array[int]:
 	return pending_food_ids.duplicate()
 
 
+# 返回当前厕所回合生效食物编号的副本，避免UI修改内部列表。
+func get_active_food_ids() -> Array[int]:
+	return active_food_ids.duplicate()
+
+
 # 返回待下一天生效食物的加法价值倍率，并限制在1.0到2.0。
 func get_pending_value_multiplier() -> float:
 	return _get_food_value_multiplier(pending_food_ids)

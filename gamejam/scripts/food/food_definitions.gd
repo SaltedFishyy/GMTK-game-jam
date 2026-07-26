@@ -10,8 +10,10 @@ enum Food {
 }
 
 const FOODS: Dictionary = {
-	Food.PRUNE: {
+	Food.PRUNE:
+	{
 		"display_name": "PRUNE",
+		"icon": preload("res://scenes/resources/UI/Icon_西梅.png"),
 		"price": 5,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -19,8 +21,10 @@ const FOODS: Dictionary = {
 		"integrity_bonus": -1,
 		"value_multiplier": 1.0,
 	},
-	Food.COFFEE: {
+	Food.COFFEE:
+	{
 		"display_name": "COFFEE",
+		"icon": preload("res://scenes/resources/UI/Icon_咖啡.png"),
 		"price": 5,
 		"charge_bonus": 2,
 		"storage_bonus": 0,
@@ -28,8 +32,10 @@ const FOODS: Dictionary = {
 		"integrity_bonus": -2,
 		"value_multiplier": 1.0,
 	},
-	Food.SWEET_POTATO: {
+	Food.SWEET_POTATO:
+	{
 		"display_name": "SWEET POTATO",
+		"icon": preload("res://scenes/resources/UI/Icon_火龙果.png"),
 		"price": 10,
 		"charge_bonus": 0,
 		"storage_bonus": 3,
@@ -37,8 +43,10 @@ const FOODS: Dictionary = {
 		"integrity_bonus": 2,
 		"value_multiplier": 1.2,
 	},
-	Food.AVOCADO: {
+	Food.AVOCADO:
+	{
 		"display_name": "AVOCADO",
+		"icon": preload("res://scenes/resources/UI/Icon_牛油果.png"),
 		"price": 15,
 		"charge_bonus": 1,
 		"storage_bonus": 2,
@@ -46,8 +54,10 @@ const FOODS: Dictionary = {
 		"integrity_bonus": 1,
 		"value_multiplier": 1.3,
 	},
-	Food.CORN: {
+	Food.CORN:
+	{
 		"display_name": "CORN",
+		"icon": preload("res://scenes/resources/UI/Icon_玉米.png"),
 		"price": 15,
 		"charge_bonus": 0,
 		"storage_bonus": 0,

@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Quokka';
+    src: url('Quokka-GlitchLeft.eot');
+    src: local('Quokka Glitch Left'), local('Quokka-GlitchLeft'),
+        url('Quokka-GlitchLeft.eot?#iefix') format('embedded-opentype'),
+        url('Quokka-GlitchLeft.woff2') format('woff2'),
+        url('Quokka-GlitchLeft.woff') format('woff'),
+        url('Quokka-GlitchLeft.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quokka';
+    src: url('Quokka-Regular.eot');
+    src: local('Quokka'), local('Quokka-Regular'),
+        url('Quokka-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Quokka-Regular.woff2') format('woff2'),
+        url('Quokka-Regular.woff') format('woff'),
+        url('Quokka-Regular.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quokka';
+    src: url('Quokka-GlitchRight.eot');
+    src: local('Quokka Glitch Right'), local('Quokka-GlitchRight'),
+        url('Quokka-GlitchRight.eot?#iefix') format('embedded-opentype'),
+        url('Quokka-GlitchRight.woff2') format('woff2'),
+        url('Quokka-GlitchRight.woff') format('woff'),
+        url('Quokka-GlitchRight.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

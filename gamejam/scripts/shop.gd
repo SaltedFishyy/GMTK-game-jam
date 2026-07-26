@@ -1,6 +1,5 @@
 extends Control
 
-const TOILET_SCENE_PATH: String = "res://scenes/toilet.tscn"
 const FoodDefinitionsScript = preload("res://scripts/food/food_definitions.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 
@@ -424,7 +423,7 @@ func _on_food_state_changed() -> void:
 	_update_shop_ui()
 
 
-# 点击NEXT DAY后只推进一次天数，并返回厕所开始新一轮。
+# 点击NEXT DAY后只推进一次天数，并进入每日状态页。
 func _on_next_day_button_pressed() -> void:
 	if has_advanced_day or GameState.is_final_day():
 		return
@@ -433,4 +432,4 @@ func _on_next_day_button_pressed() -> void:
 	next_day_button.disabled = true
 	FoodSystem.activate_pending_foods()
 	GameState.advance_day()
-	get_tree().change_scene_to_file(TOILET_SCENE_PATH)
+	get_tree().change_scene_to_file(GameState.DAY_START_SCENE_PATH)
