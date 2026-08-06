@@ -6,7 +6,7 @@ Buy food, strengthen your organs, and try to reach the daily toilet-clogging goa
 
 🎮 **[Play Dee Shitzmore on itch.io](https://kuro7777.itch.io/dee-shitzmore)**
 
-🏆 **[View and rate our GMTK Game Jam 2026 submission](https://itch.io/jam/gmtk-jam-2026/rate/4828301)**
+🏆 **[View Gameplay GIF and rate our GMTK Game Jam 2026 submission](https://itch.io/jam/gmtk-jam-2026/rate/4828301)**
 
 ## About the Game
 
