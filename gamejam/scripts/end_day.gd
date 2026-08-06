@@ -1,7 +1,5 @@
 extends Control
 
-const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
-
 var has_requested_shop_transition: bool = false
 
 @onready var day_complete_label: Label = $ResultPanel/DayCompleteLabel
@@ -74,7 +72,7 @@ func _on_wipe_your_button_pressed() -> void:
 	has_requested_shop_transition = true
 	wipe_your_button.disabled = true
 	var scene_change_error: Error = get_tree().change_scene_to_file(
-		SHOP_SCENE_PATH
+		GameState.SHOP_SCENE_PATH
 	)
 	if scene_change_error != OK:
 		has_requested_shop_transition = false

@@ -1,5 +1,6 @@
 extends Node
 
+# 经济系统：计算本局的总金钱、每厘米价值、完整度倍率等。(修改这个来控制游戏的经济平衡。)
 var money_per_cm: float = 0.3
 var total_money: int = 0
 

@@ -33,5 +33,3 @@ script = ExtResource("5_q33cr")
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="StartButton" unique_id=2047524227]
 stream = ExtResource("6_0cniw")
-
-[connection signal="pressed" from="StartButton" to="StartButton" method="_on_pressed"]

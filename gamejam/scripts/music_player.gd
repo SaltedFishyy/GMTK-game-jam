@@ -1,14 +1,14 @@
 extends AudioStreamPlayer
 
-const LOBBY_SCENE_PATHS: Array[String] = [
-	"res://scenes/StartingPage.tscn",
-	"res://scenes/IntroStory.tscn",
+var lobby_scene_paths: Array[String] = [
+	GameState.STARTING_PAGE_SCENE_PATH,
+	GameState.INTRO_STORY_SCENE_PATH,
 ]
-const IN_GAME_SCENE_PATHS: Array[String] = [
-	"res://day_start.tscn",
-	"res://scenes/toilet.tscn",
-	"res://scenes/end_day.tscn",
-	"res://scenes/shop.tscn",
+var in_game_scene_paths: Array[String] = [
+	GameState.DAY_START_SCENE_PATH,
+	GameState.TOILET_SCENE_PATH,
+	GameState.END_DAY_SCENE_PATH,
+	GameState.SHOP_SCENE_PATH,
 ]
 
 var lobby_bgm: AudioStreamWAV = preload("res://scenes/resources/music/bgm/Lobby BGM.wav")
@@ -43,9 +43,9 @@ func _on_scene_changed() -> void:
 
 func _sync_with_current_scene() -> void:
 	var current_scene: Node = get_tree().current_scene
-	if current_scene != null and current_scene.scene_file_path in LOBBY_SCENE_PATHS:
+	if current_scene != null and current_scene.scene_file_path in lobby_scene_paths:
 		ensure_lobby_music()
-	elif current_scene != null and current_scene.scene_file_path in IN_GAME_SCENE_PATHS:
+	elif current_scene != null and current_scene.scene_file_path in in_game_scene_paths:
 		ensure_in_game_music()
 	else:
 		stop_music()

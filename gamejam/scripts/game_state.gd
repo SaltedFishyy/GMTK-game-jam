@@ -2,9 +2,11 @@ extends Node
 
 const MAX_DAYS: int = 5
 const CLOG_TARGET_FEET: float = 28
+const INTRO_STORY_SCENE_PATH: String = "res://scenes/IntroStory.tscn"
 const TOILET_SCENE_PATH: String = "res://scenes/toilet.tscn"
 const DAY_START_SCENE_PATH: String = "res://day_start.tscn"
 const END_DAY_SCENE_PATH: String = "res://scenes/end_day.tscn"
+const SHOP_SCENE_PATH: String = "res://scenes/shop.tscn"
 const WIN_SCENE_PATH: String = "res://scenes/win.tscn"
 const LOSE_SCENE_PATH: String = "res://Losescreen.tscn"
 const STARTING_PAGE_SCENE_PATH: String = "res://scenes/StartingPage.tscn"

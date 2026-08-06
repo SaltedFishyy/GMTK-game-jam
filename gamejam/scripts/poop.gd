@@ -165,11 +165,6 @@ func get_length_cm() -> float:
 	return LengthUnits.pixels_to_cm(length_pixels)
 
 
-# 返回当前Poop使用的安全像素到厘米换算率。
-func get_pixels_per_cm() -> float:
-	return LengthUnits.PIXELS_PER_CM
-
-
 # 返回当前段的BottomMarker是否已到达初始化时保存的堵塞阈值。
 func has_reached_clog_threshold() -> bool:
 	return is_initialized and bottom_marker.global_position.y >= clog_threshold_y
