@@ -6,6 +6,9 @@ const QTERulesScript = preload("res://scripts/qte_rules.gd")
 const PoopReserveScript = preload("res://scripts/poop_reserve.gd")
 const TubeIndicatorScript = preload("res://scripts/components/tube_indicator.gd")
 const PoopReserveHUDScript = preload("res://scripts/components/poop_reserve_hud.gd")
+const ToiletFeedbackControllerScript = preload(
+	"res://scripts/components/toilet_feedback_controller.gd"
+)
 const STARTING_SECONDS: int = 10
 const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 
@@ -44,6 +47,7 @@ const DEFAULT_MAX_CHARGE_PUSH_DISTANCE_PIXELS: float = 150.0
 @onready var left_door: Sprite2D = $left_door
 @onready var qte_warning_label: Label = $left_door/QTEWarningLabel
 @onready var butt: Sprite2D = $Butt
+@onready var feedback_controller: ToiletFeedbackControllerScript = $ToiletFeedbackController
 
 var seconds_remaining: int = STARTING_SECONDS
 var has_round_started: bool = false
@@ -70,10 +74,6 @@ var qte_had_mouse_action: bool = false
 var qte_frozen_hold_duration: float = 0.0
 var qte_mouse_release_pending: bool = false
 var drop_sound_segment_ids: Dictionary[int, bool] = {}
-var left_door_initial_position: Vector2 = Vector2.ZERO
-var left_door_shake_tween: Tween
-var butt_initial_position: Vector2 = Vector2.ZERO
-var butt_shake_tween: Tween
 
 
 # 返回默认满蓄力距离加上当前腹肌升级后的厘米数，不包含食物临时加成。
@@ -87,10 +87,15 @@ static func get_max_charged_push_distance_cm_without_food() -> float:
 # 初始化倒计时、可见HUD、Poop和本轮状态。
 func _ready() -> void:
 	qte_random_number_generator.randomize()
-	left_door_initial_position = left_door.position
-	_stop_left_door_qte_feedback()
-	butt_initial_position = butt.position
-	_stop_butt_charge_feedback()
+	feedback_controller.configure(
+		left_door,
+		qte_warning_label,
+		butt,
+		door_shake_amplitude,
+		door_shake_speed,
+		butt_shake_amplitude,
+		butt_shake_speed
+	)
 	poop_reserve.reset(PlayerStats.get_effective_storage_capacity_cm())
 	_update_countdown_label()
 	_spawn_poop()
@@ -274,7 +279,7 @@ func _start_mouse_action() -> void:
 	has_active_mouse_action = true
 	hold_duration = 0.0
 	if poop_reserve.get_remaining_reserve_cm() > 0.0:
-		_start_butt_charge_feedback()
+		feedback_controller.start_butt_charge()
 
 
 # 第一次有效左键输入时启动倒计时和QTE调度。
@@ -345,7 +350,7 @@ func _get_charge_ratio() -> float:
 
 # 清空单次蓄力和输入状态，不影响真实鼠标按键状态。
 func _reset_charge_state() -> void:
-	_stop_butt_charge_feedback()
+	feedback_controller.stop_butt_charge()
 	has_active_mouse_action = false
 	hold_duration = 0.0
 
@@ -402,8 +407,15 @@ func _begin_qte_gameplay_pause() -> void:
 		return
 
 	is_qte_active = true
-	_stop_butt_charge_feedback()
-	_start_left_door_qte_feedback()
+	feedback_controller.stop_butt_charge()
+	var selected_warning_text: String = ""
+	if not qte_warning_texts.is_empty():
+		var warning_index: int = qte_random_number_generator.randi_range(
+			0,
+			qte_warning_texts.size() - 1
+		)
+		selected_warning_text = qte_warning_texts[warning_index]
+	feedback_controller.start_qte_warning(selected_warning_text)
 	qte_wait_timer.stop()
 	qte_had_mouse_action = has_active_mouse_action
 	qte_frozen_hold_duration = hold_duration
@@ -419,14 +431,14 @@ func _begin_qte_gameplay_pause() -> void:
 # 清理QTE暂停，并在回合仍可继续时恢复冻结的输入与掉落运动。
 func _end_qte_gameplay_pause(should_resume_round: bool) -> void:
 	if not is_qte_active:
-		_stop_left_door_qte_feedback()
+		feedback_controller.stop_qte_warning()
 		return
 
 	var had_mouse_action: bool = qte_had_mouse_action
 	var frozen_hold_duration: float = qte_frozen_hold_duration
 	var release_pending: bool = qte_mouse_release_pending
 	is_qte_active = false
-	_stop_left_door_qte_feedback()
+	feedback_controller.stop_qte_warning()
 	countdown_timer.paused = false
 	for poop_segment: Poop in broken_poops:
 		if is_instance_valid(poop_segment):
@@ -446,7 +458,7 @@ func _end_qte_gameplay_pause(should_resume_round: bool) -> void:
 	if release_pending or not is_mouse_button_down:
 		_release_mouse_action()
 	elif poop_reserve.get_remaining_reserve_cm() > 0.0:
-		_start_butt_charge_feedback()
+		feedback_controller.start_butt_charge()
 
 
 # 根据顺滑度随机安排下一次QTE等待时间。
@@ -487,103 +499,7 @@ func _stop_qte_cycle() -> void:
 	if is_qte_active:
 		_end_qte_gameplay_pause(false)
 	else:
-		_stop_left_door_qte_feedback()
-
-
-# QTE正式激活时显示提示，并用唯一循环Tween让门围绕初始位置左右震动。
-func _start_left_door_qte_feedback() -> void:
-	_stop_left_door_qte_feedback()
-	if qte_warning_texts.is_empty():
-		qte_warning_label.text = ""
-	else:
-		var warning_index: int = qte_random_number_generator.randi_range(
-			0,
-			qte_warning_texts.size() - 1
-		)
-		qte_warning_label.text = qte_warning_texts[warning_index]
-	qte_warning_label.show()
-	if is_zero_approx(door_shake_amplitude):
-		return
-
-	var safe_speed: float = maxf(door_shake_speed, 0.1)
-	var quarter_cycle_duration: float = 1.0 / (safe_speed * 2.0)
-	var half_cycle_duration: float = 1.0 / (safe_speed * 1.0)
-	left_door_shake_tween = _create_horizontal_shake_tween(
-		left_door,
-		left_door_initial_position.x,
-		door_shake_amplitude,
-		quarter_cycle_duration,
-		half_cycle_duration
-	)
-
-
-# 所有QTE结束路径共用此复位，防止Tween叠加或门位置累计漂移。
-func _stop_left_door_qte_feedback() -> void:
-	if left_door_shake_tween != null and left_door_shake_tween.is_valid():
-		left_door_shake_tween.kill()
-	left_door_shake_tween = null
-	if is_instance_valid(left_door):
-		left_door.position = left_door_initial_position
-	if is_instance_valid(qte_warning_label):
-		qte_warning_label.hide()
-
-
-# 有效按住左键蓄力时，用唯一循环Tween让Butt视觉围绕初始位置轻微左右抖动。
-func _start_butt_charge_feedback() -> void:
-	_stop_butt_charge_feedback()
-	if is_zero_approx(butt_shake_amplitude):
-		return
-
-	var safe_speed: float = maxf(butt_shake_speed, 0.1)
-	var quarter_cycle_duration: float = 1.0 / (safe_speed * 4.0)
-	var half_cycle_duration: float = 1.0 / (safe_speed * 2.0)
-	butt_shake_tween = _create_horizontal_shake_tween(
-		butt,
-		butt_initial_position.x,
-		butt_shake_amplitude,
-		quarter_cycle_duration,
-		half_cycle_duration
-	)
-
-
-# 创建围绕初始X坐标循环且无累计漂移的水平震动Tween。
-func _create_horizontal_shake_tween(
-	target: Node2D,
-	initial_x: float,
-	amplitude: float,
-	quarter_cycle_duration: float,
-	half_cycle_duration: float
-) -> Tween:
-	var shake_tween: Tween = create_tween()
-	shake_tween.set_loops()
-	shake_tween.tween_property(
-		target,
-		"position:x",
-		initial_x + amplitude,
-		quarter_cycle_duration
-	).set_trans(Tween.TRANS_LINEAR)
-	shake_tween.tween_property(
-		target,
-		"position:x",
-		initial_x - amplitude,
-		half_cycle_duration
-	).set_trans(Tween.TRANS_LINEAR)
-	shake_tween.tween_property(
-		target,
-		"position:x",
-		initial_x,
-		quarter_cycle_duration
-	).set_trans(Tween.TRANS_LINEAR)
-	return shake_tween
-
-
-# 松开、取消、QTE或回合结束时统一终止抖动并精确恢复Butt视觉位置。
-func _stop_butt_charge_feedback() -> void:
-	if butt_shake_tween != null and butt_shake_tween.is_valid():
-		butt_shake_tween.kill()
-	butt_shake_tween = null
-	if is_instance_valid(butt):
-		butt.position = butt_initial_position
+		feedback_controller.stop_qte_warning()
 
 
 # 倒计时归零时自动释放当前操作，并禁止开始新输入。
@@ -818,8 +734,7 @@ func _finish_round() -> void:
 
 # 场景退出时解除局部QTE暂停，避免Timer或Tween留下暂停状态。
 func _exit_tree() -> void:
-	_stop_butt_charge_feedback()
-	_stop_left_door_qte_feedback()
+	feedback_controller.stop_all()
 	if is_instance_valid(qte_bar):
 		qte_bar.cancel_qte()
 	if is_instance_valid(countdown_timer):

@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b5fg10gjpacmx" path="res://scenes/resources/ingame/poop/poop_body.png" id="13_mini_body"]
 [ext_resource type="Texture2D" uid="uid://gfvi4ol1cpx" path="res://scenes/resources/ingame/poop/poop_bottom.png" id="14_mini_bottom"]
 [ext_resource type="AudioStream" uid="uid://3xiqtwbr41it" path="res://scenes/resources/music/Interaction/Shit Drop.wav" id="15_shit_drop"]
+[ext_resource type="Script" path="res://scripts/components/toilet_feedback_controller.gd" id="16_feedback"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qlld6"]
 atlas = ExtResource("8_4b3qh")
@@ -128,6 +129,9 @@ script = ExtResource("1_script")
 door_shake_speed = 8.0
 qte_warning_texts = ["Hey Bro, Can I borrow some tissue?", "WASSUP MANN", "Are you having a nice time pooping", "oh yea, this feels good"]
 butt_shake_speed = 4.0
+
+[node name="ToiletFeedbackController" type="Node" parent="."]
+script = ExtResource("16_feedback")
 
 [node name="top_body" type="Sprite2D" parent="." unique_id=1062693026]
 z_index = 2
